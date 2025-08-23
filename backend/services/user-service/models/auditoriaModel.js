@@ -19,7 +19,6 @@ const Auditoria = {
         return { idauditoria: result.insertId, usuarios_idusuarios, mensagem, dataHora };
     },
 
-    // Geralmente tabelas de auditoria não são atualizadas ou deletadas, mas as funções estão aqui por completude
     update: async (id, { usuarios_idusuarios, mensagem, dataHora }) => {
         const [result] = await pool.query(
             'UPDATE auditoria SET usuarios_idusuarios = ?, mensagem = ?, dataHora = ? WHERE idauditoria = ?',
