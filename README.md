@@ -55,10 +55,7 @@ Siga estas instruções para configurar e executar o projeto em seu ambiente loc
 
 Abra seu navegador e acesse `http://localhost:5173` para ver a aplicação.
 
-# Models
-
-Este diretório contém os modelos de dados para o serviço de usuário. Cada modelo é responsável por interagir com uma tabela específica no banco de dados.
-
+## Models
 ## Como Testar os Models
 
 Para testar os modelos, você pode criar um arquivo de teste e usar os métodos de cada modelo para interagir com o banco de dados.
