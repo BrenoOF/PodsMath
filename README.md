@@ -1,135 +1,63 @@
 # PodsMath
-Um sistema gerenciador de ensino de matemática por meio de PodCast's
 
-## Getting Started
+Este é o README para o projeto PodsMath. Ele contém instruções sobre como configurar e executar o projeto.
 
-Siga estas instruções para configurar e executar o projeto em seu ambiente local.
+## Configuração
 
-### Pré-requisitos
+### Backend
 
-* Node.js (v14 ou superior)
-* npm (v6 ou superior)
+1.  **Variáveis de Ambiente:**
+    *   Navegue até a pasta `backend/config`.
+    *   Crie uma cópia do arquivo `.env.example` e renomeie para `.env`.
+    *   Abra o arquivo `.env` e configure as variáveis de ambiente para a conexão com o banco de dados MySQL:
+        ```
+        DB_HOST="seu_host"
+        DB_PORT="sua_porta"
+        DB_USER="seu_usuario"
+        DB_PASS="sua_senha"
+        DB_NAME="seu_banco_de_dados"
+        ```
 
-### Instalação
+2.  **Instalação das Dependências:**
+    *   Abra um terminal em cada uma das pastas de serviço do backend (`gateway`, `services/transcription-service`, `services/user-service`).
+    *   Execute o comando `npm install` em cada uma delas para instalar as dependências.
 
-1. Clone o repositório:
-   ```sh
-   git clone https://github.com/seu-usuario/PodsMath.git
-   ```
-2. Instale as dependências do backend:
-   ```sh
-   cd backend/gateway
-   npm install
-   cd ../services/transcription-service
-   npm install
-   cd ../user-service
-   npm install
-   ```
-3. Instale as dependências do frontend:
-   ```sh
-   cd ../../../frontend
-   npm install
-   ```
+### Frontend
 
-### Configuração de Ambiente
+1.  **Instalação das Dependências:**
+    *   Abra um terminal na pasta `frontend`.
+    *   Execute o comando `npm install` para instalar as dependências.
 
-1. No diretório `backend/config`, renomeie o arquivo `.env.example` para `.env`.
-2. Abra o arquivo `.env` e preencha as variáveis de ambiente necessárias.
+## Executando o Projeto
 
-### Executando o Projeto
+### Backend
 
-1. Inicie os serviços do backend:
-   ```sh
-   cd backend/gateway
-   npm start
-   cd ../services/transcription-service
-   npm start
-   cd ../user-service
-   npm start
-   ```
-2. Inicie o frontend:
-   ```sh
-   cd ../../../frontend
-   npm run dev
-   ```
+1.  **Iniciando os Serviços:**
+    *   Abra um terminal em cada uma das pastas de serviço do backend (`gateway`, `services/transcription-service`, `services/user-service`).
+    *   Execute o comando `npm start` em cada uma delas para iniciar os serviços.
 
-Abra seu navegador e acesse `http://localhost:5173` para ver a aplicação.
+### Frontend
 
-# Models
+1.  **Iniciando a Aplicação:**
+    *   Abra um terminal na pasta `frontend`.
+    *   Execute o comando `npm start` para iniciar a aplicação React.
 
-Este diretório contém os modelos de dados para o serviço de usuário. Cada modelo é responsável por interagir com uma tabela específica no banco de dados.
+## Testando as Rotas
 
-## Como Testar os Models
+Para testar as rotas da API, você pode usar uma ferramenta como o [Postman](https://www.postman.com/) ou o [Insomnia](https://insomnia.rest/).
 
-Para testar os modelos, você pode criar um arquivo de teste e usar os métodos de cada modelo para interagir com o banco de dados.
+As rotas da API são definidas nos arquivos de rotas dentro de cada serviço do backend. Por exemplo, as rotas de usuário estão em `backend/services/user-service/routes/usuarioRoutes.js`.
 
-### 1. Configuração do Banco de Dados
+**Exemplo de como testar a rota de login de usuário:**
 
-Antes de começar, certifique-se de que a conexão com o banco de dados está configurada corretamente no arquivo `services/user-service/db/connections.js`.
+*   **Método:** `POST`
+*   **URL:** `http://localhost:PORTA_DO_GATEWAY/user-service/login` (substitua `PORTA_DO_GATEWAY` pela porta em que o gateway está rodando)
+*   **Corpo da Requisição (JSON):**
+    ```json
+    {
+      "email": "seu_email@exemplo.com",
+      "senha": "sua_senha"
+    }
+    ```
 
-### 2. Criando um Arquivo de Teste
-
-Crie um arquivo de teste (por exemplo, `test.js`) na raiz do serviço de usuário (`services/user-service`).
-
-```javascript
-// services/user-service/test.js
-
-const Usuario = require('./models/usuarioModel');
-
-async function testUsuarioModel() {
-  try {
-    // Teste de criação de usuário
-    console.log('Criando um novo usuário...');
-    const novoUsuario = await Usuario.create({
-      idusuarios: 'auth0|123456789',
-      instituicoes_idinstituicoes: 1,
-      nome: 'Usuário de Teste',
-      email: 'teste@example.com',
-      senha: 'senha_super_segura',
-      id_usuario_professor: null,
-      nivel_acesso_idnivel_acesso: 1,
-      paletaCor_idpaletaCor: 1,
-      audiosEscutados: 0,
-    });
-    console.log('Usuário criado:', novoUsuario);
-
-    // Teste de busca de usuário por ID
-    console.log('\nBuscando usuário por ID...');
-    const usuarioBuscado = await Usuario.getById(novoUsuario.idusuarios);
-    console.log('Usuário encontrado:', usuarioBuscado);
-
-    // Teste de listagem de todos os usuários
-    console.log('\nListando todos os usuários...');
-    const todosUsuarios = await Usuario.getAll();
-    console.log('Todos os usuários:', todosUsuarios);
-
-    // Teste de atualização de usuário
-    console.log('\nAtualizando usuário...');
-    const atualizado = await Usuario.update(novoUsuario.idusuarios, {
-      nome: 'Usuário de Teste Atualizado',
-    });
-    console.log('Usuário atualizado com sucesso:', atualizado);
-
-    // Teste de exclusão de usuário
-    console.log('\nExcluindo usuário...');
-    const excluido = await Usuario.delete(novoUsuario.idusuarios);
-    console.log('Usuário excluído com sucesso:', excluido);
-
-  } catch (error) {
-    console.error('Erro durante os testes:', error);
-  }
-}
-
-testUsuarioModel();
-```
-
-### 3. Executando os Testes
-
-Para executar os testes, navegue até o diretório do serviço de usuário e execute o arquivo de teste com o Node.js.
-
-```bash
-cd services/user-service
-node test.js
-```
-
-Isso executará as funções de teste e você verá a saída no console, permitindo verificar se os métodos do modelo estão funcionando como esperado.
+**Observação:** Verifique os arquivos de rotas em cada serviço para obter a lista completa de rotas e seus respectivos métodos e parâmetros.
