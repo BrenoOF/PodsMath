@@ -12,19 +12,19 @@ const Audio = {
     },
 
     create: async (audioData) => {
-        const { temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, idiomas_imagens_idimagens } = audioData;
+        const { usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio } = audioData;
         const [result] = await pool.query(
-            'INSERT INTO audios (temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, idiomas_imagens_idimagens) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-            [temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, idiomas_imagens_idimagens]
+            'INSERT INTO audios (usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio]
         );
         return { idaudios: result.insertId, ...audioData };
     },
 
     update: async (id, audioData) => {
-        const { temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, idiomas_imagens_idimagens } = audioData;
+        const { usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio } = audioData;
         const [result] = await pool.query(
-            'UPDATE audios SET temas_idtemas = ?, usuarios_idusuarios = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ?, idiomas_imagens_idimagens = ? WHERE idaudios = ?',
-            [temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, idiomas_imagens_idimagens, id]
+            'UPDATE audios SET usuarios_idusuarios = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ?, caminho_audio = ? WHERE idaudios = ?',
+            [usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio, id]
         );
         return result.affectedRows > 0;
     },
