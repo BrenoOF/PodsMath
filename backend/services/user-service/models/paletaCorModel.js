@@ -2,18 +2,18 @@ const pool = require('../db/connections');
 
 const PaletaCor = {
     getAll: async () => {
-        const [rows] = await pool.query('SELECT * FROM paletaCor');
+        const [rows] = await pool.query('SELECT * FROM paletacor');
         return rows;
     },
 
     getById: async (id) => {
-        const [rows] = await pool.query('SELECT * FROM paletaCor WHERE idpaletaCor = ?', [id]);
+        const [rows] = await pool.query('SELECT * FROM paletacor WHERE idpaletaCor = ?', [id]);
         return rows[0];
     },
 
     create: async ({ idpaletaCor, nome, ativado }) => {
         const [result] = await pool.query(
-            'INSERT INTO paletaCor (idpaletaCor, nome, ativado) VALUES (?, ?, ?)',
+            'INSERT INTO paletacor (idpaletaCor, nome, ativado) VALUES (?, ?, ?)',
             [idpaletaCor, nome, ativado]
         );
         return { idpaletaCor: result.insertId, nome, ativado };
@@ -21,14 +21,14 @@ const PaletaCor = {
 
     update: async (id, { nome, ativado }) => {
         const [result] = await pool.query(
-            'UPDATE paletaCor SET nome = ?, ativado = ? WHERE idpaletaCor = ?',
+            'UPDATE paletacor SET nome = ?, ativado = ? WHERE idpaletaCor = ?',
             [nome, ativado, id]
         );
         return result.affectedRows > 0;
     },
 
     delete: async (id) => {
-        const [result] = await pool.query('DELETE FROM paletaCor WHERE idpaletaCor = ?', [id]);
+        const [result] = await pool.query('DELETE FROM paletacor WHERE idpaletaCor = ?', [id]);
         return result.affectedRows > 0;
     }
 };
