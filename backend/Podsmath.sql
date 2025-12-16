@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `podsmath`.`usuarios` (
   `senha` VARCHAR(100) NOT NULL,
   `id_usuario_professor` INT NULL DEFAULT NULL,
   `nivel_acesso_idnivel_acesso` INT NOT NULL,
-  `paletaCor_idpaletaCor` INT NOT NULL,
+  `paletaCor_idpaletaCor` INT NULL DEFAULT NULL,
   `audiosEscutados` INT NULL DEFAULT '0',
   PRIMARY KEY (`idusuarios`),
   INDEX `fk_usuarios_instituicoes` (`instituicoes_idinstituicoes` ASC) VISIBLE,
