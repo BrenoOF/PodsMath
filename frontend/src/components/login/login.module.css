@@ -1,0 +1,167 @@
+.container{
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+    font-family: sans-serif;
+}
+
+/* Estilo do Container do Form de Login e Cadastro */
+.containerLogin{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 49%;
+}
+
+.imgLogo{
+    width: 15.3rem;
+    margin-top: 1rem;
+}
+
+.textoLogin{
+    color: #64748b;
+}
+
+.divMudarForm{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    width: 27rem;
+    margin-top: 2rem;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+.divMudarForm>p{
+    cursor: pointer;
+    padding: 1rem 5rem;
+}
+
+.containerForm{
+    display: flex;
+    flex-direction: column;
+    border: 0.1rem solid #e2e8f0;
+    border-radius: 1rem;
+    width: 28rem;
+    height: 29rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    box-sizing: border-box;
+}
+
+.divTituloLogin{
+    margin-bottom: 2rem;
+}
+.divTituloLogin>h1{
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+.divTituloLogin>p{
+    color: #64748b;
+    font-size: 0.875rem;
+}
+
+.divInput{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+}
+.divInput label {
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+/* InputText e Password */
+.input {
+    width: 100%;
+    padding: 0.8rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+}
+
+/* Corrige o Password */
+:global(.p-password) {
+    width: 100%;
+    display: block;
+}
+
+/* Ajuste DIRETO no ícon */
+:global(.p-password .p-icon) {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.75rem;
+    margin-top: 0;
+    cursor: pointer;
+}
+/* Espaço pro ícone */
+:global(.p-password-input) {
+    padding-right: 2.5rem;
+}
+
+/* Borda padrão */
+:global(.p-inputtext),
+:global(.p-password-input) {
+    border: 0.1rem solid #cbd5e1;
+}
+/* Focus */
+:global(.p-inputtext:focus),
+:global(.p-password-input:focus) {
+    border: 0.15rem solid #012663;
+    box-shadow: 0 0 0 2px rgba(1, 38, 99, 0.15);
+}
+
+.ouContinue {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 24px 0;
+  position: relative;
+}
+.ouContinue::before, .ouContinue::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background-color: var(--surface-border, #dcdcdc);
+}
+.ouContinue span {
+  padding: 0 12px;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: var(--text-color-secondary, #6b7280);
+  background-color: var(--surface-card, #ffffff);
+  white-space: nowrap;
+}
+
+.btns{
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+}
+
+.btnEntrar{
+    color: #fff;
+    background-color: #012663;
+    margin-top: 1rem;
+}
+.btnEntrar:hover{
+    background-color: #1a3f8f;
+}
+
+.btnEntrarGoogle{
+    border: 0.1rem solid #e2e8f0;
+}
+
+/* Estilo dos Textos que fica na direita da tela */
+.containerTexto{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 51%;
+    background: linear-gradient(174.55deg, #021B33 37.85%, #4577A1 140.18%);
+}
