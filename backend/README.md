@@ -1,0 +1,75 @@
+# Podsmath-Backend
+
+Este é o backend do projeto Podsmath, composto por uma arquitetura de microserviços.
+
+## Serviços
+
+O backend é dividido nos seguintes serviços:
+
+- **user-service**: Responsável pelo gerenciamento de usuários, autenticação e outras funcionalidades relacionadas ao usuário.
+- **audio-service**: Responsável pelo processamento e armazenamento de áudios.
+- **transcription-service**: Responsável por realizar a transcrição dos áudios.
+
+## Configuração e Execução
+
+Para configurar e executar cada serviço, siga as instruções abaixo.
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) instalado
+- [NPM](https://www.npmjs.com/) (geralmente vem com o Node.js)
+
+### Instalação de Dependências
+
+Para instalar as dependências de todos os serviços, execute o seguinte comando na raiz do projeto:
+
+```bash
+npm run install-all
+```
+
+**Nota**: Este comando assume que o script `install-all` está configurado no `package.json` principal para iterar sobre os diretórios dos serviços e instalar suas dependências.
+
+### 1. user-service
+
+**Configuração:**
+
+Este serviço utiliza um arquivo de ambiente para configurar a conexão com o banco de dados. Renomeie o arquivo `.env.example` para `.env` no diretório `config` (dentro de `user-service`) e preencha com as suas credenciais do banco de dados MySQL.
+
+**Execução:**
+
+Navegue até o diretório do serviço e execute o seguinte comando:
+
+```bash
+cd services/user-service
+npm start
+```
+
+O serviço estará em execução em `http://localhost:3000` (ou na porta configurada no seu ambiente).
+
+### 2. audio-service
+
+**Execução:**
+
+Navegue até o diretório do serviço e execute o seguinte comando:
+
+```bash
+cd services/audio-service
+npm start
+```
+
+### 3. transcription-service
+
+**Execução:**
+
+Navegue até o diretório do serviço e execute o seguinte comando:
+
+```bash
+cd services/transcription-service
+npm start
+```
+
+## Testes
+
+Atualmente, nenhum dos serviços possui um script de teste configurado. Para adicionar testes, você pode usar uma biblioteca como [Jest](https://jestjs.io/) ou [Mocha](https://mochajs.org/).
+
+Depois de configurar os testes, você pode adicionar o script de teste ao `package.json` de cada serviço.
