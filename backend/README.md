@@ -67,9 +67,3 @@ Navegue até o diretório do serviço e execute o seguinte comando:
 cd services/transcription-service
 npm start
 ```
-
-## Testes
-
-Atualmente, nenhum dos serviços possui um script de teste configurado. Para adicionar testes, você pode usar uma biblioteca como [Jest](https://jestjs.io/) ou [Mocha](https://mochajs.org/).
-
-Depois de configurar os testes, você pode adicionar o script de teste ao `package.json` de cada serviço.
