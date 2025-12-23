@@ -129,7 +129,7 @@
   padding: 0 12px;
   font-size: 12px;
   text-transform: uppercase;
-  color: var(--text-color-secondary, #6b7280);
+  color: var(--text-color-secondary, #64748b);
   background-color: var(--surface-card, #ffffff);
   white-space: nowrap;
 }
@@ -161,7 +161,59 @@
 .containerTexto{
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 5rem 0 0 2.5rem;
     width: 51%;
     background: linear-gradient(174.55deg, #021B33 37.85%, #4577A1 140.18%);
+    color: #fff;
+}
+
+.tituloTexto{
+   font-size: 2.25rem;
+}
+.tituloTexto>span{
+    background: linear-gradient(90deg, #F08E60 0%, #FF851A 100%);
+    background-clip: text;
+    color: transparent;
+}
+
+.subTituloTexto{
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    color: #64748b;
+}
+
+.blocoTexto{
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    margin-bottom: 3rem;
+}
+
+.divIcon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    background-color: #ffffff1a;
+    border-radius: 100%;
+}
+
+.divMensagem{
+    margin-top: 0.5rem;
+}
+.divMensagem>p{
+    color: #FF851A;
+    margin-bottom: 0.7rem;
+}
+
+.ultimaMensagem{
+    width: 33rem;
+}
+.ultimaMensagem>hr{
+    border-color: #ffffff1a;
+}
+.ultimaMensagem>p{
+    margin-top: 3rem;
+    font-size: 0.875rem;
 }
