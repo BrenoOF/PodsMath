@@ -19,6 +19,21 @@ Para configurar e executar cada serviço, siga as instruções abaixo.
 - [Node.js](https://nodejs.org/) instalado
 - [NPM](https://www.npmjs.com/) (geralmente vem com o Node.js)
 
+### Configuração do Ambiente (.env)
+
+Para configurar as variáveis de ambiente globais, copie o arquivo `config/.env.example` para `config/.env` e preencha com os valores apropriados.
+
+Exemplo de `config/.env`:
+
+```
+# Configuração do banco Mysql
+DB_HOST = "localhost"
+DB_PORT = 3306
+DB_USER = "my_user"
+DB_PASS = "my_password"
+DB_NAME = "db_name"
+```
+
 ### Instalação de Dependências
 
 Para instalar as dependências de todos os serviços, execute o seguinte comando na raiz do projeto:
@@ -33,7 +48,7 @@ npm run install-all
 
 **Configuração:**
 
-Este serviço utiliza um arquivo de ambiente para configurar a conexão com o banco de dados. Renomeie o arquivo `.env.example` para `.env` no diretório `config` (dentro de `user-service`) e preencha com as suas credenciais do banco de dados MySQL.
+Este serviço utiliza as variáveis de ambiente configuradas no arquivo `config/.env` global para a conexão com o banco de dados. Certifique-se de que as credenciais do MySQL estejam preenchidas corretamente nesse arquivo.
 
 **Execução:**
 
