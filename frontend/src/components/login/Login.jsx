@@ -7,6 +7,8 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 
 export default function TelaLogin() {
+    const [trocar, setTrocar] = useState(true);
+
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
@@ -17,25 +19,44 @@ export default function TelaLogin() {
                     className={Style.imgLogo} />
                 <p className={Style.textoLogin}>Aprenda matemática de forma envolvente através de podcasts</p>
                 <div className={Style.divMudarForm}>
-                    <p>Entrar</p>
-                    <p>Criar Conta</p>
+                    <p onClick={(e) => { setTrocar(true) }} 
+                        style={{ color: trocar ? "" : "#64748b" }}
+                    >
+                        Entrar
+                    </p>
+                    <p onClick={(e) => { setTrocar(false) }}
+                        style={{ color: trocar ? "#64748b" : "" }}    
+                    >
+                        Criar Conta
+                    </p>
                 </div>
                 <div className={Style.containerForm}>
-                    <div className={Style.divTituloLogin}>
-                        <h1>Faça login</h1>
-                        <p>Continue sua jornada de aprendizado</p>
-                    </div>
-                    <div className={Style.divInput}>
-                        <label>Email</label>
-                        <InputText keyfilter="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                            className={Style.input} placeholder="seu@email.com" />
-                    </div>
-                    <div className={Style.divInput}>
-                        <label>Senha</label>
-                        <Password value={senha} onChange={(e) => setSenha(e.target.value)}
-                            toggleMask feedback={false} inputClassName={Style.input}
-                            placeholder="••••••••" />
-                    </div>
+                    {trocar ? (
+                        <>
+                            <div className={Style.divTituloLogin}>
+                                <h1>Faça login</h1>
+                                <p>Continue sua jornada de aprendizado</p>
+                            </div>
+                            <div className={Style.divInput}>
+                                <label>Email</label>
+                                <InputText keyfilter="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                                    className={Style.input} placeholder="seu@email.com" />
+                            </div>
+                            <div className={Style.divInput}>
+                                <label>Senha</label>
+                                <Password value={senha} onChange={(e) => setSenha(e.target.value)}
+                                    toggleMask feedback={false} inputClassName={Style.input}
+                                    placeholder="••••••••" />
+                            </div>
+                        </>
+                    )
+                    :
+                    (
+                        <div className={Style.divTituloLogin}>
+                            <h1>Crie sua conta</h1>
+                            <p>Comece a explorar o mundo da matemática hoje</p>
+                        </div>
+                    )}
                     <div className={Style.btns + " " + Style.btnEntrar}>
                         <p>Entrar</p>
                     </div>
@@ -66,7 +87,7 @@ export default function TelaLogin() {
                 </div>
                 <div className={Style.blocoTexto}>
                     <div className={Style.divIcon}>
-                        <i class="fa-solid fa-book-open" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                        <i className="fa-solid fa-book-open" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
                     </div>
                     <div className={Style.divMensagem}>
                         <p>Conteúdo especializado</p>
@@ -77,7 +98,7 @@ export default function TelaLogin() {
                 </div>
                 <div className={Style.blocoTexto}>
                     <div className={Style.divIcon}>
-                        <i class="fa-regular fa-circle-check" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                        <i className="fa-regular fa-circle-check" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
                     </div>
                     <div className={Style.divMensagem}>
                         <p>100% gratuito</p>
