@@ -1,8 +1,9 @@
 .container{
     display: flex;
     flex-direction: row;
-    width: 100vw;
-    height: 100dvh;
+    width: 100%;
+    min-height: 100dvh;
+    height: auto;
 }
 
 /* Estilo do Container do Form de Login e Cadastro */
@@ -42,7 +43,8 @@
     border: 0.1rem solid #e2e8f0;
     border-radius: 1rem;
     width: 28rem;
-    height: 29rem;
+    min-height: 29rem;
+    height: auto;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
     padding: 1.5rem;
     box-sizing: border-box;
@@ -71,7 +73,7 @@
     font-weight: bold;
 }
 
-/* InputText e Password */
+/* Email e Senha */
 .input {
     width: 100%;
     padding: 0.8rem 0.75rem;
@@ -80,13 +82,12 @@
     box-sizing: border-box;
 }
 
-/* Corrige o Password */
 :global(.p-password) {
     width: 100%;
     display: block;
 }
 
-/* Ajuste DIRETO no ícon */
+/* Ajuste DIRETO no ícon da senha */
 :global(.p-password .p-icon) {
     top: 50%;
     transform: translateY(-50%);
@@ -94,23 +95,62 @@
     margin-top: 0;
     cursor: pointer;
 }
-/* Espaço pro ícone */
 :global(.p-password-input) {
     padding-right: 2.5rem;
 }
 
-/* Borda padrão */
+/* Estilo padrão */
 :global(.p-inputtext),
 :global(.p-password-input) {
     border: 0.1rem solid #cbd5e1;
 }
-/* Focus */
 :global(.p-inputtext:focus),
 :global(.p-password-input:focus) {
     border: 0.15rem solid #012663;
     box-shadow: 0 0 0 2px rgba(1, 38, 99, 0.15);
 }
 
+/* Estilo do Input Radio */
+.divRadio{
+    display: flex;
+    gap: 2rem;
+}
+
+.inputRadio{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.inputRadio>label{
+    font-weight: normal;
+}
+
+/* Estilo Input Select */
+:global(.p-dropdown)>span{
+    border: none;
+}
+
+:global(.p-dropdown):hover{
+    border: 0.1rem solid #cbd5e1;
+}
+
+:global(.p-dropdown-panel) {
+    border: 0.1rem solid #000;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+:global(.p-dropdown-item) {
+    padding: 0.75rem 1rem;
+}
+
+:global(.p-dropdown-item:hover) {
+    background-color: #012663;
+    color: #ffffff;
+}
+
+/* Estilo da Parte alternativa de Login/Cadastro (o Google)*/
 .ouContinue {
   display: flex;
   align-items: center;
@@ -133,6 +173,7 @@
   white-space: nowrap;
 }
 
+/* Estilo Padrão de Botão*/
 .btns{
     cursor: pointer;
     display: flex;
