@@ -1,3 +1,22 @@
+@media screen and (max-width: 1023px) {
+    .containerLogin{
+        width: 100%;
+    }
+
+    .containerTexto{
+        display: none !important;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .containerLogin{
+        width: 49%;
+    }
+    .containerTexto{ 
+        display: flex;
+    }
+}
+
 .container{
     display: flex;
     flex-direction: row;
@@ -11,12 +30,17 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 49%;
 }
 
 .imgLogo{
     width: 15.3rem;
     margin-top: 1rem;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+.imgLogo:hover {
+    opacity: 0.6;
 }
 
 .textoLogin{
@@ -201,10 +225,18 @@
 .containerTexto{
     display: flex;
     flex-direction: column;
-    padding: 5rem 0 0 2.5rem;
     width: 51%;
     background: linear-gradient(174.55deg, #021B33 37.85%, #4577A1 140.18%);
     color: #fff;
+}
+
+.divTexto{
+    width: clamp(50%, 50vw, 27rem);
+    margin: 5rem 0 0 3rem;
+}
+
+.divTexto>hr{
+    border-color: #ffffff1a;
 }
 
 .tituloTexto{
@@ -220,12 +252,13 @@
     margin-top: 2rem;
     margin-bottom: 2rem;
     color: #64748b;
+    font-size: 1.25rem;
 }
 
 .blocoTexto{
     display: flex;
-    flex-direction: row;
-    gap: 1rem;
+    align-items: flex-start;
+    gap: 0.8rem;
     margin-bottom: 3rem;
 }
 
@@ -233,27 +266,19 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
+    flex-shrink: 0; 
+    width: 3.3rem;
+    height: 3.3rem;
     background-color: #ffffff1a;
     border-radius: 100%;
 }
 
-.divMensagem{
-    margin-top: 0.5rem;
-}
 .divMensagem>p{
     color: #FF851A;
     margin-bottom: 0.7rem;
 }
 
 .ultimaMensagem{
-    width: 33rem;
-}
-.ultimaMensagem>hr{
-    border-color: #ffffff1a;
-}
-.ultimaMensagem>p{
-    margin-top: 3rem;
+    margin-top: 2rem;
     font-size: 0.875rem;
 }
