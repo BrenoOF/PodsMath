@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Style from "./login.module.css";
 
@@ -9,6 +10,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Password } from 'primereact/password';
 
 export default function TelaLogin() {
+    const navigate = useNavigate();
     const [trocar, setTrocar] = useState(true);
 
     const [nome, setNome] = useState("");
@@ -36,7 +38,8 @@ export default function TelaLogin() {
         <div className={Style.container}>
             <div className={Style.containerLogin}>
                 <img src={require("../../imgs/Logo1.png")} alt="Podsmath Logo"
-                    className={Style.imgLogo} />
+                    className={Style.imgLogo} onClick={() => { navigate("/") }} 
+                    draggable="false" />
                 <p className={Style.textoLogin}>Aprenda matemática de forma envolvente através de podcasts</p>
                 <div className={Style.divMudarForm}>
                     <p onClick={(e) => { setTrocar(true) }}
@@ -109,7 +112,7 @@ export default function TelaLogin() {
                             </div>
                             <div className={Style.divInput}>
                                 <label>R.A. (6 dígitos)</label>
-                                <InputText keyfilter="num" maxLength={6} 
+                                <InputText keyfilter="num" maxLength={6}
                                     value={ra} onChange={(e) => setRA(e.target.value)}
                                     className={Style.input} placeholder="123456" />
                             </div>
@@ -144,50 +147,53 @@ export default function TelaLogin() {
                     </div>
                 </div>
             </div>
+            {/* Parte da Direita da Tela */}
             <div className={Style.containerTexto}>
-                <h1 className={Style.tituloTexto}>Matemática <span>em Áudio</span></h1>
-                <h3 className={Style.subTituloTexto}>
-                    Episódios cuidadosamente produzidos para tornar a<br />matemática acessível e fascinante
-                </h3>
-                <div className={Style.blocoTexto}>
-                    <div className={Style.divIcon}>
-                        <i className="fa-regular fa-headphones" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                <div className={Style.divTexto}>
+                    <h1 className={Style.tituloTexto}>Matemática <span>em Áudio</span></h1>
+                    <h3 className={Style.subTituloTexto}>
+                        Episódios cuidadosamente produzidos para tornar a matemática acessível e fascinante
+                    </h3>
+                    <div className={Style.blocoTexto}>
+                        <div className={Style.divIcon}>
+                            <i className="fa-regular fa-headphones" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                        </div>
+                        <div className={Style.divMensagem}>
+                            <p>Aprenda no seu ritmo</p>
+                            <span>
+                                Ouça quando e onde quiser, no trajeto, em casa ou na academia
+                            </span>
+                        </div>
                     </div>
-                    <div className={Style.divMensagem}>
-                        <p>Aprenda no seu ritmo</p>
-                        <span>
-                            Ouça quando e onde quiser, no trajeto, em casa ou na<br />academia
-                        </span>
+                    <div className={Style.blocoTexto}>
+                        <div className={Style.divIcon}>
+                            <i className="fa-solid fa-book-open" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                        </div>
+                        <div className={Style.divMensagem}>
+                            <p>Conteúdo especializado</p>
+                            <span>
+                                Professores renomados explicam conceitos complexos de forma simples
+                            </span>
+                        </div>
                     </div>
-                </div>
-                <div className={Style.blocoTexto}>
-                    <div className={Style.divIcon}>
-                        <i className="fa-solid fa-book-open" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                    <div className={Style.blocoTexto}>
+                        <div className={Style.divIcon}>
+                            <i className="fa-regular fa-circle-check" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                        </div>
+                        <div className={Style.divMensagem}>
+                            <p>100% gratuito</p>
+                            <span>
+                                Acesso completo a todos os episódios sem custo algum
+                            </span>
+                        </div>
                     </div>
-                    <div className={Style.divMensagem}>
-                        <p>Conteúdo especializado</p>
-                        <span>
-                            Professores renomados explicam conceitos complexos de<br />forma simples
-                        </span>
-                    </div>
-                </div>
-                <div className={Style.blocoTexto}>
-                    <div className={Style.divIcon}>
-                        <i className="fa-regular fa-circle-check" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
-                    </div>
-                    <div className={Style.divMensagem}>
-                        <p>100% gratuito</p>
-                        <span>
-                            Acesso completo a todos os episódios sem custo algum
-                        </span>
-                    </div>
-                </div>
-                <div className={Style.ultimaMensagem}>
                     <hr />
-                    <p>
-                        "A matemática é a linguagem com a qual Deus escreveu o universo. Junte-se a nós
-                        nessa jornada de descoberta."
-                    </p>
+                    <div className={Style.ultimaMensagem}>
+                        <p>
+                            "A matemática é a linguagem com a qual Deus escreveu o universo. Junte-se a nós
+                            nessa jornada de descoberta."
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
