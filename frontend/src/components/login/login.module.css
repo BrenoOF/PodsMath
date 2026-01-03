@@ -221,6 +221,12 @@
     border: 0.1rem solid #e2e8f0;
 }
 
+.googleIcon {
+    font-size: 0.875rem;
+    margin-right: 0.8rem;
+    color: var(--text-color);
+}
+
 /* Estilo dos Textos que fica na direita da tela */
 .containerTexto{
     display: flex;

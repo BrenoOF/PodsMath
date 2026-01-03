@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// ✅ TEMA
-import 'primereact/resources/themes/lara-light-blue/theme.css';
+// import 'primereact/resources/themes/lara-dark-blue/theme.css';
 
 // ✅ CSS BASE DO PRIMEREACT
 import 'primereact/resources/primereact.min.css';

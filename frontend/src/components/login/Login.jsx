@@ -142,7 +142,7 @@ export default function TelaLogin() {
                         <span>OU {trocar ? "CONTINUE" : "CADASTRE-SE"} COM</span>
                     </div>
                     <div className={Style.btns + " " + Style.btnEntrarGoogle}>
-                        <i className="fa-brands fa-google" style={{ fontSize: "0.875rem", color: "#0F172A", marginRight: "0.8rem" }}></i>
+                        <i className={`fa-brands fa-google ${Style.googleIcon}`}></i>
                         <p>{trocar ? "Entrar" : "Cadastrar"} com Google</p>
                     </div>
                 </div>
