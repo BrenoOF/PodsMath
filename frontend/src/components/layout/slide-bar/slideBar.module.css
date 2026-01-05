@@ -1,5 +1,29 @@
 .containerSlideBar{
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
-    width: 15.938rem;
+    width: 16rem;
+    height: 100vh;
+    border-right: solid 0.1rem #e2e8f0;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+/* Estilo da Div da Logo */
+.divLogo{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem 1rem 1.5rem;
+    border-bottom: solid 0.1rem #e2e8f0;
+}
+.imgLogo{
+    width: 7.5rem;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+.imgLogo:hover {
+    opacity: 0.6;
 }

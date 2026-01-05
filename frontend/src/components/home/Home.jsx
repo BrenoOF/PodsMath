@@ -13,7 +13,7 @@ export default function TelaHome(){
     return(
         <div>
             <SlideBar />
-            <TopBar />
+            {/* <TopBar /> */}
         </div>
     )
 }
