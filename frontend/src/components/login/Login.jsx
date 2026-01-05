@@ -8,6 +8,7 @@ import { InputText } from 'primereact/inputtext';
 import { RadioButton } from 'primereact/radiobutton';
 import { Dropdown } from 'primereact/dropdown';
 import { Password } from 'primereact/password';
+import { Message } from 'primereact/message';
 
 export default function TelaLogin() {
     const navigate = useNavigate();
@@ -22,6 +23,8 @@ export default function TelaLogin() {
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
 
+    const [errors, setErrors] = useState({});
+
     const graus = [
         { name: 'Fundamental I (1° ao 5° ano)', code: 'F1' },
         { name: 'Fundamental II (6° ao 9° ano)', code: 'F2' },
@@ -34,20 +37,102 @@ export default function TelaLogin() {
         { name: 'Pós-Doutorado', code: 'PD' }
     ];
 
+    const trocarForm = (valor) => {
+        setTrocar(valor);
+        setErrors({});
+    };
+
+    // Validações
+    const validarEmail = (value) => {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((value ?? "").trim());
+    }
+
+    const limparErro = (campo) => {
+        setErrors((prev) => ({ ...prev, [campo]: null }));
+    };
+
+    const validarLogin = () => {
+        let novosErros = {};
+
+        if (!email.trim()) {
+            novosErros.email = "Email é obrigatório";
+        } else if (!validarEmail(email)) {
+            novosErros.email = "Email inválido";
+        }
+
+        if (!senha) {
+            novosErros.senha = "Senha é obrigatória";
+        }
+
+        setErrors(novosErros);
+        return Object.keys(novosErros).length === 0;
+    };
+
+    const validarCadastro = () => {
+        let novosErros = {};
+
+        if (!nome.trim()) novosErros.nome = "Nome é obrigatório";
+
+        if (!email.trim()) {
+            novosErros.email = "Email é obrigatório";
+        } else if (!validarEmail(email)) {
+            novosErros.email = "Email inválido";
+        }
+
+        if (!tipoPessoa) novosErros.tipoPessoa = "Selecione uma opção";
+
+        if (!grau) novosErros.grau = "Selecione o grau de escolaridade";
+
+        if (!/^\d{6}$/.test(ra))
+            novosErros.ra = "RA deve conter 6 dígitos";
+
+        if (!escola.trim())
+            novosErros.escola = "Escola é obrigatória";
+
+        if (!senha || senha.length < 6)
+            novosErros.senha = "Senha deve ter no mínimo 6 caracteres";
+
+        if (senha !== confirmarSenha)
+            novosErros.confirmarSenha = "As senhas não coincidem";
+
+        setErrors(novosErros);
+        return Object.keys(novosErros).length === 0;
+    };
+
+    const handleSubmit = () => {
+        if (trocar) {
+            if (!validarLogin()) return;
+
+            console.log("LOGIN OK", { email, senha });
+        } else {
+            if (!validarCadastro()) return;
+
+            console.log("CADASTRO OK", {
+                nome,
+                email,
+                tipoPessoa,
+                grau,
+                ra,
+                escola,
+                senha
+            });
+        }
+    };
+
     return (
         <div className={Style.container}>
             <div className={Style.containerLogin}>
                 <img src={require("../../imgs/Logo1.png")} alt="Podsmath Logo"
-                    className={Style.imgLogo} onClick={() => { navigate("/") }} 
+                    className={Style.imgLogo} onClick={() => { navigate("/") }}
                     draggable="false" />
                 <p className={Style.textoLogin}>Aprenda matemática de forma envolvente através de podcasts</p>
                 <div className={Style.divMudarForm}>
-                    <p onClick={(e) => { setTrocar(true) }}
+                    <p onClick={(e) => { trocarForm(true) }}
                         style={{ color: trocar ? "" : "#64748b" }}
                     >
                         Entrar
                     </p>
-                    <p onClick={(e) => { setTrocar(false) }}
+                    <p onClick={(e) => { trocarForm(false) }}
                         style={{ color: trocar ? "#64748b" : "" }}
                     >
                         Criar Conta
@@ -68,74 +153,170 @@ export default function TelaLogin() {
                         <>
                             <div className={Style.divInput}>
                                 <label>Email</label>
-                                <InputText keyfilter="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                                    className={Style.input} placeholder="seu@email.com" />
+                                <InputText value={email} 
+                                    onChange={(e) => { 
+                                        setEmail(e.target.value);
+                                        limparErro("email");
+                                    }}
+                                    className={`${Style.input} ${errors.email ? "p-invalid" : ""}`} 
+                                    placeholder="seu@email.com" />
+                                {errors.email && (
+                                    <Message severity="error" text={errors.email} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Senha</label>
-                                <Password value={senha} onChange={(e) => setSenha(e.target.value)}
-                                    toggleMask feedback={false} inputClassName={Style.input}
-                                    placeholder="••••••••" />
+                                <Password value={senha} 
+                                    onChange={(e) => {
+                                        setSenha(e.target.value);
+                                        limparErro("senha");
+                                    }}
+                                    toggleMask feedback={false} 
+                                    inputClassName={`${Style.input} ${errors.senha ? "p-invalid" : ""}`}
+                                    placeholder="••••••••" 
+                                />
                             </div>
                         </>
                     ) : (
                         <>
                             <div className={Style.divInput}>
                                 <label>Nome Completo</label>
-                                <InputText value={nome} onChange={(e) => setNome(e.target.value)}
-                                    className={Style.input} placeholder="Maria Silva" />
+                                <InputText value={nome}
+                                    onChange={(e) => {
+                                        setNome(e.target.value);
+                                        limparErro("nome");
+                                    }}
+                                    className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`} 
+                                    placeholder="Maria Silva" 
+                                />
+                                {errors.nome && (
+                                    <Message severity="error" text={errors.nome} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Email</label>
-                                <InputText keyfilter="email" value={email} onChange={(e) => setEmail(e.target.value)}
-                                    className={Style.input} placeholder="seu@email.com" />
+                                <InputText value={email} 
+                                    onChange={(e) => {
+                                        setEmail(e.target.value);
+                                        limparErro("email");
+                                    }}
+                                    className={`${Style.input} ${errors.email ? "p-invalid" : ""}`}
+                                    placeholder="seu@email.com" 
+                                />
+                                {errors.email && (
+                                    <Message severity="error" text={errors.email} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Você é</label>
                                 <div className={Style.divRadio}>
                                     <div className={Style.inputRadio}>
                                         <RadioButton inputId="aluno" name="aluno"
-                                            value="Aluno" onChange={(e) => setTipoPessoa(e.value)} checked={tipoPessoa === 'Aluno'} />
+                                            value="Aluno" 
+                                            onChange={(e) => {
+                                                setTipoPessoa(e.value);
+                                                limparErro("tipoPessoa");
+                                            }}
+                                            checked={tipoPessoa === 'Aluno'} 
+                                        />
                                         <label htmlFor="aluno">Aluno</label>
                                     </div>
                                     <div className={Style.inputRadio}>
                                         <RadioButton inputId="professor" name="professor"
-                                            value="Professor" onChange={(e) => setTipoPessoa(e.value)} checked={tipoPessoa === 'Professor'} />
+                                            value="Professor" 
+                                            onChange={(e) => {
+                                                setTipoPessoa(e.value);
+                                                limparErro("tipoPessoa");
+                                            }} 
+                                            checked={tipoPessoa === 'Professor'} 
+                                        />
                                         <label htmlFor="professor">Professor(a)</label>
                                     </div>
+                                    
                                 </div>
+                                {errors.tipoPessoa && (
+                                    <Message severity="error" text={errors.tipoPessoa} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Grau de Escolaridade</label>
-                                <Dropdown value={grau} onChange={(e) => setGrau(e.value)} options={graus} optionLabel="name"
-                                    placeholder="Selecione..." className={Style.input} />
+                                <Dropdown value={grau} 
+                                    onChange={(e) => {
+                                        setGrau(e.value);
+                                        limparErro("grau");
+                                    }}
+                                    options={graus} optionLabel="name"
+                                    placeholder="Selecione..."  
+                                    className={`${Style.input} ${errors.grau ? "p-invalid" : ""}`}
+                                />
+                                {errors.grau && (
+                                    <Message severity="error" text={errors.grau} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>R.A. (6 dígitos)</label>
                                 <InputText keyfilter="num" maxLength={6}
-                                    value={ra} onChange={(e) => setRA(e.target.value)}
-                                    className={Style.input} placeholder="123456" />
+                                    value={ra} 
+                                    onChange={(e) => {
+                                        setRA(e.target.value);
+                                        limparErro("ra");
+                                    }}
+                                    className={`${Style.input} ${errors.ra ? "p-invalid" : ""}`}
+                                    placeholder="123456" 
+                                />
+                                {errors.ra && (
+                                    <Message severity="error" text={errors.ra} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Escola/Instituição</label>
-                                <InputText value={escola} onChange={(e) => setEscola(e.target.value)}
-                                    className={Style.input} placeholder="Escola Estadual..." />
+                                <InputText value={escola} 
+                                    onChange={(e) => {
+                                        setEscola(e.target.value);
+                                        limparErro("escola");
+                                    }}
+                                    className={`${Style.input} ${errors.escola ? "p-invalid" : ""}`}
+                                    placeholder="Escola Estadual..." 
+                                />
+                                {errors.escola && (
+                                    <Message severity="error" text={errors.escola} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Senha</label>
-                                <Password value={senha} onChange={(e) => setSenha(e.target.value)}
-                                    toggleMask feedback={false} inputClassName={Style.input}
-                                    placeholder="••••••••" />
+                                <Password value={senha} 
+                                    onChange={(e) => {
+                                        setSenha(e.target.value);
+                                        limparErro("senha");
+                                    }}
+                                    toggleMask feedback={false} 
+                                    inputClassName={`${Style.input} ${errors.senha ? "p-invalid" : ""}`}
+                                    placeholder="••••••••" 
+                                />
+                                {errors.senha && (
+                                    <Message severity="error" text={errors.senha} />
+                                )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Confirmar senha</label>
-                                <Password value={confirmarSenha} onChange={(e) => setConfirmarSenha(e.target.value)}
-                                    toggleMask feedback={false} inputClassName={Style.input}
-                                    placeholder="••••••••" />
+                                <Password value={confirmarSenha}
+                                    onChange={(e) => {
+                                        setConfirmarSenha(e.target.value);
+                                        limparErro("confirmarSenha");
+                                    }}
+                                    toggleMask feedback={false} 
+                                    inputClassName={`${Style.input} ${errors.confirmarSenha ? "p-invalid" : ""}`}
+                                    placeholder="••••••••" 
+                                />
+                                {errors.confirmarSenha && (
+                                    <Message severity="error" text={errors.confirmarSenha} />
+                                )}
                             </div>
                         </>
                     )}
-                    <div className={Style.btns + " " + Style.btnEntrar}>
+                    <div className={Style.btns + " " + Style.btnEntrar}
+                        onClick={handleSubmit}
+                    >
                         <p>{trocar ? "Entrar" : "Criar conta grátis"}</p>
                     </div>
                     <div className={Style.ouContinue}>
