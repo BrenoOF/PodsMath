@@ -33,8 +33,9 @@
 }
 
 .imgLogo{
-    width: 15.3rem;
-    margin-top: 1rem;
+    width: 10rem;
+    margin-top: 4rem;
+    margin-bottom: 3.5rem;
     cursor: pointer;
     opacity: 1;
     transition: opacity 0.2s ease;
