@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Style from "./slideBar.module.css";
@@ -6,27 +6,47 @@ import Style from "./slideBar.module.css";
 export default function CompSlideBar() {
     const navigate = useNavigate();
 
+    const [aberta, setAberta] = useState(true);
+    const [trocar, setTrocar] = useState("Home");
+
     return (
-        <div className={Style.containerSlideBar}>
+        <div className={`${Style.containerSlideBar} ${!aberta ? Style.fechada : ""}`}>
             <div className={Style.divLogo}>
                 <img src={require("../../../imgs/Logo1.png")} alt="Podsmath Logo"
                     className={Style.imgLogo} onClick={() => { navigate("/") }}
                     draggable="false" />
-                <i className="fa-regular fa-square-caret-left" style={{ fontSize: "1rem", color: "#000" }}></i>
+                {!aberta && (
+                    <hr className={Style.linhaToggle} />
+                )}
+                <i className={`fa-regular fa-square-caret-left ${Style.btnToggle}`} style={{ fontSize: "1rem", color: "#000" }}
+                    onClick={() => setAberta(!aberta)}
+                ></i>
             </div>
-            <div>
-                <div>
-                    <i ></i>
+            <div className={Style.divMenuOpcoes}>
+                <div className={`${Style.btnPadrao} ${trocar === "Home" ? Style.btnSelecionado : ""}`}
+                    onClick={()=>{
+                        setTrocar("Home");
+                    }}
+                >
+                    <i class="fa-regular fa-house" style={{ fontSize: "1rem" }}></i>
                     <p>Home</p>
                 </div>
-                <div>
-                    <i ></i>
+                <div className={`${Style.btnPadrao} ${trocar === "Explorar" ? Style.btnSelecionado : ""}`}
+                    onClick={()=>{
+                        setTrocar("Explorar");
+                    }}
+                >
+                    <i class="fa-regular fa-folder" style={{ fontSize: "1rem" }}></i>
                     <p>Explorar</p>
                 </div>
             </div>
-            <div onClick={() => { navigate("/login") }}>
-                <i ></i>
-                <p>Entrar / Cadastrar</p>
+            <div className={Style.divBtnLogin}>
+                <div className={Style.btnPadrao + " " + Style.btnLogin}
+                    onClick={() => { navigate("/login") }}
+                >
+                    <i class="fa-regular fa-user" style={{ fontSize: "1rem", color: "#fff" }}></i>
+                    <p>Entrar / Cadastrar</p>
+                </div>
             </div>
         </div>
     )
