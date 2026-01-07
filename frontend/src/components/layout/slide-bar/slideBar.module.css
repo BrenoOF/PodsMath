@@ -1,6 +1,5 @@
 .containerSlideBar{
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
     width: 16rem;
     height: 100vh;
@@ -8,6 +7,43 @@
     position: fixed;
     top: 0;
     left: 0;
+    transition: width 0.3s ease; /* 🔥 */
+    overflow: hidden;
+    /* background-color: #021B33; */
+}
+
+/* Estilo para barra fechada */
+.fechada{
+    width: 4rem;
+}
+.fechada p{
+    opacity: 0;
+    width: 0;
+    overflow: hidden;
+    transition: opacity 0.2s ease;
+}
+.fechada .divLogo{
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.fechada .imgLogo{
+    width: 3.5rem;
+    margin-bottom: 1rem;
+}
+.fechada .btnPadrao{
+    justify-content: center;
+    margin-left: 1rem;
+}
+.fechada .btnLogin{
+    display: none;
+}
+.btnToggle{
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+.fechada .btnToggle{
+    transform: rotate(180deg);
 }
 
 /* Estilo da Div da Logo */
@@ -26,4 +62,66 @@
 }
 .imgLogo:hover {
     opacity: 0.6;
+}
+
+.linhaToggle{
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    width: 4rem;
+    margin: 0.5rem 0;
+}
+
+/* Estilo dos Btn para navegar */
+.divMenuOpcoes{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    gap: 1rem;
+    margin-top: 1.8rem;
+}
+
+.btnPadrao{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    width: 13.938rem;
+    height: 2.75rem;
+    padding: 1rem;
+    border-radius: 0.6rem;
+    box-sizing: border-box;
+    font-size: 0.875rem;
+    color: #000;
+    cursor: pointer;
+}
+.btnPadrao>i{
+    color: #000;
+}
+
+.btnSelecionado{
+    background-color: #012663;
+    color: #fff !important;
+}
+.btnSelecionado:hover{
+    background-color: #1a3f8f;
+}
+.btnSelecionado>i{
+    color: #fff !important;
+}
+
+.divBtnLogin{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: solid 0.1rem #e2e8f0;
+}
+
+.btnLogin{
+    margin: 1rem;
+    justify-content: center;
+    background-color: #ff5724 !important;
+    color: #fff !important;
+}
+.btnLogin:hover{
+    background-color: #ff5724e6 !important;
 }
