@@ -7,9 +7,8 @@
     position: fixed;
     top: 0;
     left: 0;
-    transition: width 0.3s ease; /* 🔥 */
+    transition: width 0.3s ease;
     overflow: hidden;
-    /* background-color: #021B33; */
 }
 
 /* Estilo para barra fechada */
@@ -91,11 +90,10 @@
     border-radius: 0.6rem;
     box-sizing: border-box;
     font-size: 0.875rem;
-    color: #000;
     cursor: pointer;
 }
 .btnPadrao>i{
-    color: #000;
+    color: inherit;
 }
 
 .btnSelecionado{

@@ -3,10 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 import Style from "./slideBar.module.css";
 
-export default function CompSlideBar() {
+export default function CompSlideBar({ aberta, setAberta }) {
     const navigate = useNavigate();
 
-    const [aberta, setAberta] = useState(true);
     const [trocar, setTrocar] = useState("Home");
 
     return (
@@ -18,7 +17,7 @@ export default function CompSlideBar() {
                 {!aberta && (
                     <hr className={Style.linhaToggle} />
                 )}
-                <i className={`fa-regular fa-square-caret-left ${Style.btnToggle}`} style={{ fontSize: "1rem", color: "#000" }}
+                <i className={`fa-regular fa-square-caret-left ${Style.btnToggle}`} style={{ fontSize: "1rem" }}
                     onClick={() => setAberta(!aberta)}
                 ></i>
             </div>
@@ -28,7 +27,7 @@ export default function CompSlideBar() {
                         setTrocar("Home");
                     }}
                 >
-                    <i class="fa-regular fa-house" style={{ fontSize: "1rem" }}></i>
+                    <i className="fa-regular fa-house" style={{ fontSize: "1rem" }}></i>
                     <p>Home</p>
                 </div>
                 <div className={`${Style.btnPadrao} ${trocar === "Explorar" ? Style.btnSelecionado : ""}`}
@@ -36,7 +35,7 @@ export default function CompSlideBar() {
                         setTrocar("Explorar");
                     }}
                 >
-                    <i class="fa-regular fa-folder" style={{ fontSize: "1rem" }}></i>
+                    <i className="fa-regular fa-folder" style={{ fontSize: "1rem" }}></i>
                     <p>Explorar</p>
                 </div>
             </div>
