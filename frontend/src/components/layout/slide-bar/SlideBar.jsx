@@ -43,7 +43,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 <div className={Style.btnPadrao + " " + Style.btnLogin}
                     onClick={() => { navigate("/login") }}
                 >
-                    <i class="fa-regular fa-user" style={{ fontSize: "1rem", color: "#fff" }}></i>
+                    <i className="fa-regular fa-user" style={{ fontSize: "1rem", color: "#fff" }}></i>
                     <p>Entrar / Cadastrar</p>
                 </div>
             </div>

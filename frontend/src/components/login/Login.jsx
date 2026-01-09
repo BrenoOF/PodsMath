@@ -10,7 +10,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { Password } from 'primereact/password';
 import { Message } from 'primereact/message';
 
-export default function TelaLogin() {
+export default function TelaLogin(){
     const navigate = useNavigate();
     const [trocar, setTrocar] = useState(true);
 
