@@ -1,21 +1,14 @@
-import React, { useState } from "react";
-// import { useNavigate } from "react-router-dom";
+import React from "react";
 
 // import Style from "./home.module.css";
 
 // Import de Componentes
-import SlideBar from "../layout/slide-bar/SlideBar";
-import TopBar from "../layout/top-bar/TopBar";
 
-export default function TelaHome(){
-    // const navigate = useNavigate();
-
-    const [slidebarAberta, setSlidebarAberta] = useState(true);
-    
-    return(
+export default function TelaHome() {
+    return (
         <div>
-            <SlideBar aberta={slidebarAberta} setAberta={setSlidebarAberta} />
-            <TopBar slidebarAberta={slidebarAberta} />
+            <h1>Home</h1>
+            <p>Conteúdo da Home</p>
         </div>
     )
 }
