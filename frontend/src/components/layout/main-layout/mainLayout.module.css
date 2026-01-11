@@ -1,0 +1,18 @@
+.container {
+    height: 100dvh;
+}
+
+.aberta {
+    margin-left: 16rem;
+}
+
+.fechada {
+    margin-left: 4rem;
+}
+
+.main {
+    padding-top: 4rem;
+    transition: margin-left 0.3s ease;
+    height: 100dvh;
+    overflow-y: auto;
+}
