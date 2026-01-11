@@ -26,12 +26,15 @@ export default function CompTopBar({ slidebarAberta }) {
     const toast = useRef(null);
 
     const aplicarTema = (modo) => {
+        if (configAtual.tema === modo) return;
+        
         if (modo === 'light') {
             changeTheme(
                 "/themes/lara-dark-blue/theme.css",
                 "/themes/lara-light-blue/theme.css",
                 "theme-link"
             )
+            document.documentElement.setAttribute("data-theme", "light");
         }
 
         if (modo === 'dark') {
@@ -40,6 +43,7 @@ export default function CompTopBar({ slidebarAberta }) {
                 "/themes/lara-dark-blue/theme.css",
                 "theme-link"
             )
+            document.documentElement.setAttribute("data-theme", "dark");
         }
 
         localStorage.setItem("theme-mode", modo);
@@ -59,16 +63,9 @@ export default function CompTopBar({ slidebarAberta }) {
     };
 
     const aplicarFonte = (tamanho) => {
-        let scale = 1;
+        if (configAtual.font === tamanho) return;
 
-        if (tamanho === "normal") scale = 1;
-        if (tamanho === "large") scale = 1.1;
-        if (tamanho === "xlarge") scale = 1.25;
-
-        document.documentElement.style.setProperty(
-            "--font-scale",
-            scale
-        );
+        tamanhoFonte(tamanho);
 
         localStorage.setItem("font-size", tamanho);
         setConfigAtual(prev => ({
@@ -86,13 +83,21 @@ export default function CompTopBar({ slidebarAberta }) {
             life: 2000
         });
     };
+    const tamanhoFonte = (tamanho) => {
+        let scale = 1;
+        if (tamanho === "normal") scale = 1;
+        if (tamanho === "large") scale = 1.1;
+        if (tamanho === "xlarge") scale = 1.25;
+
+        document.documentElement.style.setProperty("--font-scale", scale);
+    }
 
     // ✅ Aplica o tema salvo ao recarregar a página
     useEffect(() => {
         const temaSalvo = localStorage.getItem("theme-mode");
         const fonteSalva = localStorage.getItem("font-size") || "normal";
 
-        aplicarFonte(fonteSalva);
+        tamanhoFonte(fonteSalva);
 
         if (temaSalvo === "dark") {
             changeTheme(
@@ -116,10 +121,10 @@ export default function CompTopBar({ slidebarAberta }) {
             }
         };
 
-        document.addEventListener("mousedown", handleClickOutside);
+        document.addEventListener("pointerdown", handleClickOutside);
 
         return () => {
-            document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("pointerdown", handleClickOutside);
         };
     }, [menuConfigsAberto]);
 
@@ -133,7 +138,7 @@ export default function CompTopBar({ slidebarAberta }) {
                         <InputText placeholder="Buscar..." className={Style.input} />
                     </IconField>
                 </div>
-                <div className={Style.divDireita}>
+                <div className={Style.divDireita} on>
                     <div className={Style.btnPadrao} onClick={() => { navigate("/login") }} >
                         <p>Entrar</p>
                     </div>

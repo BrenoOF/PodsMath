@@ -65,7 +65,7 @@
 .containerForm{
     display: flex;
     flex-direction: column;
-    border: 0.1rem solid #e2e8f0;
+    border: 0.1rem solid var(--border-color-tema);
     border-radius: 1rem;
     width: 28rem;
     min-height: 29rem;
