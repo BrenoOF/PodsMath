@@ -37,4 +37,22 @@ html {
 
 body {
     font-family: 'Roboto', sans-serif !important;
+    background-color: var(--app-background);
+}
+
+/* Estilo para trocar umas cores do dark theme do Prime React */
+:root[data-theme="dark"] .p-inputtext,
+:root[data-theme="dark"] .p-card,
+:root[data-theme="dark"] .p-dropdown,
+:root[data-theme="dark"] .p-button {
+    border-color: #26344a !important;
+}
+
+:root {
+    --border-color-tema: #e2e8f0; /* light */
+    --app-background: #ffffff; /* light */
+}
+:root[data-theme="dark"] {
+    --border-color-tema: #26344a; /* dark */
+    --app-background: #0f131a; /* dark azulado */
 }

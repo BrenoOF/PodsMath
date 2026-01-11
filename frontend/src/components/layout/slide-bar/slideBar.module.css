@@ -3,7 +3,7 @@
     flex-direction: column;
     width: 16rem;
     height: 100vh;
-    border-right: solid 0.1rem #e2e8f0;
+    border-right: solid 0.1rem var(--border-color-tema);
     position: fixed;
     top: 0;
     left: 0;
@@ -51,7 +51,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem 1rem 1.5rem;
-    border-bottom: solid 0.1rem #e2e8f0;
+    border-bottom: solid 0.1rem var(--border-color-tema);
 }
 .imgLogo{
     width: 7.5rem;
@@ -65,7 +65,7 @@
 
 .linhaToggle{
     border: none;
-    border-top: 1px solid #e2e8f0;
+    border-top: 1px solid var(--border-color-tema);
     width: 4rem;
     margin: 0.5rem 0;
 }
@@ -111,7 +111,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top: solid 0.1rem #e2e8f0;
+    border-top: solid 0.1rem var(--border-color-tema);
 }
 
 .btnLogin{
