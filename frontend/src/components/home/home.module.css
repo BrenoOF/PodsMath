@@ -1,3 +1,54 @@
-.containerHome{
-    
+.containerHome {
+    margin: 2.6rem 3.8rem;
+}
+
+/* Estilo da Primeira coisa da Home(um bloco falando pouco do podsmath) */
+.divBoasVindas {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    background: linear-gradient(264.39deg, #4577A1 -92.12%, #021B33 104.6%);
+    color: #fff;
+    padding: 2rem 4.6rem;
+    min-height: 24rem;
+    height: auto;
+    border-radius: 1.5rem;
+}
+
+.pequenaMensagem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.875rem;
+    background: var(--color-white-10, #FFFFFF1A);
+    border-radius: 2rem;
+    padding: 0.5rem;
+    width: 13rem;
+}
+
+.tituloBoasVindas {
+    line-height: 4rem;
+    font-size: 3.75rem;
+}
+.tituloBoasVindas>span {
+    background: linear-gradient(90deg, #F08E60 0%, #FF851A 100%);
+    background-clip: text;
+    color: transparent;
+}
+
+.subTitulo {
+    font-size: 1.25rem;
+}
+
+.imgMicrofone {
+    position: absolute;
+    right: 8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.1;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    width: 20rem;
 }

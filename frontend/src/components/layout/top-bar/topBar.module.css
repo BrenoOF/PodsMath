@@ -8,6 +8,7 @@
     position: fixed;
     top: 0;
     border-bottom: solid 0.1rem var(--border-color-tema);
+    background: var(--app-background);
     transition: left 0.3s ease, width 0.3s ease;
     z-index: 100;
 }
