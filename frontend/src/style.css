@@ -27,10 +27,6 @@
     padding: 0;
 }
 
-:root {
-    --font-scale: 1;
-}
-
 html {
     font-size: calc(16px * var(--font-scale));
 }
@@ -49,10 +45,13 @@ body {
 }
 
 :root {
-    --border-color-tema: #e2e8f0; /* light */
-    --app-background: #ffffff; /* light */
+    --font-scale: 1;
+    --border-color-tema: #e2e8f0;
+    --app-background: #ffffff;
+    --sobre-projeto-bg: #4577A124;
 }
 :root[data-theme="dark"] {
-    --border-color-tema: #26344a; /* dark */
-    --app-background: #0f131a; /* dark azulado */
+    --border-color-tema: #26344a;
+    --app-background: #0f131a;
+    --sobre-projeto-bg: #17255433;
 }

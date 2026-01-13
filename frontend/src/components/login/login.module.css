@@ -1,23 +1,24 @@
 @media screen and (max-width: 1023px) {
-    .containerLogin{
+    .containerLogin {
         width: 100%;
     }
 
-    .containerTexto{
+    .containerTexto {
         display: none !important;
     }
 }
 
 @media screen and (min-width: 1024px) {
-    .containerLogin{
+    .containerLogin {
         width: 49%;
     }
-    .containerTexto{ 
+
+    .containerTexto {
         display: flex;
     }
 }
 
-.container{
+.container {
     display: flex;
     flex-direction: row;
     width: 100%;
@@ -26,13 +27,13 @@
 }
 
 /* Estilo do Container do Form de Login e Cadastro */
-.containerLogin{
+.containerLogin {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.imgLogo{
+.imgLogo {
     width: 10rem;
     margin-top: 4rem;
     margin-bottom: 3.5rem;
@@ -40,15 +41,16 @@
     opacity: 1;
     transition: opacity 0.2s ease;
 }
+
 .imgLogo:hover {
     opacity: 0.6;
 }
 
-.textoLogin{
+.textoLogin {
     color: #64748b;
 }
 
-.divMudarForm{
+.divMudarForm {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -57,12 +59,13 @@
     font-weight: bold;
     font-size: 0.8rem;
 }
-.divMudarForm>p{
+
+.divMudarForm>p {
     cursor: pointer;
     padding: 1rem 5rem;
 }
 
-.containerForm{
+.containerForm {
     display: flex;
     flex-direction: column;
     border: 0.1rem solid var(--border-color-tema);
@@ -75,24 +78,27 @@
     box-sizing: border-box;
 }
 
-.divTituloLogin{
+.divTituloLogin {
     margin-bottom: 2rem;
 }
-.divTituloLogin>h1{
+
+.divTituloLogin>h1 {
     font-size: 1.5rem;
     margin-bottom: 0.25rem;
 }
-.divTituloLogin>p{
+
+.divTituloLogin>p {
     color: #64748b;
     font-size: 0.875rem;
 }
 
-.divInput{
+.divInput {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
     margin-bottom: 1rem;
 }
+
 .divInput label {
     font-size: 0.8rem;
     font-weight: bold;
@@ -120,6 +126,7 @@
     margin-top: 0;
     cursor: pointer;
 }
+
 :global(.p-password-input) {
     padding-right: 2.5rem;
 }
@@ -129,6 +136,7 @@
 :global(.p-password-input) {
     border: 0.1rem solid #cbd5e1;
 }
+
 :global(.p-inputtext:focus),
 :global(.p-password-input:focus) {
     border: 0.15rem solid #012663;
@@ -136,27 +144,27 @@
 }
 
 /* Estilo do Input Radio */
-.divRadio{
+.divRadio {
     display: flex;
     gap: 2rem;
 }
 
-.inputRadio{
+.inputRadio {
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.inputRadio>label{
+.inputRadio>label {
     font-weight: normal;
 }
 
 /* Estilo Input Select */
-:global(.p-dropdown)>span{
+:global(.p-dropdown)>span {
     border: none;
 }
 
-:global(.p-dropdown):hover{
+:global(.p-dropdown):hover {
     border: 0.1rem solid #cbd5e1;
 }
 
@@ -177,29 +185,32 @@
 
 /* Estilo da Parte alternativa de Login/Cadastro (o Google)*/
 .ouContinue {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 24px 0;
-  position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0;
+    position: relative;
 }
-.ouContinue::before, .ouContinue::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: var(--surface-border, #dcdcdc);
+
+.ouContinue::before,
+.ouContinue::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: var(--surface-border, #dcdcdc);
 }
+
 .ouContinue span {
-  padding: 0 12px;
-  font-size: 12px;
-  text-transform: uppercase;
-  color: var(--text-color-secondary, #64748b);
-  background-color: var(--surface-card, #ffffff);
-  white-space: nowrap;
+    padding: 0 12px;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: var(--text-color-secondary, #64748b);
+    background-color: var(--surface-card, #ffffff);
+    white-space: nowrap;
 }
 
 /* Estilo Padrão de Botão*/
-.btns{
+.btns {
     cursor: pointer;
     display: flex;
     justify-content: center;
@@ -209,16 +220,17 @@
     border-radius: 0.5rem;
 }
 
-.btnEntrar{
+.btnEntrar {
     color: #fff;
     background-color: #012663;
     margin-top: 1rem;
 }
-.btnEntrar:hover{
+
+.btnEntrar:hover {
     background-color: #1a3f8f;
 }
 
-.btnEntrarGoogle{
+.btnEntrarGoogle {
     border: 0.1rem solid #e2e8f0;
 }
 
@@ -229,7 +241,7 @@
 }
 
 /* Estilo dos Textos que fica na direita da tela */
-.containerTexto{
+.containerTexto {
     display: flex;
     flex-direction: column;
     width: 51%;
@@ -237,55 +249,56 @@
     color: #fff;
 }
 
-.divTexto{
+.divTexto {
     width: clamp(50%, 50vw, 27rem);
     margin: 5rem 0 0 3rem;
 }
 
-.divTexto>hr{
+.divTexto>hr {
     border-color: #ffffff1a;
 }
 
-.tituloTexto{
-   font-size: 2.25rem;
+.tituloTexto {
+    font-size: 2.25rem;
 }
-.tituloTexto>span{
+
+.tituloTexto>span {
     background: linear-gradient(90deg, #F08E60 0%, #FF851A 100%);
     background-clip: text;
     color: transparent;
 }
 
-.subTituloTexto{
+.subTituloTexto {
     margin-top: 2rem;
     margin-bottom: 2rem;
     color: #64748b;
     font-size: 1.25rem;
 }
 
-.blocoTexto{
+.blocoTexto {
     display: flex;
     align-items: flex-start;
     gap: 0.8rem;
     margin-bottom: 3rem;
 }
 
-.divIcon{
+.divIcon {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-shrink: 0; 
+    flex-shrink: 0;
     width: 3.3rem;
     height: 3.3rem;
     background-color: #ffffff1a;
     border-radius: 100%;
 }
 
-.divMensagem>p{
+.divMensagem>p {
     color: #FF851A;
     margin-bottom: 0.7rem;
 }
 
-.ultimaMensagem{
+.ultimaMensagem {
     margin-top: 2rem;
     font-size: 0.875rem;
 }
