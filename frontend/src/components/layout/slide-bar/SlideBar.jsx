@@ -25,6 +25,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 <div className={`${Style.btnPadrao} ${trocar === "Home" ? Style.btnSelecionado : ""}`}
                     onClick={()=>{
                         setTrocar("Home");
+                        navigate("/");
                     }}
                 >
                     <i className="fa-regular fa-house" style={{ fontSize: "1rem" }}></i>
@@ -33,6 +34,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 <div className={`${Style.btnPadrao} ${trocar === "Explorar" ? Style.btnSelecionado : ""}`}
                     onClick={()=>{
                         setTrocar("Explorar");
+                        navigate("/explorar")
                     }}
                 >
                     <i className="fa-regular fa-folder" style={{ fontSize: "1rem" }}></i>
