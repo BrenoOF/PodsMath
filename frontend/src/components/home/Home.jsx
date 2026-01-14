@@ -3,6 +3,9 @@ import React from "react";
 import Style from "./home.module.css";
 
 // Import de Componentes
+import Destaque from "./carrosseis/PodcastDestaque";
+import Novidades from "./carrosseis/Novidade";
+import Proprio from "./carrosseis/PodcastProprio";
 
 export default function TelaHome() {
     return (
@@ -33,21 +36,15 @@ export default function TelaHome() {
             {/* */}
             <hr className={Style.hrDeSeparacao} />
             {/* Podcasts em Destaque */}
-            <div>
-                <div className={Style.divTitulosDosPodcasts}>
-                    <i className="fa-solid fa-music"></i>
-                    <p>Podcasts em destaque</p>
-                </div>
-            </div>
+            <Destaque />
+            {/* */}
+            <hr className={Style.hrDeSeparacao} />
+            {/* Novidades */}
+            <Novidades />
             {/* */}
             <hr className={Style.hrDeSeparacao} />
             {/* Podcasts Proprios */}
-            <div>
-                <div className={Style.divTitulosDosPodcasts}>
-                    <i className="fa-solid fa-music"></i>
-                    <p>Podcasts Próprios</p>
-                </div>
-            </div>
+            <Proprio />
             {/* */}
             <hr className={Style.hrDeSeparacao} />
             {/* Bloco de Footer onde terá "Sobre esse Projeto" */}
@@ -71,7 +68,7 @@ export default function TelaHome() {
                         </p>
                     </div>
                     <div className={Style.btnLerMais}
-                        onClick={()=>{alert("Cliclou")}}
+                        onClick={() => { alert("Cliclou") }}
                     >
                         <p>Ler mais sobre esse projeto</p>
                     </div>
