@@ -60,16 +60,6 @@
     border: 0.1rem solid var(--border-color-tema);
 }
 
-.divTitulosDosPodcasts {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-}
-
-/* Estilos para os audios em destaque */
-
 /* Estilos para o "Sobre esse Projeto" */
 .sobreOProjeto {
     display: flex;
