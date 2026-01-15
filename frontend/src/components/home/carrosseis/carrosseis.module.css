@@ -5,6 +5,7 @@
     gap: 0.4rem;
     font-size: 1.5rem;
     font-weight: bold;
+    margin-bottom: 2rem;
 }
 
 /* Estilos para os audios em destaque */
@@ -14,7 +15,6 @@
     justify-content: space-evenly;
     flex-wrap: wrap;
     gap: 3rem;
-    margin-top: 2rem;
 }
 
 .cardsDestaque {
@@ -22,6 +22,12 @@
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cardsDestaque:hover {
+    transform: scale(1.1);
 }
 
 .cardsDestaque>div>h2 {
@@ -39,3 +45,86 @@
 }
 
 /* Estilos para os audios em destaque */
+:global(.p-carousel-item) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 26rem;
+    margin-bottom: 1.5rem;
+}
+
+.cardNovidade {
+    display: flex;
+    flex-direction: column;
+    width: 18.85rem;
+    border-radius: 1rem;
+    background-color: var(--background-secundario);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+.cardNovidade:hover{
+    transform: scale(1.1);
+    border: 0.05rem solid #ff5724;
+    box-shadow: 0px 8px 24px 0px #00000080;
+}
+
+.cardNovidade>h1 {
+    font-size: 1.125rem;
+    margin: 1rem;
+}
+
+.cardNovidade>p {
+    font-size: 0.875rem;
+    margin: 1rem;
+}
+
+.imgCardNovidade {
+    width: 18.75rem;
+    aspect-ratio: 18.75 / 12;
+    border-radius: 1rem;
+}
+
+.btnAssunto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #AED8E5;
+    color: #103C60;
+    border: 0.1rem solid #0757834d;
+    padding: 0.188rem 0.2rem;
+    width: 7rem;
+    border-radius: 5rem;
+    cursor: pointer;
+    transition: 0.5s ease;
+    margin: 1rem;
+}
+
+.btnAssunto:hover {
+    background-color: #fff;
+}
+
+.btnAssunto>p {
+    font-size: 0.875rem;
+}
+
+.divImgCardNovidade{
+    position: relative;
+}
+.iconPlay{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1.2);
+    font-size: 2.5rem;
+    color: #ff5724;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+.cardNovidade:hover .iconPlay {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+.cardNovidade:hover .imgCardNovidade {
+    filter: brightness(0.7);
+}
