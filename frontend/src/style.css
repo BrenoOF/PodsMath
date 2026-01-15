@@ -49,9 +49,11 @@ body {
     --border-color-tema: #e2e8f0;
     --app-background: #ffffff;
     --sobre-projeto-bg: #4577A124;
+    --background-secundario: #ffffff;
 }
 :root[data-theme="dark"] {
     --border-color-tema: #26344a;
     --app-background: #0f131a;
     --sobre-projeto-bg: #17255433;
+    --background-secundario: #17255433;
 }
