@@ -75,11 +75,8 @@ export default function CompPodcastDestaque() {
         return (
             <div className={Style.cardNovidade}>
                 <div className={Style.divImgCardNovidade}>
-                    <img
-                        src={item.img}
-                        alt={item.titulo}
-                        className={Style.imgCardNovidade}
-                        draggable="false"
+                    <img src={item.img} alt={item.titulo}
+                        className={Style.imgCard} draggable="false"
                     />
                     <i className={`fa-solid fa-circle-play ${Style.iconPlay}`}></i>
                 </div>

@@ -45,8 +45,6 @@ export default function TelaHome() {
             <hr className={Style.hrDeSeparacao} />
             {/* Podcasts Proprios */}
             <Proprio />
-            {/* */}
-            <hr className={Style.hrDeSeparacao} />
             {/* Bloco de Footer onde terá "Sobre esse Projeto" */}
             <div className={Style.sobreOProjeto}>
                 <div className={Style.divTextosProjeto}>

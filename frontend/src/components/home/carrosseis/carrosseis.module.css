@@ -44,41 +44,8 @@
     border-radius: 0.375rem;
 }
 
-/* Estilos para os audios em destaque */
-:global(.p-carousel-item) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 26rem;
-    margin-bottom: 1.5rem;
-}
-
-.cardNovidade {
-    display: flex;
-    flex-direction: column;
-    width: 18.85rem;
-    border-radius: 1rem;
-    background-color: var(--background-secundario);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-.cardNovidade:hover{
-    transform: scale(1.1);
-    border: 0.05rem solid #ff5724;
-    box-shadow: 0px 8px 24px 0px #00000080;
-}
-
-.cardNovidade>h1 {
-    font-size: 1.125rem;
-    margin: 1rem;
-}
-
-.cardNovidade>p {
-    font-size: 0.875rem;
-    margin: 1rem;
-}
-
-.imgCardNovidade {
+/* Estilo Padrão */
+.imgCard {
     width: 18.75rem;
     aspect-ratio: 18.75 / 12;
     border-radius: 1rem;
@@ -107,10 +74,46 @@
     font-size: 0.875rem;
 }
 
-.divImgCardNovidade{
+/* Estilos para os audios em destaque */
+:global(.p-carousel-item) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 26rem;
+    margin-bottom: 1.5rem;
+}
+
+.cardNovidade {
+    display: flex;
+    flex-direction: column;
+    width: 18.85rem;
+    border-radius: 1rem;
+    background-color: var(--background-secundario);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cardNovidade:hover {
+    transform: scale(1.1);
+    border: 0.05rem solid #ff5724;
+    box-shadow: 0px 8px 24px 0px #00000080;
+}
+
+.cardNovidade>h1 {
+    font-size: 1.125rem;
+    margin: 1rem;
+}
+
+.cardNovidade>p {
+    font-size: 0.875rem;
+    margin: 1rem;
+}
+
+.divImgCardNovidade {
     position: relative;
 }
-.iconPlay{
+
+.iconPlay {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -121,10 +124,87 @@
     transition: all 0.3s ease;
     pointer-events: none;
 }
+
 .cardNovidade:hover .iconPlay {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1.2);
 }
-.cardNovidade:hover .imgCardNovidade {
-    filter: brightness(0.7);
+
+.cardNovidade:hover .imgCard {
+    filter: brightness(0.8);
+}
+
+/* Estilo para Podcasts Proprios */
+.divTituloProprio {
+    display: flex;
+    justify-content: space-between;
+}
+
+.divTituloMostrar {
+    cursor: pointer;
+    color: var(--font-paragrafo);
+}
+
+.divPodcastsProprio {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 3.5rem;
+}
+
+.cardProprio {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem;
+    border: 0.1rem solid var(--border-color-tema);
+    border-radius: 1rem;
+    box-shadow: 5px 5px 14px 1px #00000080;
+    transition: transform 0.2s ease;
+}
+
+.cardProprio:hover {
+    transform: scale(1.01);
+}
+
+.divTextosProprio {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+    margin-left: 1rem;
+    max-width: 35%;
+}
+
+.divTextosProprio>h1 {
+    font-size: 1.5rem;
+}
+
+.divTextosProprio>p {
+    font-size: 1rem;
+}
+
+.divTextosProprio>.btnAssunto {
+    margin: 0rem !important;
+    width: auto !important;
+    padding: 0.4rem !important;
+}
+
+.divIconProprio {
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconPlayProprio {
+    color: #226BA0;
+    font-size: 3.5rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.iconPlayProprio:hover {
+    color: #1a3f8f;
+    transform: scale(1.15);
 }
