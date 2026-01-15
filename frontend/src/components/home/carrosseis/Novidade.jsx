@@ -98,13 +98,13 @@ export default function CompPodcastDestaque() {
 
     const responsiveOptions = [
         {
-            breakpoint: '1024px',
-            numVisible: 2,
+            breakpoint: '1366px',
+            numVisible: 3,
             numScroll: 1
         },
         {
-            breakpoint: '1366px',
-            numVisible: 3,
+            breakpoint: '1024px',
+            numVisible: 2,
             numScroll: 1
         }
     ];
