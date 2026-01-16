@@ -27,7 +27,7 @@ export default function CompTopBar({ slidebarAberta }) {
 
     const aplicarTema = (modo) => {
         if (configAtual.tema === modo) return;
-        
+
         if (modo === 'light') {
             changeTheme(
                 "/themes/lara-dark-blue/theme.css",
@@ -76,10 +76,10 @@ export default function CompTopBar({ slidebarAberta }) {
         toast.current.show({
             severity: 'contrast',
             summary: 'Tamanho da Fonte Alterado',
-            detail: 
+            detail:
                 tamanho === "normal" ? "Fonte normal ativada" :
-                tamanho === "large" ? "Fonte grande ativada" :
-                tamanho === "xlarge" ? "Fonte muito grande ativada" : " ",
+                    tamanho === "large" ? "Fonte grande ativada" :
+                        tamanho === "xlarge" ? "Fonte muito grande ativada" : " ",
             life: 2000
         });
     };
@@ -94,15 +94,23 @@ export default function CompTopBar({ slidebarAberta }) {
 
     // ✅ Aplica o tema salvo ao recarregar a página
     useEffect(() => {
-        const temaSalvo = localStorage.getItem("theme-mode");
+        const temaSalvo = localStorage.getItem("theme-mode" || "light");
         const fonteSalva = localStorage.getItem("font-size") || "normal";
 
         tamanhoFonte(fonteSalva);
 
+        document.documentElement.setAttribute("data-theme", temaSalvo);
+
         if (temaSalvo === "dark") {
             changeTheme(
-                "lara-light-blue",
-                "lara-dark-blue",
+                "/themes/lara-light-blue/theme.css",
+                "/themes/lara-dark-blue/theme.css",
+                "theme-link"
+            );
+        } else {
+            changeTheme(
+                "/themes/lara-dark-blue/theme.css",
+                "/themes/lara-light-blue/theme.css",
                 "theme-link"
             );
         }
@@ -138,11 +146,19 @@ export default function CompTopBar({ slidebarAberta }) {
                         <InputText placeholder="Buscar..." className={Style.input} />
                     </IconField>
                 </div>
-                <div className={Style.divDireita} on>
-                    <div className={Style.btnPadrao} onClick={() => { navigate("/login") }} >
+                <div className={Style.divDireita}>
+                    <div className={Style.btnPadrao}
+                        onClick={() => {
+                            navigate("/login", { state: { mode: "login" } });
+                        }}
+                    >
                         <p>Entrar</p>
                     </div>
-                    <div className={Style.btnPadrao + " " + Style.corParaFundo} onClick={() => { navigate("/login") }} >
+                    <div className={Style.btnPadrao + " " + Style.corParaFundo}
+                        onClick={() => {
+                            navigate("/login", { state: { mode: "cadastro" } });
+                        }}
+                    >
                         <p>Inscrever-se</p>
                     </div>
                     <div

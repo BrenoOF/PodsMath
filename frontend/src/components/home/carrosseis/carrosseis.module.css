@@ -74,7 +74,7 @@
     font-size: 0.875rem;
 }
 
-/* Estilos para os audios em destaque */
+/* Estilos para as novidades */
 :global(.p-carousel-item) {
     display: flex;
     justify-content: center;
@@ -107,6 +107,7 @@
 .cardNovidade>p {
     font-size: 0.875rem;
     margin: 1rem;
+    color: var(--font-paragrafo);
 }
 
 .divImgCardNovidade {
@@ -182,6 +183,7 @@
 
 .divTextosProprio>p {
     font-size: 1rem;
+    color: var(--font-paragrafo);
 }
 
 .divTextosProprio>.btnAssunto {
