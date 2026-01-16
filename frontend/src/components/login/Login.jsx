@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import Style from "./login.module.css";
 
@@ -10,9 +11,12 @@ import { Dropdown } from 'primereact/dropdown';
 import { Password } from 'primereact/password';
 import { Message } from 'primereact/message';
 
-export default function TelaLogin(){
+export default function TelaLogin() {
     const navigate = useNavigate();
-    const [trocar, setTrocar] = useState(true);
+    const location = useLocation();
+    const [trocar, setTrocar] = useState(() => {
+        return location.state?.mode === "cadastro" ? false : true;
+    });
 
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
@@ -99,11 +103,14 @@ export default function TelaLogin(){
         return Object.keys(novosErros).length === 0;
     };
 
-    const handleSubmit = () => {
+    // Parte de Ligar Frontend com o Backend
+    const enviarForms = async (e) => {
+        e.preventDefault();
+
         if (trocar) {
             if (!validarLogin()) return;
 
-            console.log("LOGIN OK", { email, senha });
+            await logar();
         } else {
             if (!validarCadastro()) return;
 
@@ -116,6 +123,40 @@ export default function TelaLogin(){
                 escola,
                 senha
             });
+        }
+    };
+
+    const logar = async () => {
+        try {
+            // Lê o JSON completo
+            const response = await axios.get("/users.json");
+            const usuarios = response.data;
+
+            // Procura usuário que bate com email e senha
+            const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+
+            if (usuario) {
+                // Salva dados do usuário no localStorage
+                localStorage.setItem("usuarioId", usuario.id);
+
+                setErrors({});
+
+                setTimeout(() => {
+                    navigate("/");
+                }, 2000);
+            } else {
+                setErrors((prev) => ({
+                    ...prev,
+                    login: "Email ou senha inválidos"
+                }));
+            }
+        } catch (error) {
+            // console.error(error);
+
+            setErrors((prev) => ({
+                ...prev,
+                login: "Erro interno. Tente novamente."
+            }));
         }
     };
 
@@ -153,12 +194,13 @@ export default function TelaLogin(){
                         <>
                             <div className={Style.divInput}>
                                 <label>Email</label>
-                                <InputText value={email} 
-                                    onChange={(e) => { 
+                                <InputText value={email}
+                                    onChange={(e) => {
                                         setEmail(e.target.value);
                                         limparErro("email");
+                                        limparErro("login");
                                     }}
-                                    className={`${Style.input} ${errors.email ? "p-invalid" : ""}`} 
+                                    className={`${Style.input} ${errors.email ? "p-invalid" : ""}`}
                                     placeholder="seu@email.com" />
                                 {errors.email && (
                                     <Message severity="error" text={errors.email} />
@@ -166,16 +208,23 @@ export default function TelaLogin(){
                             </div>
                             <div className={Style.divInput}>
                                 <label>Senha</label>
-                                <Password value={senha} 
+                                <Password value={senha}
                                     onChange={(e) => {
                                         setSenha(e.target.value);
                                         limparErro("senha");
+                                        limparErro("login");
                                     }}
-                                    toggleMask feedback={false} 
+                                    toggleMask feedback={false}
                                     inputClassName={`${Style.input} ${errors.senha ? "p-invalid" : ""}`}
-                                    placeholder="••••••••" 
+                                    placeholder="••••••••"
                                 />
+                                {errors.senha && (
+                                    <Message severity="error" text={errors.senha} />
+                                )}
                             </div>
+                            {errors.login && (
+                                <Message severity="error" text={errors.login} />
+                            )}
                         </>
                     ) : (
                         <>
@@ -186,8 +235,8 @@ export default function TelaLogin(){
                                         setNome(e.target.value);
                                         limparErro("nome");
                                     }}
-                                    className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`} 
-                                    placeholder="Maria Silva" 
+                                    className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`}
+                                    placeholder="Maria Silva"
                                 />
                                 {errors.nome && (
                                     <Message severity="error" text={errors.nome} />
@@ -195,13 +244,13 @@ export default function TelaLogin(){
                             </div>
                             <div className={Style.divInput}>
                                 <label>Email</label>
-                                <InputText value={email} 
+                                <InputText value={email}
                                     onChange={(e) => {
                                         setEmail(e.target.value);
                                         limparErro("email");
                                     }}
                                     className={`${Style.input} ${errors.email ? "p-invalid" : ""}`}
-                                    placeholder="seu@email.com" 
+                                    placeholder="seu@email.com"
                                 />
                                 {errors.email && (
                                     <Message severity="error" text={errors.email} />
@@ -212,27 +261,27 @@ export default function TelaLogin(){
                                 <div className={Style.divRadio}>
                                     <div className={Style.inputRadio}>
                                         <RadioButton inputId="aluno" name="aluno"
-                                            value="Aluno" 
+                                            value="Aluno"
                                             onChange={(e) => {
                                                 setTipoPessoa(e.value);
                                                 limparErro("tipoPessoa");
                                             }}
-                                            checked={tipoPessoa === 'Aluno'} 
+                                            checked={tipoPessoa === 'Aluno'}
                                         />
                                         <label htmlFor="aluno">Aluno</label>
                                     </div>
                                     <div className={Style.inputRadio}>
                                         <RadioButton inputId="professor" name="professor"
-                                            value="Professor" 
+                                            value="Professor"
                                             onChange={(e) => {
                                                 setTipoPessoa(e.value);
                                                 limparErro("tipoPessoa");
-                                            }} 
-                                            checked={tipoPessoa === 'Professor'} 
+                                            }}
+                                            checked={tipoPessoa === 'Professor'}
                                         />
                                         <label htmlFor="professor">Professor(a)</label>
                                     </div>
-                                    
+
                                 </div>
                                 {errors.tipoPessoa && (
                                     <Message severity="error" text={errors.tipoPessoa} />
@@ -240,13 +289,13 @@ export default function TelaLogin(){
                             </div>
                             <div className={Style.divInput}>
                                 <label>Grau de Escolaridade</label>
-                                <Dropdown value={grau} 
+                                <Dropdown value={grau}
                                     onChange={(e) => {
                                         setGrau(e.value);
                                         limparErro("grau");
                                     }}
                                     options={graus} optionLabel="name"
-                                    placeholder="Selecione..."  
+                                    placeholder="Selecione..."
                                     className={`${Style.input} ${errors.grau ? "p-invalid" : ""}`}
                                 />
                                 {errors.grau && (
@@ -256,13 +305,13 @@ export default function TelaLogin(){
                             <div className={Style.divInput}>
                                 <label>R.A. (6 dígitos)</label>
                                 <InputText keyfilter="num" maxLength={6}
-                                    value={ra} 
+                                    value={ra}
                                     onChange={(e) => {
                                         setRA(e.target.value);
                                         limparErro("ra");
                                     }}
                                     className={`${Style.input} ${errors.ra ? "p-invalid" : ""}`}
-                                    placeholder="123456" 
+                                    placeholder="123456"
                                 />
                                 {errors.ra && (
                                     <Message severity="error" text={errors.ra} />
@@ -270,13 +319,13 @@ export default function TelaLogin(){
                             </div>
                             <div className={Style.divInput}>
                                 <label>Escola/Instituição</label>
-                                <InputText value={escola} 
+                                <InputText value={escola}
                                     onChange={(e) => {
                                         setEscola(e.target.value);
                                         limparErro("escola");
                                     }}
                                     className={`${Style.input} ${errors.escola ? "p-invalid" : ""}`}
-                                    placeholder="Escola Estadual..." 
+                                    placeholder="Escola Estadual..."
                                 />
                                 {errors.escola && (
                                     <Message severity="error" text={errors.escola} />
@@ -284,14 +333,14 @@ export default function TelaLogin(){
                             </div>
                             <div className={Style.divInput}>
                                 <label>Senha</label>
-                                <Password value={senha} 
+                                <Password value={senha}
                                     onChange={(e) => {
                                         setSenha(e.target.value);
                                         limparErro("senha");
                                     }}
-                                    toggleMask feedback={false} 
+                                    toggleMask feedback={false}
                                     inputClassName={`${Style.input} ${errors.senha ? "p-invalid" : ""}`}
-                                    placeholder="••••••••" 
+                                    placeholder="••••••••"
                                 />
                                 {errors.senha && (
                                     <Message severity="error" text={errors.senha} />
@@ -304,9 +353,9 @@ export default function TelaLogin(){
                                         setConfirmarSenha(e.target.value);
                                         limparErro("confirmarSenha");
                                     }}
-                                    toggleMask feedback={false} 
+                                    toggleMask feedback={false}
                                     inputClassName={`${Style.input} ${errors.confirmarSenha ? "p-invalid" : ""}`}
-                                    placeholder="••••••••" 
+                                    placeholder="••••••••"
                                 />
                                 {errors.confirmarSenha && (
                                     <Message severity="error" text={errors.confirmarSenha} />
@@ -315,7 +364,7 @@ export default function TelaLogin(){
                         </>
                     )}
                     <div className={Style.btns + " " + Style.btnEntrar}
-                        onClick={handleSubmit}
+                        onClick={enviarForms}
                     >
                         <p>{trocar ? "Entrar" : "Criar conta grátis"}</p>
                     </div>
