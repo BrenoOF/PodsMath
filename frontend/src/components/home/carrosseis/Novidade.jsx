@@ -5,8 +5,20 @@ import Style from "./carrosseis.module.css";
 // Import de Componentes
 import { Carousel } from "primereact/carousel";
 
-export default function CompPodcastDestaque() {
+export default function CompPodcastNovidades() {
     const [novidades, setNovidades] = useState([]);
+    const [numVisible, setNumVisible] = useState(4);
+
+    // Atualiza quantidade de cards conforme tamanho da fonte
+    const atualizarNumVisible = (e) => {
+        const tamanhoFont = e?.datail || localStorage.getItem("font-size");
+
+        if (tamanhoFont === "xlarge") {
+            setNumVisible(3);
+        } else {
+            setNumVisible(4);
+        }
+    };
 
     useEffect(() => {
         const dadosSimulados = [
@@ -67,8 +79,15 @@ export default function CompPodcastDestaque() {
                 assunto: "algebra"
             }
         ];
-
         setNovidades(dadosSimulados);
+
+        // Aplica regra inicial para fonts
+        atualizarNumVisible();
+        // Escutador para mudanças no localStorage
+        window.addEventListener("fontChange", atualizarNumVisible);
+        return () => {
+            window.removeEventListener("fontChange", atualizarNumVisible);
+        };
     }, []);
 
     const novidadesTemplate = (item) => {
@@ -115,7 +134,7 @@ export default function CompPodcastDestaque() {
             <Carousel
                 value={novidades}
                 itemTemplate={novidadesTemplate}
-                numVisible={4}
+                numVisible={numVisible}
                 numScroll={2}
                 circular
                 autoplayInterval={5000}

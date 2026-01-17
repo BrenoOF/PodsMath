@@ -71,6 +71,11 @@ export default function CompTopBar({ slidebarAberta }) {
             font: tamanho
         }));
 
+        // Dispara um Evento para Mudança de Fonte
+        window.dispatchEvent(new CustomEvent("fontChange", {
+            detail: tamanho
+        }));
+
         toast.current.show({
             severity: 'contrast',
             summary: 'Tamanho da Fonte Alterado',

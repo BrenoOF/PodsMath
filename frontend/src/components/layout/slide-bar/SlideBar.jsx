@@ -97,21 +97,24 @@ export default function CompSlideBar({ aberta, setAberta }) {
                     </>
                 ) : (
                     <>
-                        <div className={Style.btnPadrao + " " + Style.btnLogin}
-                            onClick={() => { navigate("/perfil") }}
-                        >
-                            <i className="fa-solid fa-gear"
-                                style={{ fontSize: "1rem", color: "#fff" }}
-                            ></i>
-                            <p>Configurações</p>
-                        </div>
-                        <div className={Style.btnPadrao + " " + Style.btnLogin}
-                            onClick={() => { logout() }}
-                        >
-                            <i className="fa-solid fa-arrow-right-from-bracket"
-                                style={{ fontSize: "1rem", color: "#fff" }}
-                            ></i>
-                            <p>Sair</p>
+                        <div className={Style.divMenuLogado}>
+                            <div className={`${Style.btnPadrao} ${trocar === "Perfil" ? Style.btnSelecionado : ""}`}
+                                onClick={() => {
+                                    setTrocar("Perfil");
+                                    navigate("/Perfil");
+                                }}
+                            >
+                                <i className="fa-solid fa-gear" style={{ fontSize: "1rem" }}></i>
+                                <p>Configurações</p>
+                            </div>
+                            <div className={Style.btnPadrao + " " + Style.btnSair}
+                                onClick={() => { logout() }}
+                            >
+                                <i className="fa-solid fa-arrow-right-from-bracket"
+                                    style={{ fontSize: "1rem" }}
+                                ></i>
+                                <p>Sair</p>
+                            </div>
                         </div>
                     </>
                 )}
