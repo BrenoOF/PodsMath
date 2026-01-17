@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { PrimeReactContext } from 'primereact/api';
 
@@ -13,17 +14,14 @@ import { Toast } from 'primereact/toast';
 export default function CompTopBar({ slidebarAberta }) {
     const navigate = useNavigate();
     const { changeTheme } = useContext(PrimeReactContext);
+    const [menuConfigsAberto, setMenuConfigsAberto] = useState(false);
+    const [menuUserAberto, setMenuUserAberto] = useState(false);
 
+    // Gerenciamento de Configuração do sistema pelo User
     const [configAtual, setConfigAtual] = useState({
         tema: localStorage.getItem("theme-mode") || "light",
         font: localStorage.getItem("font-size") || "normal"
     });
-
-    const [menuConfigsAberto, setMenuConfigsAberto] = useState(false);
-
-    const menuConfigsRef = useRef(null);
-    const btnConfigsRef = useRef(null);
-    const toast = useRef(null);
 
     const aplicarTema = (modo) => {
         if (configAtual.tema === modo) return;
@@ -117,6 +115,10 @@ export default function CompTopBar({ slidebarAberta }) {
     }, [changeTheme]);
 
     // refs para quando clicar fora do menuConfigs ele fechar
+    const toast = useRef(null);
+
+    const menuConfigsRef = useRef(null);
+    const btnConfigsRef = useRef(null);
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -130,11 +132,40 @@ export default function CompTopBar({ slidebarAberta }) {
         };
 
         document.addEventListener("pointerdown", handleClickOutside);
-
-        return () => {
-            document.removeEventListener("pointerdown", handleClickOutside);
-        };
+        return () => { document.removeEventListener("pointerdown", handleClickOutside) };
     }, [menuConfigsAberto]);
+
+    // Verificação se está Logado
+    const [userLogado, setUserLogado] = useState(false);
+    const [dadosUser, setDadosUser] = useState(null);
+    const usuarioId = localStorage.getItem("usuarioId");
+
+    useEffect(() => {
+        const buscarUsuario = async () => {
+            if (!usuarioId) {
+                setUserLogado(false);
+                return;
+            };
+
+            try {
+                const response = await axios.get("/users.json");
+                const usuarioEncontrado = response.data.find(
+                    (user) => String(user.id) === String(usuarioId)
+                );
+
+                if (usuarioEncontrado) {
+                    setDadosUser(usuarioEncontrado);
+                    setUserLogado(true);
+                } else {
+                    setUserLogado(false);
+                    localStorage.removeItem("usuarioId");
+                }
+            } catch (error) {
+                console.error("Erro ao buscar usuário:", error);
+            }
+        }
+        buscarUsuario();
+    }, [usuarioId]);
 
     return (
         <>
@@ -147,20 +178,39 @@ export default function CompTopBar({ slidebarAberta }) {
                     </IconField>
                 </div>
                 <div className={Style.divDireita}>
-                    <div className={Style.btnPadrao}
-                        onClick={() => {
-                            navigate("/login", { state: { mode: "login" } });
-                        }}
-                    >
-                        <p>Entrar</p>
-                    </div>
-                    <div className={Style.btnPadrao + " " + Style.corParaFundo}
-                        onClick={() => {
-                            navigate("/login", { state: { mode: "cadastro" } });
-                        }}
-                    >
-                        <p>Inscrever-se</p>
-                    </div>
+                    {!userLogado ? (
+                        <>
+                            <div className={Style.btnPadrao}
+                                onClick={() => {
+                                    navigate("/login", { state: { mode: "login" } });
+                                }}
+                            >
+                                <p>Entrar</p>
+                            </div>
+                            <div className={Style.btnPadrao + " " + Style.corParaFundo}
+                                onClick={() => {
+                                    navigate("/login", { state: { mode: "cadastro" } });
+                                }}
+                            >
+                                <p>Inscrever-se</p>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div
+                                className={Style.divInfoPerfil}
+                                onClick={() => { setMenuUserAberto(!menuUserAberto) }}
+                            >
+                                <div className={Style.divInfoTexto}>
+                                    <h1>{dadosUser.nome}</h1>
+                                    <p>{dadosUser.email}</p>
+                                </div>
+                                <img src={dadosUser.img} alt="foto de perfil"
+                                    className={Style.imgPerfil} draggable="false"
+                                />
+                            </div>
+                        </>
+                    )}
                     <div
                         ref={btnConfigsRef}
                         className={Style.btnConfigs} onClick={() => setMenuConfigsAberto(!menuConfigsAberto)}
@@ -211,5 +261,5 @@ export default function CompTopBar({ slidebarAberta }) {
                 </div>
             </div>
         </>
-    )
+    );
 }

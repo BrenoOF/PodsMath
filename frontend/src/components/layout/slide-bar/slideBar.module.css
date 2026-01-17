@@ -111,6 +111,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
     border-top: solid 0.1rem var(--border-color-tema);
 }
 
