@@ -124,3 +124,20 @@
 .btnLogin:hover{
     background-color: #ff5724e6 !important;
 }
+
+/* Estilos Para o Botão de Configuração que Leva para o Perfil */
+.divMenuLogado{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0rem;
+}
+.btnSair{
+    color: #ff5724;
+    transition: 0.5s ease;
+}
+.btnSair:hover{
+    background-color: #ff5724e6;
+    color: #fff;
+}

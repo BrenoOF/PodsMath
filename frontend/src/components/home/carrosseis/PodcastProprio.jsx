@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import Style from "./carrosseis.module.css";
 
-export default function CompPodcastDestaque() {
+export default function CompPodcastProprio() {
     const [podcastsProprio, setPodcastsProprio] = useState([]);
 
     useEffect(() => {
