@@ -8,22 +8,22 @@
     },
     {
         "id": 2,
-        "nome": "Maria Silva",
-        "email": "maria@email.com",
-        "senha": "abcdef",
+        "nome": "Jhenifer Maiara",
+        "email": "jhenifer@email.com",
+        "senha": "jhenifer@email.com",
         "img": "/img-perfil/img2.png"
     },
     {
         "id": 3,
-        "nome": "João Pereira",
-        "email": "joao@email.com",
-        "senha": "654321",
+        "nome": "Saulo Batista",
+        "email": "saulo@email.com",
+        "senha": "saulo261",
         "img": "/img-perfil/img3.png"
     },
     {
         "id": 4,
-        "nome": "Ana Costa",
-        "email": "ana@email.com",
+        "nome": "Breno Fidelis",
+        "email": "breno@email.com",
         "senha": "senha123",
         "img": "/img-perfil/img4.png"
     }

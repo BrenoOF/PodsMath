@@ -46,16 +46,18 @@ body {
 
 :root {
     --font-scale: 1;
-    --border-color-tema: #e2e8f0;
     --app-background: #ffffff;
-    --sobre-projeto-bg: #4577A124;
+    --border-color-tema: #e2e8f0;
+    --border-inversa: #26344a;
     --background-secundario: #ffffff;
     --font-paragrafo: #4577A1;
+    --sobre-projeto-bg: #4577A124;
 }
 :root[data-theme="dark"] {
-    --border-color-tema: #26344a;
     --app-background: #0f131a;
-    --sobre-projeto-bg: #17255433;
+    --border-color-tema: #26344a;
+    --border-inversa: #e2e8f0;
     --background-secundario: #17255433;
     --font-paragrafo: #ffffff;
+    --sobre-projeto-bg: #17255433;
 }

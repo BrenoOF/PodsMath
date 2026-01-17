@@ -1,5 +1,5 @@
 /* Estilo para ajustar o width do container estilo padrão para barra toda */
-.containerTopBar{
+.containerTopBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -13,25 +13,25 @@
     z-index: 100;
 }
 
-.topBarAberta{
+.topBarAberta {
     left: 16rem;
     width: calc(100% - 16rem);
 }
 
-.topBarFechada{
+.topBarFechada {
     left: 4rem;
     width: calc(100% - 4rem);
 }
 
 /* Estilo para o input de pesquisa */
-.divEsquerda{
+.divEsquerda {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
 /* Reutiliza o MESMO padrão de input */
-.input{
+.input {
     width: 170%;
     padding: 0.8rem 0.75rem 0.8rem 2.5rem;
     border-radius: 1rem;
@@ -39,7 +39,7 @@
 }
 
 /* Ícone de search */
-.divEsquerda :global(.pi-search){
+.divEsquerda :global(.pi-search) {
     position: absolute;
     top: 50%;
     left: 0.75rem;
@@ -47,14 +47,14 @@
 }
 
 /* Estilo para menu de Login/Cadastro */
-.divDireita{
+.divDireita {
     display: flex;
     align-items: center;
     gap: 1rem;
     margin-right: 0.8rem;
 }
 
-.btnPadrao{
+.btnPadrao {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -63,17 +63,19 @@
     width: 7.2rem;
     height: 2.5rem;
 }
-.corParaFundo{
+
+.corParaFundo {
     background-color: #ff5724;
     color: #fff;
     border-radius: 0.6rem;
 }
-.corParaFundo:hover{
+
+.corParaFundo:hover {
     background-color: #ff5724e6;
 }
 
 /* Estilo para Modal de Troca de Tema */
-.btnConfigs{
+.btnConfigs {
     cursor: pointer;
 }
 
@@ -101,7 +103,7 @@
     pointer-events: auto;
 }
 
-.btnTroca{
+.btnTroca {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -110,13 +112,40 @@
     padding: 0.5rem 0.6rem;
     border-radius: 0.5rem;
 }
+
 .btnTroca:hover {
     background-color: #ff5724;
     color: #fff;
 }
 
-.btnTroca > div{
+.btnTroca>div {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+/* Estilo para quando o usuario estiver logado */
+.divInfoPerfil {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.divInfoTexto {
+    text-align: right;
+}
+
+.divInfoTexto>h1 {
+    font-size: 0.875rem;
+}
+
+.divInfoTexto>p {
+    font-size: 0.75rem;
+    color: var(--font-paragrafo);
+}
+
+.imgPerfil {
+    width: 2.75rem;
+    border-radius: 100%;
+    border: 0.2rem solid #075783;
 }

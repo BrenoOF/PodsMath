@@ -15,7 +15,11 @@ export default function App() {
                 {/* Rotas com Layout fixo */}
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/explorar" element={<h1>Olá Mundo</h1>} />
+                    <Route path="/explorar" element={<h1>Tela Para Explorar será Construida</h1>} />
+                    <Route path="/historico" element={<h1>Tela Para Histórico será Construida</h1>} />
+                    <Route path="/favoritos" element={<h1>Tela Para Favoritos será Construida</h1>} />
+
+                    <Route path="/perfil" element={<h1>Tela Para Perfil será Construida</h1>} />
                 </Route>
             </Routes>
         </Routers>
