@@ -148,4 +148,5 @@
     width: 2.75rem;
     border-radius: 100%;
     border: 0.2rem solid #075783;
+    cursor: pointer;
 }

@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 import Style from "./slideBar.module.css";
 
+// Import Components
+
 export default function CompSlideBar({ aberta, setAberta }) {
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const [trocar, setTrocar] = useState("Home");
+    // Função para ver a Rota
+    const rotaAtiva = (rota) => location.pathname === rota;
 
     // Verificação se está Logado
     const [userLogado, setUserLogado] = useState(false);
@@ -23,11 +28,27 @@ export default function CompSlideBar({ aberta, setAberta }) {
 
     // Fazer Logout
     const logout = () => {
-        localStorage.removeItem("usuarioId");
-
-        setUserLogado(false);
-
-        navigate("/");
+        try {
+            localStorage.removeItem("usuarioId");
+            setUserLogado(false);
+            navigate("/");
+        } catch (error) {
+            console.error("Erro ao Realizar logout ", error);
+        }
+    }
+    const alertSair = () => {
+        Swal.fire({
+            title: "Quer Realmente Sair?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Quero Sair!",
+            cancelButtonColor: "#d33",
+            confirmButtonColor: "#012663"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout();
+            }
+        });
     }
 
     return (
@@ -44,18 +65,16 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 ></i>
             </div>
             <div className={Style.divMenuOpcoes}>
-                <div className={`${Style.btnPadrao} ${trocar === "Home" ? Style.btnSelecionado : ""}`}
+                <div className={`${Style.btnPadrao} ${rotaAtiva("/") ? Style.btnSelecionado : ""}`}
                     onClick={() => {
-                        setTrocar("Home");
                         navigate("/");
                     }}
                 >
                     <i className="fa-regular fa-house" style={{ fontSize: "1rem" }}></i>
                     <p>Home</p>
                 </div>
-                <div className={`${Style.btnPadrao} ${trocar === "Explorar" ? Style.btnSelecionado : ""}`}
+                <div className={`${Style.btnPadrao} ${rotaAtiva("/explorar") ? Style.btnSelecionado : ""}`}
                     onClick={() => {
-                        setTrocar("Explorar");
                         navigate("/explorar");
                     }}
                 >
@@ -64,18 +83,16 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 </div>
                 {userLogado && (
                     <>
-                        <div className={`${Style.btnPadrao} ${trocar === "Histórico" ? Style.btnSelecionado : ""}`}
+                        <div className={`${Style.btnPadrao} ${rotaAtiva("/historico") ? Style.btnSelecionado : ""}`}
                             onClick={() => {
-                                setTrocar("Histórico");
                                 navigate("/historico");
                             }}
                         >
                             <i className="fa-regular fa-clock" style={{ fontSize: "1rem" }}></i>
                             <p>Histórico</p>
                         </div>
-                        <div className={`${Style.btnPadrao} ${trocar === "Favoritos" ? Style.btnSelecionado : ""}`}
+                        <div className={`${Style.btnPadrao} ${rotaAtiva("/favoritos") ? Style.btnSelecionado : ""}`}
                             onClick={() => {
-                                setTrocar("Favoritos");
                                 navigate("/favoritos");
                             }}
                         >
@@ -98,17 +115,16 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 ) : (
                     <>
                         <div className={Style.divMenuLogado}>
-                            <div className={`${Style.btnPadrao} ${trocar === "Perfil" ? Style.btnSelecionado : ""}`}
+                            <div className={`${Style.btnPadrao} ${rotaAtiva("/perfil") ? Style.btnSelecionado : ""}`}
                                 onClick={() => {
-                                    setTrocar("Perfil");
-                                    navigate("/Perfil");
+                                    navigate("/perfil");
                                 }}
                             >
                                 <i className="fa-solid fa-gear" style={{ fontSize: "1rem" }}></i>
                                 <p>Configurações</p>
                             </div>
                             <div className={Style.btnPadrao + " " + Style.btnSair}
-                                onClick={() => { logout() }}
+                                onClick={() => { alertSair() }}
                             >
                                 <i className="fa-solid fa-arrow-right-from-bracket"
                                     style={{ fontSize: "1rem" }}

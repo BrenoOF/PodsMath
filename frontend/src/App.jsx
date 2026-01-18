@@ -2,9 +2,10 @@ import React from "react";
 import { BrowserRouter as Routers, Routes, Route } from "react-router-dom"
 
 // Import Telas
+import Login from "./components/login/Login";
 import MainLayout from "./components/layout/main-layout/MainLayout";
 import Home from "./components/home/Home";
-import Login from "./components/login/Login";
+import Explorar from "./components/explorar/Explorar";
 
 export default function App() {
     return (
@@ -15,7 +16,7 @@ export default function App() {
                 {/* Rotas com Layout fixo */}
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
-                    <Route path="/explorar" element={<h1>Tela Para Explorar será Construida</h1>} />
+                    <Route path="/explorar" element={<Explorar />} />
                     <Route path="/historico" element={<h1>Tela Para Histórico será Construida</h1>} />
                     <Route path="/favoritos" element={<h1>Tela Para Favoritos será Construida</h1>} />
 
