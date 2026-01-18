@@ -1,0 +1,133 @@
+{
+    "podcastsProprios": [
+        {
+                "id": 1,
+                "titulo": "Trigonometria no Cotidiano: Aplicações Práticas",
+                "descricao": "Descubra como a trigonometria está presente em mapas, construções e até em apps de navegação.",
+                "img": "/imgs/cardExemplo.jpg",
+                "assunto": "Trigonometria"
+        },
+        {
+                "id": 2,
+                "titulo": "Álgebra Essencial: Fundamentos e Aplicações",
+                "descricao": "Domine os conceitos básicos de álgebra e aprenda como aplicar expressões e equações no dia a dia.",
+                "img": "/imgs/cardExemplo.jpg",
+                "assunto": "Estatística"
+        },
+        {
+                "id": 3,
+                "titulo": "Matemática Financeira: Juros Simples e Compostos",
+                "descricao": "Aprenda a calcular juros e entender como eles impactam empréstimos, investimentos e o dia a dia.",
+                "img": "/imgs/cardExemplo.jpg",
+                "assunto": "Matemática Financeira"
+        }
+    ],
+    "novidades": [
+        {
+            "id": 1,
+            "titulo": "Funções do 1º Grau",
+            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "algebra"
+        },
+        {
+            "id": 2,
+            "titulo": "Trigonometria",
+            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "calculo"
+        },
+        {
+            "id": 3,
+            "titulo": "Funções do 1º Grau",
+            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "estatísticas"
+        },
+        {
+            "id": 4,
+            "titulo": "Trigonometria",
+            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "geometria"
+        },
+        {
+            "id": 5,
+            "titulo": "Funções do 1º Grau",
+            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "algebra"
+        },
+        {
+            "id": 6,
+            "titulo": "Trigonometria",
+            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "algebra"
+        },
+        {
+            "id": 7,
+            "titulo": "Funções do 1º Grau",
+            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "algebra"
+        },
+        {
+            "id": 8,
+            "titulo": "Trigonometria",
+            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "algebra"
+        }
+    ],
+    "podcastsDestaque": [
+        {
+            "id": 1,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 2,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 3,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 4,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 5,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 6,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 7,
+            "titulo": "Geometria Básica",
+            "episodios": 8,
+            "img": "/imgs/cardExemplo.jpg"
+        },
+        {
+            "id": 8,
+            "titulo": "Geometria Básica",
+            "episodios": 1,
+            "img": "/imgs/cardExemplo.jpg"
+        }
+    ]
+}

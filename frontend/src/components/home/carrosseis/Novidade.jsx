@@ -5,8 +5,7 @@ import Style from "./carrosseis.module.css";
 // Import de Componentes
 import { Carousel } from "primereact/carousel";
 
-export default function CompPodcastNovidades() {
-    const [novidades, setNovidades] = useState([]);
+export default function CompPodcastNovidades({ podcasts }) {
     const [numVisible, setNumVisible] = useState(4);
 
     // Atualiza quantidade de cards conforme tamanho da fonte
@@ -21,66 +20,6 @@ export default function CompPodcastNovidades() {
     };
 
     useEffect(() => {
-        const dadosSimulados = [
-            {
-                id: 1,
-                titulo: "Funções do 1º Grau",
-                descricao: "Aprenda os conceitos fundamentais das funções do primeiro grau.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "algebra"
-            },
-            {
-                id: 2,
-                titulo: "Trigonometria",
-                descricao: "Seno, cosseno e tangente explicados de forma simples.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "calculo"
-            },
-            {
-                id: 3,
-                titulo: "Funções do 1º Grau",
-                descricao: "Aprenda os conceitos fundamentais das funções do primeiro grau.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "estatísticas"
-            },
-            {
-                id: 4,
-                titulo: "Trigonometria",
-                descricao: "Seno, cosseno e tangente explicados de forma simples.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "geometria"
-            },
-            {
-                id: 5,
-                titulo: "Funções do 1º Grau",
-                descricao: "Aprenda os conceitos fundamentais das funções do primeiro grau.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "algebra"
-            },
-            {
-                id: 6,
-                titulo: "Trigonometria",
-                descricao: "Seno, cosseno e tangente explicados de forma simples.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "algebra"
-            },
-            {
-                id: 7,
-                titulo: "Funções do 1º Grau",
-                descricao: "Aprenda os conceitos fundamentais das funções do primeiro grau.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "algebra"
-            },
-            {
-                id: 8,
-                titulo: "Trigonometria",
-                descricao: "Seno, cosseno e tangente explicados de forma simples.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "algebra"
-            }
-        ];
-        setNovidades(dadosSimulados);
-
         // Aplica regra inicial para fonts
         atualizarNumVisible();
         // Escutador para mudanças no localStorage
@@ -132,7 +71,7 @@ export default function CompPodcastNovidades() {
                 <p>Novidades</p>
             </div>
             <Carousel
-                value={novidades}
+                value={podcasts}
                 itemTemplate={novidadesTemplate}
                 numVisible={numVisible}
                 numScroll={2}

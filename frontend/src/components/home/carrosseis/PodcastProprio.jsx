@@ -1,39 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import Style from "./carrosseis.module.css";
 
-export default function CompPodcastProprio() {
-    const [podcastsProprio, setPodcastsProprio] = useState([]);
-
-    useEffect(() => {
-        const dadosSimulados = [
-            {
-                id: 1,
-                titulo: "Trigonometria no Cotidiano: Aplicações Práticas",
-                descricao: "Descubra como a trigonometria está presente em mapas, construções e até em apps de navegação.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "Trigonometria"
-            },
-            {
-                id: 2,
-                titulo: "Álgebra Essencial: Fundamentos e Aplicações",
-                descricao: "Domine os conceitos básicos de álgebra e aprenda como aplicar expressões e equações no dia a dia.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "Estatística"
-            },
-            {
-                id: 3,
-                titulo: "Matemática Financeira: Juros Simples e Compostos",
-                descricao: "Aprenda a calcular juros e entender como eles impactam empréstimos, investimentos e o dia a dia.",
-                img: require("../../../imgs/cardExemplo.jpg"),
-                assunto: "Matemática Financeira"
-            }
-        ]
-
-        setPodcastsProprio(dadosSimulados);
-
-    }, []);
-
+export default function CompPodcastProprio({ podcasts }) {
     return (
         <div>
             <div className={Style.divTituloProprio}>
@@ -41,13 +10,13 @@ export default function CompPodcastProprio() {
                     <i className="fa-solid fa-music"></i>
                     <p>Podcasts Próprios</p>
                 </div>
-                <div className={Style.divTitulosDosPodcasts + " "+ Style.divTituloMostrar}>
+                <div className={Style.divTitulosDosPodcasts + " " + Style.divTituloMostrar}>
                     <p>Mostrar tudo</p>
                     <i className="fa-solid fa-arrow-up-right-from-square"></i>
                 </div>
             </div>
             <div className={Style.divPodcastsProprio}>
-                {podcastsProprio.map(index => (
+                {podcasts.map(index => (
                     <div className={Style.cardProprio} key={index.id}>
                         <img src={index.img} alt={`Capa do podcast ${index.titulo}`}
                             className={Style.imgCard} draggable="false"

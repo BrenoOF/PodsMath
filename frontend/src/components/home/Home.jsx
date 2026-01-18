@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import Style from "./home.module.css";
 
@@ -8,6 +9,24 @@ import Novidades from "./carrosseis/Novidade";
 import Proprio from "./carrosseis/PodcastProprio";
 
 export default function TelaHome() {
+    const [dadosHome, setDadosHome] = useState(null);
+
+    useEffect(() => {
+        const carregarDados = async () => {
+            try {
+                const response = await axios.get("/podcasts.json");
+                setDadosHome(response.data);
+            } catch (error) {
+                console.error("Erro ao carregar dados da home", error);
+            }
+        }
+        carregarDados();
+    }, []);
+
+    if(!dadosHome){
+        return <p>Carregando...</p>;
+    }
+
     return (
         <div className={Style.containerHome}>
             {/* Primeiro bloco onde tem um "Bem Vindo" */}
@@ -36,15 +55,15 @@ export default function TelaHome() {
             {/* */}
             <hr className={Style.hrDeSeparacao} />
             {/* Podcasts em Destaque */}
-            <Destaque />
+            <Destaque podcasts={dadosHome.podcastsDestaque} />
             {/* */}
             <hr className={Style.hrDeSeparacao} />
             {/* Novidades */}
-            <Novidades />
+            <Novidades podcasts={dadosHome.novidades} />
             {/* */}
             <hr className={Style.hrDeSeparacao} />
             {/* Podcasts Proprios */}
-            <Proprio />
+            <Proprio podcasts={dadosHome.podcastsProprios} />
             {/* Bloco de Footer onde terá "Sobre esse Projeto" */}
             <div className={Style.sobreOProjeto}>
                 <div className={Style.divTextosProjeto}>
