@@ -16,16 +16,16 @@ export default function CompPodcastProprio({ podcasts }) {
                 </div>
             </div>
             <div className={Style.divPodcastsProprio}>
-                {podcasts.map(index => (
-                    <div className={Style.cardProprio} key={index.id}>
-                        <img src={index.img} alt={`Capa do podcast ${index.titulo}`}
+                {podcasts.map(item => (
+                    <div className={Style.cardProprio} key={item.id}>
+                        <img src={item.img} alt={`Capa do podcast ${item.titulo}`}
                             className={Style.imgCard} draggable="false"
                         />
                         <div className={Style.divTextosProprio}>
-                            <h1>{index.titulo}</h1>
-                            <p>{index.descricao}</p>
+                            <h1>{item.titulo}</h1>
+                            <p>{item.descricao}</p>
                             <div className={Style.btnAssunto}>
-                                <p>{index.assunto}</p>
+                                <p>{item.assunto}</p>
                             </div>
                         </div>
                         <div className={Style.divIconProprio}>
