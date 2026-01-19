@@ -10,17 +10,17 @@ export default function CompPodcastDestaque({ podcasts }) {
                 <p>Podcasts em destaque</p>
             </div>
             <div className={Style.divCardsDestaque}>
-                {podcasts.map(index => (
-                    <div className={Style.cardsDestaque} key={index.id}>
-                        <img src={index.img}
-                            alt={`Capa do podcast ${index.titulo}`}
+                {podcasts.map(item => (
+                    <div className={Style.cardsDestaque} key={item.id}>
+                        <img src={item.img}
+                            alt={`Capa do podcast ${item.titulo}`}
                             className={Style.imgCardDestaque} draggable="false"
                         />
                         <div>
-                            <h2>{index.titulo}</h2>
+                            <h2>{item.titulo}</h2>
                             <p>
-                                {index.episodios} 
-                                {index.episodios > 1 ? "episódios" : "episódio"}
+                                {item.episodios} 
+                                {item.episodios > 1 ? "episódios" : "episódio"}
                             </p>
                         </div>
                     </div>
