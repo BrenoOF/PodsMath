@@ -6,6 +6,7 @@ import Login from "./components/login/Login";
 import MainLayout from "./components/layout/main-layout/MainLayout";
 import Home from "./components/home/Home";
 import Explorar from "./components/explorar/Explorar";
+import Sobre from "./components/home/sobre-projeto/SobreProjeto";
 
 export default function App() {
     return (
@@ -21,6 +22,8 @@ export default function App() {
                     <Route path="/favoritos" element={<h1>Tela Para Favoritos será Construida</h1>} />
 
                     <Route path="/perfil" element={<h1>Tela Para Perfil será Construida</h1>} />
+
+                    <Route path="/sobre-o-projeto" element={<Sobre />} />
                 </Route>
             </Routes>
         </Routers>

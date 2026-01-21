@@ -1,0 +1,92 @@
+/* Estilo para primeira div onde tem a Apresentação */
+.divApresentacao {
+    color: #fff;
+    padding: 4rem 0rem;
+    background: linear-gradient(to bottom right, #045d8c, #045d8ce6, #ff5a24);
+}
+
+.btnVoltar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 5.5rem;
+    height: 2.5rem;
+    margin: 0rem 2rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border-radius: 0.625rem;
+}
+
+.btnVoltar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.divOrganizarTextos {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.semiBtn {
+    padding: 0.25rem 0.625rem;
+    background-color: #ffffff33;
+    border: 0.1rem solid #fff;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.semiBtn:hover {
+    background-color: #045d8ccc;
+}
+
+.divTextos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 50%;
+}
+
+.divTextos>h1 {
+    font-size: 3rem;
+}
+
+.divTextos>p {
+    width: 90%;
+    font-size: 1.25rem;
+    text-align: center;
+}
+
+/* Estilos para Segunda Parte */
+.containerSegundaParte {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #7c7c7c;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+.divInformacoes {
+    display: flex;
+    flex-direction: column;
+    background-color: #ff0;
+    width: 67%;
+}
+
+/* Estilos para Títulos */
+.divTitulos {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0rem 1.5rem 0rem;
+}
+
+.divTitulos>h1 {
+    font-size: 1.875rem;
+}
