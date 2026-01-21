@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import Style from "./home.module.css";
 
@@ -9,6 +10,7 @@ import Novidades from "./carrosseis/Novidade";
 import Proprio from "./carrosseis/PodcastProprio";
 
 export default function TelaHome() {
+    const navigate = useNavigate();
     const [dadosHome, setDadosHome] = useState(null);
 
     useEffect(() => {
@@ -85,7 +87,7 @@ export default function TelaHome() {
                         </p>
                     </div>
                     <div className={Style.btnLerMais}
-                        onClick={() => { alert("Cliclou") }}
+                        onClick={() => { navigate("/sobre-o-projeto") }}
                     >
                         <p>Ler mais sobre esse projeto</p>
                     </div>
