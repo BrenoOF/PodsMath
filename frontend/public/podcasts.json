@@ -84,25 +84,25 @@
         {
             "id": 1,
             "titulo": "Geometria Básica",
-            "episodios": 8,
+            "episodios": 1,
             "img": "/imgs/cardExemplo.jpg"
         },
         {
             "id": 2,
             "titulo": "Geometria Básica",
-            "episodios": 8,
+            "episodios": 1,
             "img": "/imgs/cardExemplo.jpg"
         },
         {
             "id": 3,
             "titulo": "Geometria Básica",
-            "episodios": 8,
+            "episodios": 1,
             "img": "/imgs/cardExemplo.jpg"
         },
         {
             "id": 4,
             "titulo": "Geometria Básica",
-            "episodios": 8,
+            "episodios": 1,
             "img": "/imgs/cardExemplo.jpg"
         },
         {
@@ -126,7 +126,7 @@
         {
             "id": 8,
             "titulo": "Geometria Básica",
-            "episodios": 1,
+            "episodios": 8,
             "img": "/imgs/cardExemplo.jpg"
         }
     ]
