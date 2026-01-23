@@ -60,7 +60,7 @@
     border: 0.1rem solid var(--border-color-tema);
 }
 
-/* Estilos para o "Sobre esse Projeto" */
+/* Estilos para o "Sobre este Projeto" */
 .sobreOProjeto {
     display: flex;
     background-color: var(--sobre-projeto-bg);
@@ -120,5 +120,7 @@
 .imgProfessora {
     width: 25vw;
     aspect-ratio: 34.5 / 28;
+    object-fit: cover;
+    object-position: bottom;
     border-radius: 1.25rem;
 }

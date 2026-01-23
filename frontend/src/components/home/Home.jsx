@@ -25,7 +25,7 @@ export default function TelaHome() {
         carregarDados();
     }, []);
 
-    if(!dadosHome){
+    if (!dadosHome) {
         return <p>Carregando...</p>;
     }
 
@@ -87,7 +87,10 @@ export default function TelaHome() {
                         </p>
                     </div>
                     <div className={Style.btnLerMais}
-                        onClick={() => { navigate("/sobre-o-projeto") }}
+                        onClick={() => {
+                            window.scrollTo(0, 0);
+                            navigate("/sobre-o-projeto");
+                        }}
                     >
                         <p>Ler mais sobre esse projeto</p>
                     </div>
