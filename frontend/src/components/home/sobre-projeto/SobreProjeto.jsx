@@ -49,8 +49,8 @@ export default function TelaSobre() {
                     </p>
                     <br />
                     <p>
-                        Além de apoiar estudantes em sua jornada acadêmica, o PodsMath também se propõe 
-                        a ser uma ferramenta complementar para professores e entusiastas da área, 
+                        Além de apoiar estudantes em sua jornada acadêmica, o PodsMath também se propõe
+                        a ser uma ferramenta complementar para professores e entusiastas da área,
                         promovendo o aprendizado contínuo por meio da tecnologia e da inovação educacional.
                     </p>
                 </div>
@@ -105,17 +105,27 @@ export default function TelaSobre() {
                         <i className="fa-solid fa-users" style={{ fontSize: "1.75rem", color: "#075783" }}></i>
                         <h1>Nossa Equipe</h1>
                     </div>
-                    <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto nemo ducimus, culpa voluptatem numquam consequatur provident dolores officiis, id veritatis sunt perspiciatis recusandae sed libero quibusdam debitis, quisquam asperiores porro.
-                    </p>
-                    <br />
-                    <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto nemo ducimus, culpa voluptatem numquam consequatur provident dolores officiis, id veritatis sunt perspiciatis recusandae sed libero quibusdam debitis, quisquam asperiores porro.
-                    </p>
-                    <br />
-                    <p>
-                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Iusto nemo ducimus, culpa voluptatem numquam consequatur provident dolores officiis, id veritatis sunt perspiciatis recusandae sed libero quibusdam debitis, quisquam asperiores porro.
-                    </p>
+                    <div className={Style.divNossaEquipe}>
+                        <img src={require("../../../imgs/prof-2.jpg")} alt="Imagem Professora"
+                            className={Style.imgProfessora} draggable="false"
+                        />
+                        <div className={Style.divTextoNossaEquipe}>
+                            <h1>
+                                Profa. Dra. Adriana de Bortoli
+                            </h1>
+                            <div className={Style.divSubTituloNossaEquipe}>
+                                <p>
+                                    Coordenadora e Apresentadora
+                                </p>
+                            </div>
+                            <p>
+                                A Profa. Dra. Adriana de Bortoli é professora da área de Matemática, com atuação
+                                voltada à educação e à didática do ensino matemático. No PodsMath, atua como
+                                coordenadora e apresentadora, contribuindo para a criação de conteúdos acessíveis,
+                                claros e voltados a públicos de diferentes níveis de conhecimento.
+                            </p>
+                        </div>
+                    </div>
                 </div>
                 {/* Parte do "Parceiros do Projeto" */}
                 <div className={Style.divInformacoes}>
@@ -178,8 +188,53 @@ export default function TelaSobre() {
                         </div>
                     </div>
                 </div>
+                {/* Parte do "Nosso Impacto" */}
+                <div className={Style.divFooter}>
+                    <h1>
+                        Nosso Impacto
+                    </h1>
+                    <p>
+                        O PodsMath vem ampliando o acesso ao conhecimento matemático por meio de conteúdos 
+                        educativos em áudio, alcançando estudantes, professores e entusiastas em todo o país. 
+                        Nosso impacto reflete o compromisso em tornar a matemática mais acessível, prática e 
+                        presente no dia a dia de diferentes públicos.
+                    </p>
+                    <div className={Style.containerInformacoesFooter}>
+                        <div className={Style.divInformacoesFooter}>
+                            <h1>
+                                50K+
+                            </h1>
+                            <p>
+                                Ouvintes Mensais
+                            </p>
+                        </div>
+                        <div className={Style.divInformacoesFooter}>
+                            <h1>
+                                200+
+                            </h1>
+                            <p>
+                                Episódios Publicados
+                            </p>
+                        </div>
+                        <div className={Style.divInformacoesFooter}>
+                            <h1>
+                                15
+                            </h1>
+                            <p>
+                                Temas Abordados
+                            </p>
+                        </div>
+                        <div className={Style.divInformacoesFooter}>
+                            <h1>
+                                4.9
+                            </h1>
+                            <p>
+                                Avaliação Média
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div>### Footer ###</div>
         </div>
     );
 }
