@@ -26,5 +26,12 @@
         "email": "breno@email.com",
         "senha": "senha123",
         "img": "/imgs/img-perfil/img4.png"
+    },
+    {
+        "id": 5,
+        "nome": "User para Testes",
+        "email": "teste@email.com",
+        "senha": "123456",
+        "img": "/imgs/img-perfil/img5.png"
     }
 ]

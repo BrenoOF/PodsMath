@@ -93,7 +93,7 @@ export default function TelaHome() {
                     </div>
                 </div>
                 <div className={Style.divImgProf}>
-                    <img src={require("../../imgs/prof.jpg")} alt="imagem de um microfone"
+                    <img src={require("../../imgs/prof.jpg")} alt="Imagem Professora"
                         className={Style.imgProfessora}
                         draggable="false"
                     />
