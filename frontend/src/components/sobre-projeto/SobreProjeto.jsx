@@ -106,7 +106,7 @@ export default function TelaSobre() {
                         <h1>Nossa Equipe</h1>
                     </div>
                     <div className={Style.divNossaEquipe}>
-                        <img src={require("../../../imgs/prof-2.jpg")} alt="Imagem Professora"
+                        <img src={require("../../imgs/prof-2.jpg")} alt="Imagem Professora"
                             className={Style.imgProfessora} draggable="false"
                         />
                         <div className={Style.divTextoNossaEquipe}>

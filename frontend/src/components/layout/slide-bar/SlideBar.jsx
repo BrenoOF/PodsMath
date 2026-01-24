@@ -117,7 +117,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
                         <div className={Style.divMenuLogado}>
                             <div className={`${Style.btnPadrao} ${rotaAtiva("/perfil") ? Style.btnSelecionado : ""}`}
                                 onClick={() => {
-                                    navigate("/perfil");
+                                    navigate("/configuracoes");
                                 }}
                             >
                                 <i className="fa-solid fa-gear" style={{ fontSize: "1rem" }}></i>
