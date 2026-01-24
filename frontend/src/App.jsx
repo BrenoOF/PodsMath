@@ -6,7 +6,8 @@ import Login from "./components/login/Login";
 import MainLayout from "./components/layout/main-layout/MainLayout";
 import Home from "./components/home/Home";
 import Explorar from "./components/explorar/Explorar";
-import Sobre from "./components/home/sobre-projeto/SobreProjeto";
+import Sobre from "./components/sobre-projeto/SobreProjeto";
+import Configuracoes from "./components/configuracoes/Configuracoes";
 
 export default function App() {
     return (
@@ -17,13 +18,12 @@ export default function App() {
                 {/* Rotas com Layout fixo */}
                 <Route element={<MainLayout />}>
                     <Route path="/" element={<Home />} />
+                    <Route path="/sobre-o-projeto" element={<Sobre />} />
+
                     <Route path="/explorar" element={<Explorar />} />
                     <Route path="/historico" element={<h1>Tela Para Histórico será Construida</h1>} />
                     <Route path="/favoritos" element={<h1>Tela Para Favoritos será Construida</h1>} />
-
-                    <Route path="/perfil" element={<h1>Tela Para Perfil será Construida</h1>} />
-
-                    <Route path="/sobre-o-projeto" element={<Sobre />} />
+                    <Route path="/configuracoes" element={<Configuracoes />} />
                 </Route>
             </Routes>
         </Routers>

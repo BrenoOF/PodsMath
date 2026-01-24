@@ -212,7 +212,7 @@ export default function CompTopBar({ slidebarAberta }) {
                                 </div>
                                 <img src={dadosUser.img} alt="foto de perfil"
                                     className={Style.imgPerfil} draggable="false"
-                                    onClick={() => { navigate("/perfil") }}
+                                    onClick={() => { navigate("/configuracoes") }}
                                 />
                             </div>
                         </>
