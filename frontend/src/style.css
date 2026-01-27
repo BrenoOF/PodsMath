@@ -36,6 +36,10 @@ body {
     background-color: var(--app-background);
 }
 
+:root {
+    --font-scale: 1;
+}
+
 /* Estilo para trocar umas cores do dark theme do Prime React */
 :root[data-theme="dark"] .p-inputtext,
 :root[data-theme="dark"] .p-card,
@@ -44,20 +48,30 @@ body {
     border-color: #26344a !important;
 }
 
+/* Variáveis */
 :root {
-    --font-scale: 1;
     --app-background: #ffffff;
+    --background-secundario: #ffffff;
     --border-color-tema: #e2e8f0;
     --border-inversa: #26344a;
-    --background-secundario: #ffffff;
     --font-paragrafo: #4577A1;
+    --font-meio-apagada: #64748b;
     --sobre-projeto-bg: #4577A124;
+
+    /* Botões */
+    --btn-1: #012663;
+    --btn-1-hover: #1a3f8f;
 }
 :root[data-theme="dark"] {
     --app-background: #0f131a;
+    --background-secundario: #17255433;
     --border-color-tema: #26344a;
     --border-inversa: #e2e8f0;
-    --background-secundario: #17255433;
     --font-paragrafo: #ffffff;
+    --font-meio-apagada: #94a3b8;
     --sobre-projeto-bg: #17255433;
+
+    /* Botões */
+    --btn-1: #ff5724;
+    --btn-1-hover: #ff5724e6;
 }

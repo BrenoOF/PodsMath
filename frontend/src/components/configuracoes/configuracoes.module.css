@@ -1,5 +1,5 @@
 /* Ajuste do Espaço das Informações */
-.containerPerfil {
+.containerConfig {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,11 +7,12 @@
     margin-top: 2rem;
 }
 
-.divPerfil {
+.divConfig {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 56rem;
+    max-width: 58rem;
+    padding-inline: 1.5rem;
 }
 
 /* Estilos para o Título da Página */
@@ -22,7 +23,7 @@
 
 .divTituloTop>p {
     font-size: 1rem;
-    opacity: 0.5;
+    color: var(--font-meio-apagada);
 }
 
 /* Esilos para o Menu de navegação */
@@ -60,3 +61,140 @@
 }
 
 /* Estilos para os Forms / Informações */
+.divForm {
+    margin-top: 2rem;
+    padding: 2rem;
+    border: 0.2rem solid var(--border-color-tema);
+    background-color: var(--background-secundario);
+    border-radius: 0.75rem;
+}
+
+.divTituloForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.divTituloForm>h1 {
+    font-size: 1.25rem;
+}
+
+.divTituloForm>p {
+    font-size: 0.875rem;
+    color: var(--font-meio-apagada);
+}
+
+/* Estilo padrão para os Forms */
+.btnEnviarForm {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 7.5rem;
+    height: 2.5rem;
+    background-color: var(--btn-1);
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border-radius: 0.625rem;
+    transition: background-color 0.2s ease;
+}
+
+.btnEnviarForm:hover {
+    background-color: var(--btn-1-hover);
+}
+
+/* Estilo para Perfil */
+/* Estilo para Segurança */
+.divInputs {
+    margin-top: 2rem;
+}
+
+.divInput {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1rem;
+    width: 50%;
+}
+
+.divInput>label {
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+.input {
+    width: 100%;
+    padding: 0.8rem 0.75rem;
+    border-radius: 0.625rem;
+    font-size: 0.875rem;
+    box-sizing: border-box;
+}
+
+:global(.p-password) {
+    width: 100%;
+    display: block;
+}
+
+:global(.p-password .p-icon) {
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0.75rem;
+    margin-top: 0;
+    cursor: pointer;
+}
+
+/* Estilo para Conta */
+.divInformacoesConta {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 2rem 0rem;
+}
+
+.divInformacoesConta>hr {
+    width: 100%;
+    border: none;
+    height: 2px;
+    background-color: var(--border-color-tema);
+}
+
+.divInformacao>h1 {
+    font-size: 0.875rem;
+}
+
+.divInformacao>p {
+    font-size: 0.875rem;
+    color: var(--font-meio-apagada);
+}
+
+/* Estilos para exclusão da conta */
+.textosPerigo>h1 {
+    font-size: 1.125rem;
+    color: #ef4444e6;
+    margin-bottom: 1rem;
+}
+
+.textosPerigo>p {
+    font-size: 0.875rem;
+    color: var(--font-meio-apagada);
+    margin-bottom: 1rem;
+}
+
+.btnExcluirConta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 7.5rem;
+    height: 2.5rem;
+    background-color: #ef4444;
+    color: #fff;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border-radius: 0.625rem;
+    transition: background-color 0.2s ease;
+}
+
+.btnExcluirConta:hover {
+    background-color: #ef4444e6;
+}

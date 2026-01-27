@@ -4,8 +4,6 @@ import Swal from 'sweetalert2';
 
 import Style from "./slideBar.module.css";
 
-// Import Components
-
 export default function CompSlideBar({ aberta, setAberta }) {
     const navigate = useNavigate();
     const location = useLocation();
@@ -51,12 +49,37 @@ export default function CompSlideBar({ aberta, setAberta }) {
         });
     }
 
+    // Troca de Logo caso o usuario esteja no modo dark
+    const [temaAtual, setTemaAtual] = useState(localStorage.getItem("theme-mode") || "light");
+
+    useEffect(() => {
+        const atualizarTema = (e) => {
+            const novoTema = e?.detail || localStorage.getItem("theme-mode");
+            setTemaAtual(novoTema);
+        };
+
+        // Escutador para mudanças no localStorage
+        window.addEventListener("themeChange", atualizarTema);
+        return () => {
+            window.removeEventListener("themeChange", atualizarTema);
+        };
+    }, []);
+
+    const trocarLogo = () => {
+        if (temaAtual === "dark") {
+            return require("../../../imgs/Logo2.png");
+        }
+
+        return require("../../../imgs/Logo1.png");
+    }
+
     return (
         <div className={`${Style.containerSlideBar} ${!aberta ? Style.fechada : ""}`}>
             <div className={Style.divLogo}>
-                <img src={require("../../../imgs/Logo1.png")} alt="Podsmath Logo"
+                <img src={trocarLogo()} alt="Podsmath Logo"
                     className={Style.imgLogo} onClick={() => { navigate("/") }}
-                    draggable="false" />
+                    draggable="false"
+                />
                 {!aberta && (
                     <hr className={Style.linhaToggle} />
                 )}
@@ -115,7 +138,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
                 ) : (
                     <>
                         <div className={Style.divMenuLogado}>
-                            <div className={`${Style.btnPadrao} ${rotaAtiva("/perfil") ? Style.btnSelecionado : ""}`}
+                            <div className={`${Style.btnPadrao} ${rotaAtiva("/configuracoes") ? Style.btnSelecionado : ""}`}
                                 onClick={() => {
                                     navigate("/configuracoes");
                                 }}

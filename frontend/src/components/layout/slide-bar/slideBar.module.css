@@ -1,4 +1,4 @@
-.containerSlideBar{
+.containerSlideBar {
     display: flex;
     flex-direction: column;
     width: 16rem;
@@ -12,58 +12,67 @@
 }
 
 /* Estilo para barra fechada */
-.fechada{
+.fechada {
     width: 4rem;
 }
-.fechada p{
+
+.fechada p {
     opacity: 0;
     width: 0;
     overflow: hidden;
     transition: opacity 0.2s ease;
 }
-.fechada .divLogo{
+
+.fechada .divLogo {
     flex-direction: column;
     gap: 0.75rem;
 }
-.fechada .imgLogo{
+
+.fechada .imgLogo {
     width: 3.5rem;
     margin-bottom: 1rem;
 }
-.fechada .btnPadrao{
+
+.fechada .btnPadrao {
     justify-content: center;
     margin-left: 1rem;
 }
-.fechada .btnLogin{
+
+.fechada .btnLogin {
     display: none;
 }
-.btnToggle{
+
+.btnToggle {
     cursor: pointer;
     font-size: 1.1rem;
     transition: transform 0.3s ease;
 }
-.fechada .btnToggle{
+
+.fechada .btnToggle {
     transform: rotate(180deg);
 }
 
 /* Estilo da Div da Logo */
-.divLogo{
+.divLogo {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 1rem 1.5rem 1rem 1.5rem;
     border-bottom: solid 0.1rem var(--border-color-tema);
 }
-.imgLogo{
+
+.imgLogo {
     width: 7.5rem;
     cursor: pointer;
     opacity: 1;
     transition: opacity 0.2s ease;
 }
+
 .imgLogo:hover {
     opacity: 0.6;
 }
 
-.linhaToggle{
+.linhaToggle {
     border: none;
     border-top: 1px solid var(--border-color-tema);
     width: 4rem;
@@ -71,7 +80,7 @@
 }
 
 /* Estilo dos Btn para navegar */
-.divMenuOpcoes{
+.divMenuOpcoes {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -80,7 +89,7 @@
     margin-top: 1.8rem;
 }
 
-.btnPadrao{
+.btnPadrao {
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -92,22 +101,25 @@
     font-size: 0.875rem;
     cursor: pointer;
 }
-.btnPadrao>i{
+
+.btnPadrao>i {
     color: inherit;
 }
 
-.btnSelecionado{
+.btnSelecionado {
     background-color: #012663;
     color: #fff !important;
 }
-.btnSelecionado:hover{
+
+.btnSelecionado:hover {
     background-color: #1a3f8f;
 }
-.btnSelecionado>i{
+
+.btnSelecionado>i {
     color: #fff !important;
 }
 
-.divBtnLogin{
+.divBtnLogin {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -115,29 +127,32 @@
     border-top: solid 0.1rem var(--border-color-tema);
 }
 
-.btnLogin{
+.btnLogin {
     margin: 1rem;
     justify-content: center;
     background-color: #ff5724 !important;
     color: #fff !important;
 }
-.btnLogin:hover{
+
+.btnLogin:hover {
     background-color: #ff5724e6 !important;
 }
 
 /* Estilos Para o Botão de Configuração que Leva para o Perfil */
-.divMenuLogado{
+.divMenuLogado {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
     padding: 1rem 0rem;
 }
-.btnSair{
+
+.btnSair {
     color: #ff5724;
     transition: 0.5s ease;
 }
-.btnSair:hover{
+
+.btnSair:hover {
     background-color: #ff5724e6;
     color: #fff;
 }

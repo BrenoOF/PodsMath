@@ -18,10 +18,7 @@ export default function CompPodcastDestaque({ podcasts }) {
                         />
                         <div>
                             <h2>{item.titulo}</h2>
-                            <p>
-                                {item.episodios}
-                                {item.episodios > 1 ? " episódios" : " episódio"}
-                            </p>
+                            <p>{item.episodios}{item.episodios > 1 ? " episódios" : " episódio"}</p>
                         </div>
                     </div>
                 ))}

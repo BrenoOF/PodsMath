@@ -111,12 +111,13 @@
     background-color: #1a3f8f;
 }
 
-.divImgProf{
+.divImgProf {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 50%;
 }
+
 .imgProfessora {
     width: 25vw;
     aspect-ratio: 34.5 / 28;

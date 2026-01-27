@@ -70,12 +70,8 @@ export default function TelaExplorar() {
                             <i className={`fa-solid fa-${item.icon}`}></i>
                         </div>
                         <div className={Style.tituloCard}>
-                            <h1>
-                                {item.titulo}
-                            </h1>
-                            <p>
-                                {item.subTitulo}
-                            </p>
+                            <h1>{item.titulo}</h1>
+                            <p>{item.subTitulo}</p>
                         </div>
                     </div>
                 ))}

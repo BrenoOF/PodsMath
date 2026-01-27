@@ -23,6 +23,7 @@ export default function CompTopBar({ slidebarAberta }) {
         font: localStorage.getItem("font-size") || "normal"
     });
 
+    // Mudança do Tema
     const aplicarTema = (modo) => {
         if (configAtual.tema === modo) return;
 
@@ -50,6 +51,11 @@ export default function CompTopBar({ slidebarAberta }) {
             tema: modo
         }));
 
+        // Dispara um Evento para Mudança de Temas
+        window.dispatchEvent(new CustomEvent("themeChange", {
+            detail: modo
+        }));
+
         toast.current.show({
             severity: 'contrast',
             summary: 'Tema alterado',
@@ -60,6 +66,7 @@ export default function CompTopBar({ slidebarAberta }) {
         });
     };
 
+    // Mudança de Fonte
     const aplicarFonte = (tamanho) => {
         if (configAtual.font === tamanho) return;
 
@@ -124,6 +131,7 @@ export default function CompTopBar({ slidebarAberta }) {
 
     const menuConfigsRef = useRef(null);
     const btnConfigsRef = useRef(null);
+    
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (

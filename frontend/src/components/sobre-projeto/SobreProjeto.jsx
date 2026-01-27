@@ -65,9 +65,7 @@ export default function TelaSobre() {
                             <div className={Style.divIconPrincipio}>
                                 <i className="fa-solid fa-bullseye" style={{ fontSize: "1.5rem", color: "#075783" }}></i>
                             </div>
-                            <h1>
-                                Missão
-                            </h1>
+                            <h1>Missão</h1>
                             <p>
                                 Democratizar o acesso ao conhecimento matemático através de conteúdo de alta qualidade,
                                 tornando a matemática acessível e inspiradora para todos.
@@ -77,9 +75,7 @@ export default function TelaSobre() {
                             <div className={Style.divIconPrincipio}>
                                 <i className="fa-solid fa-lightbulb" style={{ fontSize: "1.5rem", color: "#075783" }}></i>
                             </div>
-                            <h1>
-                                Visão
-                            </h1>
+                            <h1>Visão</h1>
                             <p>
                                 Ser a principal plataforma de podcasts educacionais de matemática no Brasil,
                                 transformando a forma como estudantes e entusiastas aprendem.
@@ -89,9 +85,7 @@ export default function TelaSobre() {
                             <div className={Style.divIconPrincipio}>
                                 <i className="fa-solid fa-heart" style={{ fontSize: "1.5rem", color: "#075783" }}></i>
                             </div>
-                            <h1>
-                                Valores
-                            </h1>
+                            <h1>Valores</h1>
                             <p>
                                 Excelência acadêmica, inclusão educacional, inovação pedagógica e comprometimento
                                 com o desenvolvimento contínuo do conhecimento.
@@ -110,13 +104,9 @@ export default function TelaSobre() {
                             className={Style.imgProfessora} draggable="false"
                         />
                         <div className={Style.divTextoNossaEquipe}>
-                            <h1>
-                                Profa. Dra. Adriana de Bortoli
-                            </h1>
+                            <h1>Profa. Dra. Adriana de Bortoli</h1>
                             <div className={Style.divSubTituloNossaEquipe}>
-                                <p>
-                                    Coordenadora e Apresentadora
-                                </p>
+                                <p>Coordenadora e Apresentadora</p>
                             </div>
                             <p>
                                 A Profa. Dra. Adriana de Bortoli é professora da área de Matemática, com atuação
@@ -136,63 +126,37 @@ export default function TelaSobre() {
                     <div className={Style.divCardsParceiros}>
                         <div className={Style.cardParceiro + " " + Style.padraoCard}>
                             <div className={Style.divSubTituloParceiro}>
-                                <p>
-                                    Instituição de Ensino Superior
-                                </p>
+                                <p>Instituição de Ensino Superior</p>
                             </div>
-                            <h1>
-                                Universidade Federal de Matemática
-                            </h1>
-                            <p>
-                                Parceria acadêmica para desenvolvimento de conteúdo científico
-                            </p>
+                            <h1>Universidade Federal de Matemática</h1>
+                            <p>Parceria acadêmica para desenvolvimento de conteúdo científico</p>
                         </div>
                         <div className={Style.cardParceiro + " " + Style.padraoCard}>
                             <div className={Style.divSubTituloParceiro}>
-                                <p>
-                                    Centro de Pesquisa
-                                </p>
+                                <p>Centro de Pesquisa</p>
                             </div>
-                            <h1>
-                                Instituto de Tecnologia Educacional
-                            </h1>
-                            <p>
-                                Apoio técnico e metodológico para produção de conteúdo
-                            </p>
+                            <h1>Instituto de Tecnologia Educacional</h1>
+                            <p>Apoio técnico e metodológico para produção de conteúdo</p>
                         </div>
                         <div className={Style.cardParceiro + " " + Style.padraoCard}>
                             <div className={Style.divSubTituloParceiro}>
-                                <p>
-                                    Organização sem fins lucrativos
-                                </p>
+                                <p>Organização sem fins lucrativos</p>
                             </div>
-                            <h1>
-                                Fundação para Educação Digital
-                            </h1>
-                            <p>
-                                Financiamento e suporte para democratização do ensino
-                            </p>
+                            <h1>Fundação para Educação Digital</h1>
+                            <p>Financiamento e suporte para democratização do ensino</p>
                         </div>
                         <div className={Style.cardParceiro + " " + Style.padraoCard}>
                             <div className={Style.divSubTituloParceiro}>
-                                <p>
-                                    Comunidade Educacional
-                                </p>
+                                <p>Comunidade Educacional</p>
                             </div>
-                            <h1>
-                                Rede Nacional de Professores
-                            </h1>
-                            <p>
-                                Colaboração na curadoria e validação de conteúdos
-                            </p>
+                            <h1>Rede Nacional de Professores</h1>
+                            <p>Colaboração na curadoria e validação de conteúdos</p>
                         </div>
                     </div>
                 </div>
                 {/* Parte do "Nosso Impacto" */}
                 <div className={Style.divFooter}>
-                    <h1>
-                        Nosso Impacto
-                    </h1>
+                    <h1>Nosso Impacto</h1>
                     <p>
                         O PodsMath vem ampliando o acesso ao conhecimento matemático por meio de conteúdos 
                         educativos em áudio, alcançando estudantes, professores e entusiastas em todo o país. 
@@ -201,36 +165,20 @@ export default function TelaSobre() {
                     </p>
                     <div className={Style.containerInformacoesFooter}>
                         <div className={Style.divInformacoesFooter}>
-                            <h1>
-                                50K+
-                            </h1>
-                            <p>
-                                Ouvintes Mensais
-                            </p>
+                            <h1>50K+</h1>
+                            <p>Ouvintes Mensais</p>
                         </div>
                         <div className={Style.divInformacoesFooter}>
-                            <h1>
-                                200+
-                            </h1>
-                            <p>
-                                Episódios Publicados
-                            </p>
+                            <h1>200+</h1>
+                            <p>Episódios Publicados</p>
                         </div>
                         <div className={Style.divInformacoesFooter}>
-                            <h1>
-                                15
-                            </h1>
-                            <p>
-                                Temas Abordados
-                            </p>
+                            <h1>15</h1>
+                            <p>Temas Abordados</p>
                         </div>
                         <div className={Style.divInformacoesFooter}>
-                            <h1>
-                                4.9
-                            </h1>
-                            <p>
-                                Avaliação Média
-                            </p>
+                            <h1>4.9</h1>
+                            <p>Avaliação Média</p>
                         </div>
                     </div>
                 </div>

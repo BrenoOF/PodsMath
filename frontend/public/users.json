@@ -4,34 +4,44 @@
         "nome": "Guilherme Freitas",
         "email": "guilherme@email.com",
         "senha": "123456",
-        "img": "/imgs/img-perfil/img1.png"
+        "img": "/imgs/img-perfil/img1.png",
+        "nivelAcesso": "admin master",
+        "membroDesde": "2026-01-26"
     },
     {
         "id": 2,
         "nome": "Jhenifer Maiara",
         "email": "jhenifer@email.com",
         "senha": "jhenifer@email.com",
-        "img": "/imgs/img-perfil/img2.png"
+        "img": "/imgs/img-perfil/img2.png",
+        "nivelAcesso": "user",
+        "membroDesde": "2026-01-26"
     },
     {
         "id": 3,
         "nome": "Saulo Batista",
         "email": "saulo@email.com",
         "senha": "saulo261",
-        "img": "/imgs/img-perfil/img3.png"
+        "img": "/imgs/img-perfil/img3.png",
+        "nivelAcesso": "user",
+        "membroDesde": "2026-01-26"
     },
     {
         "id": 4,
         "nome": "Breno Fidelis",
         "email": "breno@email.com",
         "senha": "senha123",
-        "img": "/imgs/img-perfil/img4.png"
+        "img": "/imgs/img-perfil/img4.png",
+        "nivelAcesso": "moderador",
+        "membroDesde": "2026-01-26"
     },
     {
         "id": 5,
         "nome": "User para Testes",
         "email": "teste@email.com",
         "senha": "123456",
-        "img": "/imgs/img-perfil/img5.png"
+        "img": "/imgs/img-perfil/img5.png",
+        "nivelAcesso": "user",
+        "membroDesde": "2026-01-26"
     }
 ]
