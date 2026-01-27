@@ -222,12 +222,12 @@
 
 .btnEntrar {
     color: #fff;
-    background-color: #012663;
+    background-color: var(--btn-1);
     margin-top: 1rem;
 }
 
 .btnEntrar:hover {
-    background-color: #1a3f8f;
+    background-color: var(--btn-1-hover);
 }
 
 .btnEntrarGoogle {

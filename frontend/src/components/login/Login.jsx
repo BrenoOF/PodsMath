@@ -160,12 +160,24 @@ export default function TelaLogin() {
         }
     };
 
+    // Troca de Logo caso o usuario esteja no modo dark
+    const trocarLogo = () => {
+        const tema = localStorage.getItem("theme-mode");
+
+        if (tema === "dark") {
+            return require("../../imgs/Logo2.png");
+        }
+
+        return require("../../imgs/Logo1.png");
+    }
+
     return (
         <div className={Style.container}>
             <div className={Style.containerLogin}>
-                <img src={require("../../imgs/Logo1.png")} alt="Podsmath Logo"
+                <img src={trocarLogo()} alt="Podsmath Logo"
                     className={Style.imgLogo} onClick={() => { navigate("/") }}
-                    draggable="false" />
+                    draggable="false" 
+                />
                 <p className={Style.textoLogin}>Aprenda matemática de forma envolvente através de podcasts</p>
                 <div className={Style.divMudarForm}>
                     <p onClick={(e) => { trocarForm(true) }}

@@ -38,9 +38,7 @@ export default function TelaHome() {
                     <p>Plataforma Educacional</p>
                 </div>
                 <h1 className={Style.tituloBoasVindas}>
-                    <span>
-                        Aprenda Matemática
-                    </span>
+                    <span>Aprenda Matemática</span>
                     <br />
                     quando e onde quiser
                 </h1>
