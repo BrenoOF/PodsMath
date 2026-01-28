@@ -103,8 +103,72 @@
     background-color: var(--btn-1-hover);
 }
 
-/* Estilo para Perfil */
-/* Estilo para Segurança */
+/* Estilos para Imagem de Perfil */
+.divFotoPerfil {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.ajusteImgPerfil{
+    position: relative;
+    width: 8rem;
+    height: 8rem;
+}
+
+.imgPerfil {
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    object-fit: cover;
+}
+
+/* Esconde o input */
+.inputFile {
+    display: none;
+}
+
+.iconeAlterarImg{
+    position: absolute;
+    bottom: 0.2rem;
+    right: 0.2rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+
+    background-color: #ff5724;
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.iconeAlterarImg:hover{
+    background-color: #ff5724e6;
+}
+
+.divTextoFotoPerfil {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.divTextoFotoPerfil>h1 {
+    font-size: 0.875rem;
+}
+
+.divTextoFotoPerfil>p {
+    color: var(--font-meio-apagada);
+    font-size: 0.75rem;
+}
+
+/* Estilo para Inputs */
 .divInputs {
     margin-top: 2rem;
 }
@@ -115,6 +179,11 @@
     gap: 0.4rem;
     margin-bottom: 1rem;
     width: 50%;
+}
+
+.divInput>p {
+    color: var(--font-meio-apagada);
+    font-size: 0.75rem;
 }
 
 .divInput>label {
@@ -141,6 +210,40 @@
     right: 0.75rem;
     margin-top: 0;
     cursor: pointer;
+}
+
+:global(.p-inputtext),
+:global(.p-password-input) {
+    border: 0.1rem solid #cbd5e1;
+}
+
+:global(.p-inputtext:focus),
+:global(.p-password-input:focus) {
+    border: 0.15rem solid #012663;
+    box-shadow: 0 0 0 2px rgba(1, 38, 99, 0.15);
+}
+
+:global(.p-dropdown)>span {
+    border: none;
+}
+
+:global(.p-dropdown):hover {
+    border: 0.1rem solid #cbd5e1;
+}
+
+:global(.p-dropdown-panel) {
+    border: 0.1rem solid #000;
+    overflow: hidden;
+    border-radius: 0;
+}
+
+:global(.p-dropdown-item) {
+    padding: 0.75rem 1rem;
+}
+
+:global(.p-dropdown-item:hover) {
+    background-color: #012663;
+    color: #ffffff;
 }
 
 /* Estilo para Conta */

@@ -20,7 +20,7 @@ export default function CompConta({ dadosUser }) {
     const alertExclusao = () => {
         Swal.fire({
             title: "Quer Realmente Excluir a Conta?",
-            text: "Tem certeza que deseja excluir sua conta? Esta ação não pode ser desfeita.",
+            text: "Esta ação não pode ser desfeita.",
             icon: "question",
             showCancelButton: true,
             confirmButtonText: "Sim, Quero Excluir!",
