@@ -77,9 +77,21 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
             email,
             grauEscolaridadeId: grau.id,
             ra,
-            escola
+            escola,
+            previewImg
         });
     }
+
+    // Função para fingir upload de imagem
+    const [previewImg, setPreviewImg] = useState("");
+
+    const trocarImagem = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const preview = URL.createObjectURL(file);
+        setPreviewImg(preview);
+    };
 
     return (
         <div>
@@ -88,17 +100,33 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                 <p>Atualize suas informações de perfil</p>
             </div>
             <div className={Style.divFotoPerfil}>
-                <div className={Style.divImagemPerfil}>
-                    <img src={imagem || "/imgs/img-perfil/avatar-default.png"} 
-                        alt="Imagem de Perfil"
+                <div className={Style.ajusteImgPerfil}>
+                    <img src={previewImg || imagem || "/imgs/img-perfil/avatar-default.png"}
+                        alt="Imagem de Perfil" className={Style.imgPerfil}
+                        draggable="false"
                     />
+                    {/* Input escondido */}
+                    <input
+                        type="file"
+                        accept="image/*"
+                        id="inputImagemPerfil"
+                        onChange={trocarImagem}
+                        className={Style.inputFile}
+                    />
+                    {/* Ícone clicável */}
+                    <label
+                        htmlFor="inputImagemPerfil"
+                        className={Style.iconeAlterarImg}
+                    >
+                        <i className="fa-regular fa-camera"></i>
+                    </label>
                 </div>
                 <div className={Style.divTextoFotoPerfil}>
                     <h1>Foto de Perfil</h1>
                     <p>Clique no ícone para alterar</p>
                 </div>
             </div>
-            <div>
+            <div className={Style.divInputs}>
                 <div className={Style.divInput}>
                     <label>Nome Completo</label>
                     <InputText value={nome}
@@ -106,7 +134,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                             setNome(e.target.value);
                             limparErro("nome");
                         }}
-                        inputClassName={`${Style.input} ${errors.nome ? "p-invalid" : ""}`}
+                        className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`}
                         placeholder="Seu nome completo"
                     />
                     {errors?.nome && (
@@ -116,7 +144,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                 <div className={Style.divInput}>
                     <label>Email</label>
                     <InputText value={email}
-                        inputClassName={Style.input}
+                        className={Style.input}
                         placeholder="Seu nome completo"
                         disabled
                     />
@@ -145,7 +173,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                             setRa(e.target.value);
                             limparErro("ra");
                         }}
-                        inputClassName={`${Style.input} ${errors.ra ? "p-invalid" : ""}`}
+                        className={`${Style.input} ${errors.ra ? "p-invalid" : ""}`}
                         placeholder="Registro Acadêmico"
                     />
                     {errors?.ra && (
@@ -159,7 +187,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                             setEscola(e.target.value);
                             limparErro("escola");
                         }}
-                        inputClassName={`${Style.input} ${errors.escola ? "p-invalid" : ""}`}
+                        className={`${Style.input} ${errors.escola ? "p-invalid" : ""}`}
                         placeholder="Nome da escola ou instituição"
                     />
                     {errors?.escola && (
