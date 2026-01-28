@@ -1,0 +1,11 @@
+[
+    { "id": 1, "name": "Fundamental I (1° ao 5° ano)", "code": "F1" },
+    { "id": 2, "name": "Fundamental II (6° ao 9° ano)", "code": "F2" },
+    { "id": 3, "name": "Ensino Médio", "code": "EM" },
+    { "id": 4, "name": "Técnico", "code": "T" },
+    { "id": 5, "name": "Ensino Superior", "code": "ES" },
+    { "id": 6, "name": "Pós-graduação (Lato Sensu)", "code": "PG" },
+    { "id": 7, "name": "Mestrado", "code": "M" },
+    { "id": 8, "name": "Doutorado", "code": "D" },
+    { "id": 9, "name": "Pós-Doutorado", "code": "PD" }
+]

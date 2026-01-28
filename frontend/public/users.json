@@ -6,7 +6,10 @@
         "senha": "123456",
         "img": "/imgs/img-perfil/img1.png",
         "nivelAcesso": "admin master",
-        "membroDesde": "2026-01-26"
+        "membroDesde": "2026-01-26",
+        "grauEscolaridadeId": 5,
+        "ra": "123456",
+        "escola": "FATEC Lins"
     },
     {
         "id": 2,
@@ -15,7 +18,10 @@
         "senha": "jhenifer@email.com",
         "img": "/imgs/img-perfil/img2.png",
         "nivelAcesso": "user",
-        "membroDesde": "2026-01-26"
+        "membroDesde": "2026-01-26",
+        "grauEscolaridadeId": 6,
+        "ra": "234567",
+        "escola": "FATEC Lins"
     },
     {
         "id": 3,
@@ -24,7 +30,10 @@
         "senha": "saulo261",
         "img": "/imgs/img-perfil/img3.png",
         "nivelAcesso": "user",
-        "membroDesde": "2026-01-26"
+        "membroDesde": "2026-01-26",
+        "grauEscolaridadeId": 4,
+        "ra": "345678",
+        "escola": "FATEC Lins"
     },
     {
         "id": 4,
@@ -33,7 +42,10 @@
         "senha": "senha123",
         "img": "/imgs/img-perfil/img4.png",
         "nivelAcesso": "moderador",
-        "membroDesde": "2026-01-26"
+        "membroDesde": "2026-01-26",
+        "grauEscolaridadeId": 5,
+        "ra": "456789",
+        "escola": "FATEC Lins"
     },
     {
         "id": 5,
@@ -42,6 +54,9 @@
         "senha": "123456",
         "img": "/imgs/img-perfil/img5.png",
         "nivelAcesso": "user",
-        "membroDesde": "2026-01-26"
+        "membroDesde": "2026-01-26",
+        "grauEscolaridadeId": 3,
+        "ra": "567890",
+        "escola": "FATEC Lins"
     }
 ]
