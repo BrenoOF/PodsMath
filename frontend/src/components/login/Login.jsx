@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -21,7 +21,7 @@ export default function TelaLogin() {
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
     const [tipoPessoa, setTipoPessoa] = useState("");
-    const [grau, setGrau] = useState("");
+    const [grau, setGrau] = useState(null);
     const [ra, setRA] = useState("");
     const [escola, setEscola] = useState("");
     const [senha, setSenha] = useState("");
@@ -29,22 +29,33 @@ export default function TelaLogin() {
 
     const [errors, setErrors] = useState({});
 
-    const graus = [
-        { name: 'Fundamental I (1° ao 5° ano)', code: 'F1' },
-        { name: 'Fundamental II (6° ao 9° ano)', code: 'F2' },
-        { name: 'Ensino Médio', code: 'EM' },
-        { name: 'Técnico', code: 'T' },
-        { name: 'Ensino Superior', code: 'ES' },
-        { name: 'Pós-graduação (Lato Sensu)', code: 'PG' },
-        { name: 'Mestrado', code: 'M' },
-        { name: 'Doutorado', code: 'D' },
-        { name: 'Pós-Doutorado', code: 'PD' }
-    ];
-
     const trocarForm = (valor) => {
         setTrocar(valor);
         setErrors({});
+
+        if (valor) {
+            // indo para login
+            setSenha("");
+        } else {
+            // indo para cadastro
+            setGrau(null);
+        }
     };
+
+    // Puxar graus do json
+    const [graus, setGraus] = useState([]);
+    useEffect(() => {
+        const carregarGrausEscolares = async () => {
+            try {
+                const response = await axios.get("/grausEscolar.json");
+                setGraus(response.data);
+            } catch (error) {
+                console.error("Erro ao carregar dados do JSON", error);
+            }
+        }
+
+        carregarGrausEscolares();
+    }, []);
 
     // Validações
     const validarEmail = (value) => {
@@ -87,8 +98,11 @@ export default function TelaLogin() {
 
         if (!grau) novosErros.grau = "Selecione o grau de escolaridade";
 
-        if (!/^\d{6}$/.test(ra))
-            novosErros.ra = "RA deve conter 6 dígitos";
+        if (!ra.trim()) {
+            novosErros.ra = "R.A. é obrigatório";
+        } else if (!/^\d{6}$/.test(ra)) {
+            novosErros.ra = "R.A. deve conter 6 dígitos";
+        }
 
         if (!escola.trim())
             novosErros.escola = "Escola é obrigatória";
@@ -118,7 +132,7 @@ export default function TelaLogin() {
                 nome,
                 email,
                 tipoPessoa,
-                grau,
+                grauEscolaridadeId: grau.id,
                 ra,
                 escola,
                 senha
@@ -176,7 +190,7 @@ export default function TelaLogin() {
             <div className={Style.containerLogin}>
                 <img src={trocarLogo()} alt="Podsmath Logo"
                     className={Style.imgLogo} onClick={() => { navigate("/") }}
-                    draggable="false" 
+                    draggable="false"
                 />
                 <p className={Style.textoLogin}>Aprenda matemática de forma envolvente através de podcasts</p>
                 <div className={Style.divMudarForm}>
