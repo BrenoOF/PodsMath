@@ -126,6 +126,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                     <p>Clique no ícone para alterar</p>
                 </div>
             </div>
+            <hr className={Style.linhaSeparacao} />
             <div className={Style.divInputs}>
                 <div className={Style.divInput}>
                     <label>Nome Completo</label>
