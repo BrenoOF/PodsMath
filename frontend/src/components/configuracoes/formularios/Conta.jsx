@@ -44,17 +44,17 @@ export default function CompConta({ dadosUser }) {
                     <h1>Email</h1>
                     <p>{dadosUser?.email}</p>
                 </div>
-                <hr />
+                <hr className={Style.linhaSeparacao} />
                 <div className={Style.divInformacao}>
                     <h1>Nível de Acesso</h1>
                     <p>{dadosUser?.nivelAcesso}</p>
                 </div>
-                <hr />
+                <hr className={Style.linhaSeparacao} />
                 <div className={Style.divInformacao}>
                     <h1>Membro desde</h1>
                     <p>{dadosUser?.membroDesde}</p>
                 </div>
-                <hr />
+                <hr className={Style.linhaSeparacao} />
             </div>
             <div className={Style.textosPerigo}>
                 <h1>Zona de Perigo</h1>

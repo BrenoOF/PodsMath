@@ -1,14 +1,76 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerSlideBar {
+        flex-direction: column;
+        width: 100vw;
+        height: 5rem;
+        border-top: solid 0.1rem var(--border-color-tema);
+        position: fixed;
+        bottom: 0;
+        left: 0;
+    }
+
+    .divMenuOpcoes {
+        flex-direction: row;
+        align-items: center;
+        flex: 1;
+        gap: 1rem;
+    }
+
+    /* Partes que não ficaram no mobile */
+    .divLogo {
+        display: none;
+    }
+
+    .divBtnLogin {
+        display: none;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerSlideBar {
+        flex-direction: column;
+        width: 16rem;
+        height: 100vh;
+        border-right: solid 0.1rem var(--border-color-tema);
+        position: fixed;
+        top: 0;
+        left: 0;
+    }
+
+    .divMenuOpcoes {
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        gap: 1rem;
+        margin-top: 1.8rem;
+    }
+
+    /* Partes que ficaram no desktop */
+    .divLogo {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem 1rem 1.5rem;
+        border-bottom: solid 0.1rem var(--border-color-tema);
+    }
+
+    .divBtnLogin {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-top: solid 0.1rem var(--border-color-tema);
+    }
+}
+
+/* Estilo principal */
 .containerSlideBar {
     display: flex;
-    flex-direction: column;
-    width: 16rem;
-    height: 100vh;
-    border-right: solid 0.1rem var(--border-color-tema);
-    position: fixed;
-    top: 0;
-    left: 0;
     transition: width 0.3s ease;
     overflow: hidden;
+    z-index: 50;
+    background: var(--app-background);
 }
 
 /* Estilo para barra fechada */
@@ -53,14 +115,6 @@
 }
 
 /* Estilo da Div da Logo */
-.divLogo {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1.5rem 1rem 1.5rem;
-    border-bottom: solid 0.1rem var(--border-color-tema);
-}
-
 .imgLogo {
     width: 7.5rem;
     cursor: pointer;
@@ -117,14 +171,6 @@
 
 .btnSelecionado>i {
     color: #fff !important;
-}
-
-.divBtnLogin {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-top: solid 0.1rem var(--border-color-tema);
 }
 
 .btnLogin {
