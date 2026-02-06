@@ -3,10 +3,12 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    width: 100vw;
     height: 4rem;
     padding: 0 1.5rem;
     position: fixed;
     top: 0;
+    left: 0;
     border-bottom: solid 0.1rem var(--border-color-tema);
     background: var(--app-background);
     transition: left 0.3s ease, width 0.3s ease;
@@ -15,36 +17,52 @@
 
 /* Responsividade */
 @media screen and (max-width: 769px) {
-    .topBarAberta {
+
+    .topBarAberta,
+    .topBarFechada {
         left: 0rem;
+        width: 100vw;
+    }
+
+    .divInfoTexto {
+        display: none;
+    }
+
+    .ajusteMobile {
+        display: none !important;
     }
 }
 
 @media screen and (min-width: 770px) {
     .topBarAberta {
         left: 16rem;
+        width: calc(100% - 16rem);
     }
-}
 
-.topBarAberta {
-    width: calc(100% - 16rem);
-}
-
-.topBarFechada {
-    left: 4rem;
-    width: calc(100% - 4rem);
+    .topBarFechada {
+        left: 4rem;
+        width: calc(100% - 4rem);
+    }
 }
 
 /* Estilo para o input de pesquisa */
 .divEsquerda {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    margin-right: 0.5rem;
+    margin-left: -1rem;
+    width: clamp(12rem, 34rem, 34rem);
 }
 
-/* Reutiliza o MESMO padrão de input */
+.ajusteInput{
+    display: flex;
+    flex: 1 1 34rem;
+    max-width: 34rem;
+    min-width: 12rem;
+}
+
 .input {
-    width: 170%;
+    width: 100%;
     padding: 0.8rem 0.75rem 0.8rem 2.5rem;
     border-radius: 1rem;
     font-size: 0.875rem;
@@ -62,8 +80,7 @@
 .divDireita {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    margin-right: 0.8rem;
+    gap: 0.5rem;
 }
 
 .btnPadrao {
@@ -72,6 +89,7 @@
     align-items: center;
     cursor: pointer;
     font-size: 0.875rem;
+    font-weight: bold;
     width: 7.2rem;
     height: 2.5rem;
 }
@@ -97,8 +115,8 @@
     gap: 0.4rem;
     padding: 0.75rem;
     position: absolute;
-    top: 3.5rem;
-    right: 1.5rem;
+    top: 3.9rem;
+    right: 0.3rem;
     background: var(--surface-card, #fff);
     border-radius: 0.8rem;
     border: solid 0.1rem var(--border-color-tema);
@@ -161,4 +179,31 @@
     border-radius: 100%;
     border: 0.2rem solid #075783;
     cursor: pointer;
+}
+
+/* Estilos para quando o usuario estiver no celular e cliclar na foto de perfil */
+.modalInfoUser {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.5rem 0.6rem;
+}
+
+.modalInfoUser>h1 {
+    font-size: 0.875rem;
+}
+
+.modalInfoUser>p {
+    font-size: 0.75rem;
+    color: var(--font-paragrafo);
+}
+
+.modalBtnSair {
+    color: #ff5724;
+    transition: 0.5s ease;
+}
+
+.modalBtnSair:hover {
+    background-color: #ff5724e6;
+    color: #fff;
 }

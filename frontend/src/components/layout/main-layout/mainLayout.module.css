@@ -2,25 +2,39 @@
     height: 100dvh;
 }
 
-.fechada {
-    margin-left: 4rem;
-}
-
 .main {
     padding-top: 4rem;
     transition: margin-left 0.3s ease;
     height: 100dvh;
+    overflow-y: hidden;
+    position: relative;
+    z-index: 1;
+}
+
+.scrollArea {
+    height: calc(100dvh - 4rem); /* desconta a TopBar */
     overflow-y: auto;
+
+    position: relative;
+    z-index: 200; /* maior que TopBar e SlideBar (100) */
 }
 
 /* Responsividade */
 @media screen and (max-width: 769px) {
+    .fechada {
+        margin-left: 0rem;
+    }
+
     .aberta {
         margin-left: 0rem;
     }
 }
 
 @media screen and (min-width: 770px) {
+    .fechada {
+        margin-left: 4rem;
+    }
+
     .aberta {
         margin-left: 16rem;
     }

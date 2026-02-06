@@ -27,7 +27,9 @@ export default function TelaLayout() {
             <TopBar slidebarAberta={slidebarAberta} />
             {/* Conteúdo dinâmico */}
             <main id="conteudo-main" className={`${Style.main} ${slidebarAberta ? Style.aberta : Style.fechada}`}>
-                <Outlet />
+                <div className={Style.scrollArea}>
+                    <Outlet />
+                </div>
             </main>
         </div>
     );

@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
+
 import { PrimeReactContext } from 'primereact/api';
+import { useMatchMedia } from 'primereact/hooks';
 
 import Style from "./topBar.module.css";
 
@@ -14,7 +17,6 @@ import { Toast } from 'primereact/toast';
 export default function CompTopBar({ slidebarAberta }) {
     const navigate = useNavigate();
     const { changeTheme } = useContext(PrimeReactContext);
-    const [menuConfigsAberto, setMenuConfigsAberto] = useState(false);
     const [menuUserAberto, setMenuUserAberto] = useState(false);
 
     // Gerenciamento de Configuração do sistema pelo User
@@ -126,28 +128,6 @@ export default function CompTopBar({ slidebarAberta }) {
         }
     }, [changeTheme]);
 
-    // refs para quando clicar fora do menuConfigs ele fechar
-    const toast = useRef(null);
-
-    const menuConfigsRef = useRef(null);
-    const btnConfigsRef = useRef(null);
-    
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-            if (
-                menuConfigsAberto &&
-                menuConfigsRef.current &&
-                !menuConfigsRef.current.contains(event.target) &&
-                !btnConfigsRef.current.contains(event.target)
-            ) {
-                setMenuConfigsAberto(false);
-            }
-        };
-
-        document.addEventListener("pointerdown", handleClickOutside);
-        return () => { document.removeEventListener("pointerdown", handleClickOutside) };
-    }, [menuConfigsAberto]);
-
     // Verificação se está Logado
     const [userLogado, setUserLogado] = useState(false);
     const [dadosUser, setDadosUser] = useState(null);
@@ -180,12 +160,84 @@ export default function CompTopBar({ slidebarAberta }) {
         buscarUsuario();
     }, [usuarioId]);
 
+    // Refs para quando clicar fora do menuConfigs ele fechar
+    const toast = useRef(null);
+
+    const [menuConfigsAberto, setMenuConfigsAberto] = useState(false);
+    const menuConfigsRef = useRef(null);
+    const btnConfigsRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                menuConfigsAberto &&
+                menuConfigsRef.current &&
+                !menuConfigsRef.current.contains(event.target) &&
+                !btnConfigsRef.current.contains(event.target)
+            ) {
+                setMenuConfigsAberto(false);
+            }
+        };
+
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => { document.removeEventListener("pointerdown", handleClickOutside) };
+    }, [menuConfigsAberto]);
+
+    // Refs User Mobile
+    const [modalUserMobileAberto, setModalUserMobileAberto] = useState(false);
+    const mobileConfigsRef = useRef(null);
+    const btnMobileConfigsRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                modalUserMobileAberto &&
+                mobileConfigsRef.current &&
+                !mobileConfigsRef.current.contains(event.target) &&
+                !btnMobileConfigsRef.current.contains(event.target)
+            ) {
+                setModalUserMobileAberto(false);
+            }
+        };
+
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => { document.removeEventListener("pointerdown", handleClickOutside) };
+    }, [modalUserMobileAberto]);
+
+    // Verificação de mobile
+    const mobile = useMatchMedia('(max-width: 769px)');
+    
+    // Fazer Logout
+    const logout = () => {
+        try {
+            localStorage.removeItem("usuarioId");
+            setUserLogado(false);
+            navigate("/");
+        } catch (error) {
+            console.error("Erro ao Realizar logout ", error);
+        }
+    }
+    const alertSair = () => {
+        Swal.fire({
+            title: "Quer Realmente Sair?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Quero Sair!",
+            cancelButtonColor: "#d33",
+            confirmButtonColor: "#012663"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                logout();
+            }
+        });
+    }
+
     return (
         <>
             <Toast ref={toast} position="bottom-right" />
             <div className={`${Style.containerTopBar} ${slidebarAberta ? Style.topBarAberta : Style.topBarFechada}`}>
                 <div className={Style.divEsquerda}>
-                    <IconField iconPosition="left">
+                    <IconField iconPosition="left" className={Style.ajusteInput}>
                         <InputIcon className="pi pi-search" />
                         <InputText placeholder="Buscar..." className={Style.input} />
                     </IconField>
@@ -193,7 +245,7 @@ export default function CompTopBar({ slidebarAberta }) {
                 <div className={Style.divDireita}>
                     {!userLogado ? (
                         <>
-                            <div className={Style.btnPadrao}
+                            <div className={Style.btnPadrao + " " + Style.ajusteMobile}
                                 onClick={() => {
                                     navigate("/login", { state: { mode: "login" } });
                                 }}
@@ -220,7 +272,16 @@ export default function CompTopBar({ slidebarAberta }) {
                                 </div>
                                 <img src={dadosUser.img} alt="foto de perfil"
                                     className={Style.imgPerfil} draggable="false"
-                                    onClick={() => { navigate("/configuracoes") }}
+                                    ref={btnMobileConfigsRef}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+
+                                        if (mobile) {
+                                            setModalUserMobileAberto(!modalUserMobileAberto);
+                                        } else {
+                                            navigate("/configuracoes");
+                                        }
+                                    }}
                                 />
                             </div>
                         </>
@@ -231,6 +292,44 @@ export default function CompTopBar({ slidebarAberta }) {
                     >
                         <i className="fa-solid fa-circle-half-stroke"></i>
                     </div>
+                    {/* Modal para navegação mobile */}
+                    {mobile && modalUserMobileAberto && (
+                        <div
+                            ref={mobileConfigsRef}
+                            className={`${Style.menuConfigs} ${modalUserMobileAberto ? Style.menuAberto : ""}`}
+                        >
+                            <div className={Style.modalInfoUser}>
+                                <h1>{dadosUser.nome}</h1>
+                                <p>{dadosUser.email}</p>
+                            </div>
+                            <hr style={{ 
+                                    width: "18rem",
+                                    border: "0.1rem var(--border-color-tema) solid" 
+                                }} 
+                            />
+                            <div onClick={() => {
+                                    navigate("/configuracoes");
+                                    setModalUserMobileAberto(false);
+                                }}
+                                className={Style.btnTroca}
+                            >
+                                <div>
+                                    <i className="fa-solid fa-gear"
+                                        style={{ fontSize: "1.1rem" }}
+                                    ></i>
+                                    <p>Configurações</p>
+                                </div>
+                            </div>
+                            <div onClick={() => alertSair()} className={Style.btnTroca + " " + Style.modalBtnSair}>
+                                <div>
+                                    <i className="fa-solid fa-arrow-right-from-bracket"
+                                        style={{ fontSize: "1.1rem" }}
+                                    ></i>
+                                    <p>Sair</p>
+                                </div>
+                            </div>
+                        </div>
+                    )}
                     {/* Modal para controle das configurações do úsuario */}
                     <div
                         ref={menuConfigsRef}
