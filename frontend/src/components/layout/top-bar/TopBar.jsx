@@ -59,7 +59,7 @@ export default function CompTopBar({ slidebarAberta }) {
         }));
 
         toast.current.show({
-            severity: 'contrast',
+            severity: 'info',
             summary: 'Tema alterado',
             detail: modo === 'dark'
                 ? 'Modo escuro ativado'
@@ -86,7 +86,7 @@ export default function CompTopBar({ slidebarAberta }) {
         }));
 
         toast.current.show({
-            severity: 'contrast',
+            severity: 'info',
             summary: 'Tamanho da Fonte Alterado',
             detail:
                 tamanho === "normal" ? "Fonte normal ativada" :
