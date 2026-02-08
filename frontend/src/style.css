@@ -1,3 +1,4 @@
+/* Configução de Fonts */
 @font-face {
     font-family: 'Roboto';
     src: url('./fonts/Roboto-Regular.ttf') format('truetype');
@@ -22,6 +23,34 @@
     font-display: swap;
 }
 
+/* Correção TOAST Prime React */
+.p-toast {
+    z-index: 9999;
+}
+
+.p-toast-message {
+    padding: 1rem 1.25rem;
+    font-family: 'Roboto', sans-serif;
+}
+
+.p-toast-message-content {
+    gap: 0.75rem;
+}
+
+.p-toast-detail {
+    opacity: 0.85;
+}
+
+@media (max-width: 600px) {
+    .p-toast {
+        left: 50% !important;
+        transform: translateX(-50%);
+        bottom: 1rem !important;
+        width: 90vw;
+    }
+}
+
+/* Estilos padrões */
 * {
     margin: 0;
     padding: 0;
@@ -62,6 +91,7 @@ body {
     --btn-1: #012663;
     --btn-1-hover: #1a3f8f;
 }
+
 :root[data-theme="dark"] {
     --app-background: #0f131a;
     --background-secundario: #17255433;
