@@ -6,7 +6,6 @@ import Style from "./configuracoes.module.css";
 // Import de Componentes
 import FormPerfil from "./formularios/Perfil.jsx";
 import FormSeguranca from "./formularios/Seguranca.jsx";
-import FormConta from "./formularios/Conta.jsx";
 
 export default function TelaConfiguracoes() {
     const [controle, setControle] = useState("perfil");
@@ -69,15 +68,6 @@ export default function TelaConfiguracoes() {
                         <i className="fa-solid fa-lock"></i>
                         <p>Segurança</p>
                     </div>
-                    <div className={`
-                        ${Style.opcoesMenuTop}
-                        ${controle === "conta" ? Style.opcaoSelecionada : ""}
-                    `}
-                        onClick={() => { setControle("conta") }}
-                    >
-                        <i className="fa-solid fa-circle-info"></i>
-                        <p>Conta</p>
-                    </div>
                 </div>
                 {/* Formulário / Informações */}
                 <div className={Style.divForm}>
@@ -91,13 +81,11 @@ export default function TelaConfiguracoes() {
                     )}
                     {controle === "seguranca" && (
                         <FormSeguranca 
+                            dadosUserSenha={dadosUser?.senha}
                             errors={errors}
                             setErrors={setErrors}
                             limparErro={limparErro}
                         />
-                    )}
-                    {controle === "conta" && (
-                        <FormConta dadosUser={dadosUser} />
                     )}
                 </div>
             </div>

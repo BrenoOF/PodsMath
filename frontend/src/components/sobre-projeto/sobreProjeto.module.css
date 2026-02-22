@@ -1,6 +1,6 @@
 /* Estilo para primeira div onde tem a Apresentação */
 .divApresentacao {
-    color: #fff;
+    color: var(--branco);
     padding: 4rem 0rem;
     background: linear-gradient(to bottom right, #045d8c, #045d8ce6, #ff5a24);
 }
@@ -32,8 +32,8 @@
 
 .semiBtn {
     padding: 0.25rem 0.625rem;
-    background-color: #ffffff33;
-    border: 0.1rem solid #fff;
+    background-color: var(--cor-semibtn-normal);
+    border: 0.1rem solid var(--branco);
     border-radius: 2rem;
     font-size: 0.75rem;
     font-weight: 600;
@@ -41,7 +41,7 @@
 }
 
 .semiBtn:hover {
-    background-color: #045d8ccc;
+    background-color: var(--cor-semibtn-hover);
 }
 
 .divTextos {
@@ -103,7 +103,7 @@
     gap: 1rem;
     border-radius: 0.75rem;
     border: 0.125rem solid transparent;
-    background-color: var(--background-secundario);
+    background-color: var(--app-background);
 }
 
 .padraoCard:hover {
@@ -173,17 +173,17 @@
 .divSubTituloNossaEquipe {
     width: fit-content;
     padding: 0.25rem 0.625rem;
-    background-color: #0757831a;
-    border: 0.1rem solid #07578333;
-    color: #075783;
+    background-color: var(--cor-semibtn-normal);
+    border: 0.1rem solid var(--cor-semibtn-hover);
+    color: var(--cor-azul-font-borda);
     border-radius: 2rem;
     font-size: 0.75rem;
     transition: 0.2s ease;
 }
 
 .divSubTituloNossaEquipe:hover {
-    background-color: #075783cc;
-    color: #fff;
+    background-color: var(--cor-semibtn-hover);
+    color: var(--branco);
 }
 
 /* Estilos Parceiros do Projeto */
@@ -204,17 +204,17 @@
 .divSubTituloParceiro {
     width: fit-content;
     padding: 0.25rem 0.625rem;
-    background-color: #ff57241a;
-    border: 0.1rem solid #ff5724;
-    color: #ff5724;
+    background-color: var(--cor-semibtn-normal);
+    border: 0.1rem solid var(--cor-laranja-escuro);
+    color: var(--cor-laranja-escuro);
     border-radius: 2rem;
     font-size: 0.75rem;
     transition: 0.2s ease;
 }
 
 .divSubTituloParceiro:hover {
-    background-color: #075783cc;
-    color: #fff;
+    background-color: var(--cor-semibtn-hover);
+    color: var(--branco);
 }
 
 /* Estilos para o Rodapé/Footer */
@@ -228,7 +228,7 @@
     margin: 5rem 0rem;
     padding: 3rem;
     border-radius: 1rem;
-    background-color: var(--background-secundario);
+    background-color: var(--app-background);
 }
 .divFooter>h1{
     font-size: 1.875rem;
@@ -252,7 +252,7 @@
     align-items: center;
 }
 .divInformacoesFooter>h1{
-    color: #075783;
+    color: var(--cor-azul-font-borda);
     font-size: 2.25rem;
 }
 .divInformacoesFooter>p{

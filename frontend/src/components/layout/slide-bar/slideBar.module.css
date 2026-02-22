@@ -29,11 +29,11 @@
     }
 
     .btnSelecionado {
-        color: #1a3f8f !important;
+        color: var(--cor-azul-escura-font-bg) !important;
     }
 
     .btnSelecionado>i {
-        color: #1a3f8f !important;
+        color: var(--cor-azul-escura-font-bg) !important;
     }
 
     /* Partes que não ficaram no mobile */
@@ -75,16 +75,16 @@
     }
 
     .btnSelecionado {
-        background-color: #012663;
-        color: #fff !important;
+        background-color: var(--cor-azul-escura-padrao);
+        color: var(--branco) !important;
     }
 
     .btnSelecionado:hover {
-        background-color: #1a3f8f;
+        background-color: var(--cor-azul-escura-font-bg);
     }
 
     .btnSelecionado>i {
-        color: #fff !important;
+        color: var(--branco) !important;
     }
 
     /* Partes que ficaram no desktop */
@@ -195,12 +195,12 @@
 .btnLogin {
     margin: 1rem;
     justify-content: center;
-    background-color: #ff5724 !important;
-    color: #fff !important;
+    background-color: var(--cor-laranja-escuro) !important;
+    color: var(--branco) !important;
 }
 
 .btnLogin:hover {
-    background-color: #ff5724e6 !important;
+    background-color: var(--cor-laranja-escuro-hover) !important;
 }
 
 /* Estilos Para o Botão de Configuração que Leva para o Perfil */
@@ -213,11 +213,11 @@
 }
 
 .btnSair {
-    color: #ff5724;
+    color: var(--cor-laranja-escuro);
     transition: 0.5s ease;
 }
 
 .btnSair:hover {
-    background-color: #ff5724e6;
-    color: #fff;
+    background-color: var(--cor-laranja-escuro-hover);
+    color: var(--branco);
 }

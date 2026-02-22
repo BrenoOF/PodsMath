@@ -19,9 +19,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #AED8E5;
-    color: #103C60;
-    border: 0.1rem solid #0757834d;
+    background-color: var(--cor-semibtn-hover);
+    border: 0.1rem solid var(--cor-azul-escura-padrao);
+    color: var(--branco);
     padding: 0.188rem 0.2rem;
     width: 7rem;
     border-radius: 5rem;
@@ -32,22 +32,24 @@
 }
 
 .btnAssunto:hover {
-    background-color: #fff;
+    background-color: var(--cor-semibtn-normal);
+    color: var(--cor-azul-font-borda);
 }
 
 /* Estilos para os audios em destaque */
 .divCardsDestaque {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: center;
     flex-wrap: wrap;
-    gap: 3rem;
+    gap: 4rem;
 }
 
 .cardsDestaque {
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex: 0 0 8rem;
     gap: 1rem;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -67,7 +69,7 @@
 
 .imgCardDestaque {
     width: 8rem;
-    box-shadow: 0px 8px 24px 0px #00000080;
+    box-shadow: 0px 4px 12px 0px var(--sombra);
     border-radius: 0.375rem;
 }
 
@@ -85,15 +87,15 @@
     flex-direction: column;
     width: 18.85rem;
     border-radius: 1rem;
-    background-color: var(--background-secundario);
+    background-color: var(--app-background);
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 
 .cardNovidade:hover {
     transform: scale(1.1);
-    border: 0.05rem solid #ff5724;
-    box-shadow: 0px 8px 24px 0px #00000080;
+    border: 0.05rem solid var(--cor-laranja-escuro);
+    box-shadow: 0px 8px 24px 0px var(--sombra);
 }
 
 .cardNovidade>h1 {
@@ -117,7 +119,7 @@
     left: 50%;
     transform: translate(-50%, -50%) scale(1.2);
     font-size: 2.5rem;
-    color: #ff5724;
+    color: var(--cor-laranja-escuro);
     opacity: 0;
     transition: all 0.3s ease;
     pointer-events: none;
@@ -156,7 +158,7 @@
     padding: 1.5rem;
     border: 0.1rem solid var(--border-color-tema);
     border-radius: 1rem;
-    box-shadow: 5px 5px 14px 1px #00000080;
+    box-shadow: 5px 5px 14px 1px var(--sombra);
     transition: transform 0.2s ease;
 }
 
@@ -197,13 +199,13 @@
 }
 
 .iconPlayProprio {
-    color: #226BA0;
+    color: var(--cor-azul-escura-padrao);
     font-size: 3.5rem;
     cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .iconPlayProprio:hover {
-    color: #1a3f8f;
+    color: var(--cor-azul-escura-font-bg);
     transform: scale(1.15);
 }

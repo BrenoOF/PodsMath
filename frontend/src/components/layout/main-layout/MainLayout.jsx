@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
 import Style from "./mainLayout.module.css";
@@ -9,13 +9,16 @@ import SlideBar from "../slide-bar/SlideBar";
 
 export default function TelaLayout() {
     const [slidebarAberta, setSlidebarAberta] = useState(true);
+    const mainRef = useRef(null);
 
     const { pathname } = useLocation();
 
     useEffect(() => {
-        const main = document.getElementById("conteudo-main");
-        if (main) {
-            main.scrollTop = 0;
+        if (mainRef.current) {
+            mainRef.current.scrollTo({
+                top: 0,
+                behavior: "instant"
+            });
         }
     }, [pathname]);
 
@@ -26,8 +29,8 @@ export default function TelaLayout() {
             {/* Topo fixo */}
             <TopBar slidebarAberta={slidebarAberta} />
             {/* Conteúdo dinâmico */}
-            <main id="conteudo-main" className={`${Style.main} ${slidebarAberta ? Style.aberta : Style.fechada}`}>
-                <div className={Style.scrollArea}>
+            <main className={`${Style.main} ${slidebarAberta ? Style.aberta : Style.fechada}`}>
+                <div ref={mainRef} className={Style.scrollArea}>
                     <Outlet />
                 </div>
             </main>

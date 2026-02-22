@@ -158,9 +158,9 @@ export default function TelaSobre() {
                 <div className={Style.divFooter}>
                     <h1>Nosso Impacto</h1>
                     <p>
-                        O PodsMath vem ampliando o acesso ao conhecimento matemático por meio de conteúdos 
-                        educativos em áudio, alcançando estudantes, professores e entusiastas em todo o país. 
-                        Nosso impacto reflete o compromisso em tornar a matemática mais acessível, prática e 
+                        O PodsMath vem ampliando o acesso ao conhecimento matemático por meio de conteúdos
+                        educativos em áudio, alcançando estudantes, professores e entusiastas em todo o país.
+                        Nosso impacto reflete o compromisso em tornar a matemática mais acessível, prática e
                         presente no dia a dia de diferentes públicos.
                     </p>
                     <div className={Style.containerInformacoesFooter}>

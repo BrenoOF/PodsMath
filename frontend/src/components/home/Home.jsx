@@ -84,12 +84,7 @@ export default function TelaHome() {
                             Antônio Seabra - FATEC de Lins SP e seus alunos.
                         </p>
                     </div>
-                    <div className={Style.btnLerMais}
-                        onClick={() => {
-                            window.scrollTo(0, 0);
-                            navigate("/sobre-o-projeto");
-                        }}
-                    >
+                    <div className={Style.btnLerMais} onClick={() => { navigate("/sobre-o-projeto") }}>
                         <p>Ler mais sobre esse projeto</p>
                     </div>
                 </div>

@@ -337,14 +337,14 @@ export default function CompTopBar({ slidebarAberta }) {
                     >
                         <div onClick={() => aplicarTema("light")} className={Style.btnTroca}>
                             <div>
-                                <i className="fa-regular fa-moon"></i>
+                                <i className="fa-regular fa-moonfa-regular fa-sun"></i>
                                 <p>Modo claro</p>
                             </div>
                             {configAtual.tema === "light" && <i className="fa-solid fa-check"></i>}
                         </div>
                         <div onClick={() => aplicarTema("dark")} className={Style.btnTroca}>
                             <div>
-                                <i className="fa-regular fa-sun"></i>
+                                <i className="fa-regular fa-moon"></i>
                                 <p>Modo escuro</p>
                             </div>
                             {configAtual.tema === "dark" && <i className="fa-solid fa-check"></i>}

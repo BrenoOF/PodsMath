@@ -47,7 +47,7 @@
 }
 
 .textoLogin {
-    color: #64748b;
+    color: var(--font-meio-apagada);
 }
 
 .divMudarForm {
@@ -71,9 +71,8 @@
     border: 0.1rem solid var(--border-color-tema);
     border-radius: 1rem;
     width: 28rem;
-    min-height: 29rem;
     height: auto;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 5px 20px var(--sombra);
     padding: 1.5rem;
     box-sizing: border-box;
 }
@@ -88,7 +87,7 @@
 }
 
 .divTituloLogin>p {
-    color: #64748b;
+    color: var(--font-meio-apagada);
     font-size: 0.875rem;
 }
 
@@ -134,79 +133,13 @@
 /* Estilo padrão */
 :global(.p-inputtext),
 :global(.p-password-input) {
-    border: 0.1rem solid #cbd5e1;
+    border: 0.1rem solid var(--cor-borda-input);
 }
 
 :global(.p-inputtext:focus),
 :global(.p-password-input:focus) {
-    border: 0.15rem solid #012663;
-    box-shadow: 0 0 0 2px rgba(1, 38, 99, 0.15);
-}
-
-/* Estilo do Input Radio */
-.divRadio {
-    display: flex;
-    gap: 2rem;
-}
-
-.inputRadio {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.inputRadio>label {
-    font-weight: normal;
-}
-
-/* Estilo Input Select */
-:global(.p-dropdown)>span {
-    border: none;
-}
-
-:global(.p-dropdown):hover {
-    border: 0.1rem solid #cbd5e1;
-}
-
-:global(.p-dropdown-panel) {
-    border: 0.1rem solid #000;
-    overflow: hidden;
-    border-radius: 0;
-}
-
-:global(.p-dropdown-item) {
-    padding: 0.75rem 1rem;
-}
-
-:global(.p-dropdown-item:hover) {
-    background-color: #012663;
-    color: #ffffff;
-}
-
-/* Estilo da Parte alternativa de Login/Cadastro (o Google)*/
-.ouContinue {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 24px 0;
-    position: relative;
-}
-
-.ouContinue::before,
-.ouContinue::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background-color: var(--surface-border, #dcdcdc);
-}
-
-.ouContinue span {
-    padding: 0 12px;
-    font-size: 12px;
-    text-transform: uppercase;
-    color: var(--text-color-secondary, #64748b);
-    background-color: var(--surface-card, #ffffff);
-    white-space: nowrap;
+    border: 0.15rem solid var(--cor-azul-escura-padrao);
+    box-shadow: 0 2px 6px var(--sombra);
 }
 
 /* Estilo Padrão de Botão*/
@@ -221,7 +154,7 @@
 }
 
 .btnEntrar {
-    color: #fff;
+    color: var(--branco);
     background-color: var(--btn-1);
     margin-top: 1rem;
 }
@@ -230,14 +163,16 @@
     background-color: var(--btn-1-hover);
 }
 
-.btnEntrarGoogle {
-    border: 0.1rem solid #e2e8f0;
+/* Esqueceu a Senha */
+.divEsqueceuSenha {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    cursor: pointer;
 }
 
-.googleIcon {
-    font-size: 0.875rem;
-    margin-right: 0.8rem;
-    color: var(--text-color);
+.divEsqueceuSenha>p {
+    color: var(--font-paragrafo);
 }
 
 /* Estilo dos Textos que fica na direita da tela */
@@ -246,7 +181,7 @@
     flex-direction: column;
     width: 51%;
     background: linear-gradient(174.55deg, #021B33 37.85%, #4577A1 140.18%);
-    color: #fff;
+    color: var(--branco);
 }
 
 .divTexto {
@@ -255,7 +190,7 @@
 }
 
 .divTexto>hr {
-    border-color: #ffffff1a;
+    border-color: var(--fundo-apagado);
 }
 
 .tituloTexto {
@@ -271,7 +206,7 @@
 .subTituloTexto {
     margin-top: 2rem;
     margin-bottom: 2rem;
-    color: #64748b;
+    color: var(--font-meio-apagada);
     font-size: 1.25rem;
 }
 
@@ -289,12 +224,16 @@
     flex-shrink: 0;
     width: 3.3rem;
     height: 3.3rem;
-    background-color: #ffffff1a;
+    background-color: var(--fundo-apagado);
     border-radius: 100%;
 }
 
+.divIcon>i{
+    color: var(--texto-laranja);
+}
+
 .divMensagem>p {
-    color: #FF851A;
+    color: var(--texto-laranja);
     margin-bottom: 0.7rem;
 }
 
