@@ -95,13 +95,13 @@
 }
 
 .corParaFundo {
-    background-color: #ff5724;
-    color: #fff;
+    background-color: var(--cor-laranja-escuro);
+    color: var(--branco);
     border-radius: 0.6rem;
 }
 
 .corParaFundo:hover {
-    background-color: #ff5724e6;
+    background-color: var(--cor-laranja-escuro-hover);
 }
 
 /* Estilo para Modal de Troca de Tema */
@@ -117,10 +117,10 @@
     position: absolute;
     top: 3.9rem;
     right: 0.3rem;
-    background: var(--surface-card, #fff);
+    background: var(--surface-card, var(--branco));
     border-radius: 0.8rem;
     border: solid 0.1rem var(--border-color-tema);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 25px var(--sombra);
     opacity: 0;
     transform: scale(0.95);
     pointer-events: none;
@@ -144,8 +144,8 @@
 }
 
 .btnTroca:hover {
-    background-color: #ff5724;
-    color: #fff;
+    background-color: var(--cor-laranja-escuro);
+    color: var(--branco);
 }
 
 .btnTroca>div {
@@ -177,7 +177,7 @@
 .imgPerfil {
     width: 2.75rem;
     border-radius: 100%;
-    border: 0.2rem solid #075783;
+    border: 0.2rem solid var(--cor-azul-font-borda);
     cursor: pointer;
 }
 
@@ -199,11 +199,11 @@
 }
 
 .modalBtnSair {
-    color: #ff5724;
+    color: var(--cor-laranja-escuro);
     transition: 0.5s ease;
 }
 
 .modalBtnSair:hover {
-    background-color: #ff5724e6;
-    color: #fff;
+    background-color: var(--cor-laranja-escuro-hover);
+    color: var(--branco);
 }

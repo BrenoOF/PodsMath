@@ -1,69 +1,23 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 import Style from "../configuracoes.module.css";
 
 // Import de Componentes
 import { InputText } from 'primereact/inputtext';
-import { Dropdown } from 'primereact/dropdown';
 import { Message } from 'primereact/message';
 
 export default function CompPerfil({ dadosUser, errors, setErrors, limparErro }) {
     const [imagem, setImagem] = useState("");
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
-    const [grau, setGrau] = useState(null);
-    const [ra, setRa] = useState("");
-    const [escola, setEscola] = useState("");
-
-    // Puxar graus do json
-    const [graus, setGraus] = useState([]);
-    useEffect(() => {
-        const carregarGrausEscolares = async () => {
-            try {
-                const response = await axios.get("/grausEscolar.json");
-                setGraus(response.data);
-            } catch (error) {
-                console.error("Erro ao carregar dados do JSON", error);
-            }
-        }
-
-        carregarGrausEscolares();
-    }, []);
-
-    // Ajustar dados do usuário
-    useEffect(() => {
-        if (!dadosUser || graus.length === 0) return;
-
-        setImagem(dadosUser.img);
-        setNome(dadosUser.nome);
-        setEmail(dadosUser.email);
-        setRa(dadosUser.ra);
-        setEscola(dadosUser.escola);
-
-        const grauEncontrado = graus.find(
-            (g) => g.id === dadosUser.grauEscolaridadeId
-        );
-
-        setGrau(grauEncontrado || null);
-    }, [dadosUser, graus]);
 
     // Validações e Envio de Form
     const validarEdicao = () => {
         let novosErros = {};
 
         if (!nome.trim()) novosErros.nome = "Nome é obrigatório";
-
-        if (!grau) novosErros.grau = "Selecione o grau de escolaridade";
-
-        if (!ra.trim()) {
-            novosErros.ra = "R.A. é obrigatório";
-        } else if (!/^\d{6}$/.test(ra)) {
-            novosErros.ra = "R.A. deve conter 6 dígitos";
-        }
-
-        if (!escola.trim())
-            novosErros.escola = "Escola é obrigatória";
 
         setErrors(novosErros);
         return Object.keys(novosErros).length === 0;
@@ -75,9 +29,6 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
         console.log("EDIÇÃO OK", {
             nome,
             email,
-            grauEscolaridadeId: grau.id,
-            ra,
-            escola,
             previewImg
         });
     }
@@ -92,6 +43,43 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
         const preview = URL.createObjectURL(file);
         setPreviewImg(preview);
     };
+
+    const navigate = useNavigate();
+
+    // Funções para a Parte de Conta
+    const excluirConta = () => {
+        try {
+            localStorage.removeItem("usuarioId");
+            navigate("/");
+        } catch (error) {
+            console.error("Erro ao Excluir conta ", error);
+        }
+    }
+
+    const alertExclusao = () => {
+        Swal.fire({
+            title: "Quer Realmente Excluir a Conta?",
+            text: "Esta ação não pode ser desfeita.",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Quero Excluir!",
+            cancelButtonColor: "#d33",
+            confirmButtonColor: "#012663"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                excluirConta();
+            }
+        });
+    }
+
+    // Ajustar dados do usuário
+    useEffect(() => {
+        if (!dadosUser) return;
+
+        setImagem(dadosUser.img);
+        setNome(dadosUser.nome);
+        setEmail(dadosUser.email);
+    }, [dadosUser]);
 
     return (
         <div>
@@ -142,62 +130,35 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                         <Message severity="error" text={errors.nome} />
                     )}
                 </div>
-                <div className={Style.divInput}>
-                    <label>Email</label>
-                    <InputText value={email}
-                        className={Style.input}
-                        placeholder="Seu nome completo"
-                        disabled
-                    />
-                    <p>O email não pode ser alterado</p>
-                </div>
-                <div className={Style.divInput}>
-                    <label>Grau de Escolaridade</label>
-                    <Dropdown value={grau}
-                        onChange={(e) => {
-                            setGrau(e.value);
-                            limparErro("grau");
-                        }}
-                        options={graus} optionLabel="name"
-                        placeholder="Selecione..."
-                        className={`${Style.input} ${errors.grau ? "p-invalid" : ""}`}
-                    />
-                    {errors.grau && (
-                        <Message severity="error" text={errors.grau} />
-                    )}
-                </div>
-                <div className={Style.divInput}>
-                    <label>R.A.</label>
-                    <InputText keyfilter="num" maxLength={6}
-                        value={ra}
-                        onChange={(e) => {
-                            setRa(e.target.value);
-                            limparErro("ra");
-                        }}
-                        className={`${Style.input} ${errors.ra ? "p-invalid" : ""}`}
-                        placeholder="Registro Acadêmico"
-                    />
-                    {errors?.ra && (
-                        <Message severity="error" text={errors.ra} />
-                    )}
-                </div>
-                <div className={Style.divInput}>
-                    <label>Escola/Instituição</label>
-                    <InputText value={escola}
-                        onChange={(e) => {
-                            setEscola(e.target.value);
-                            limparErro("escola");
-                        }}
-                        className={`${Style.input} ${errors.escola ? "p-invalid" : ""}`}
-                        placeholder="Nome da escola ou instituição"
-                    />
-                    {errors?.escola && (
-                        <Message severity="error" text={errors.escola} />
-                    )}
-                </div>
             </div>
             <div className={Style.btnEnviarForm} onClick={() => { editarDados() }}>
                 <p>Salvar Alterações</p>
+            </div>
+            <div>
+                <div className={Style.divInformacoesConta}>
+                    <div className={Style.divInformacao}>
+                        <h1>Email</h1>
+                        <p>{dadosUser?.email}</p>
+                    </div>
+                    <hr className={Style.linhaSeparacao} />
+                    <div className={Style.divInformacao}>
+                        <h1>Nível de Acesso</h1>
+                        <p>{dadosUser?.nivelAcesso}</p>
+                    </div>
+                    <hr className={Style.linhaSeparacao} />
+                    <div className={Style.divInformacao}>
+                        <h1>Membro desde</h1>
+                        <p>{dadosUser?.membroDesde}</p>
+                    </div>
+                    <hr className={Style.linhaSeparacao} />
+                </div>
+                <div className={Style.textosPerigo}>
+                    <h1>Zona de Perigo</h1>
+                    <p>Ações irreversíveis relacionadas à sua conta</p>
+                </div>
+                <div className={Style.btnExcluirConta} onClick={() => { alertExclusao() }}>
+                    <p>Excluir Conta</p>
+                </div>
             </div>
         </div>
     )

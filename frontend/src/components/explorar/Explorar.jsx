@@ -9,7 +9,7 @@ export default function TelaExplorar() {
         {
             id: 1,
             titulo: "Álgebra",
-            subTitulo: "Explore equações, fumções e estruturas algébricas",
+            subTitulo: "Explore equações, funções e estruturas algébricas",
             icon: "calculator",
             bg: "#a855f7, #ec4899"
         },

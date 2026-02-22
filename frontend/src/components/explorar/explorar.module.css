@@ -31,7 +31,7 @@
     flex-direction: column;
     gap: 0.5rem;
     border-radius: 0.75rem;
-    background-color: var(--background-secundario);
+    background-color: var(--app-background);
     cursor: pointer;
     transition: transform 0.2s ease;
 }
@@ -49,7 +49,7 @@
 }
 
 .icon>i {
-    color: #fff;
+    color: var(--branco);
     font-size: 4rem;
 }
 

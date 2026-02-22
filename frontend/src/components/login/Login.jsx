@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -6,10 +6,12 @@ import Style from "./login.module.css";
 
 // Import de Componentes
 import { InputText } from 'primereact/inputtext';
-import { RadioButton } from 'primereact/radiobutton';
-import { Dropdown } from 'primereact/dropdown';
 import { Password } from 'primereact/password';
 import { Message } from 'primereact/message';
+
+// Import de Imagens
+import LogoLight from "../../imgs/Logo1.png";
+import LogoDark from "../../imgs/Logo2.png";
 
 export default function TelaLogin() {
     const navigate = useNavigate();
@@ -20,10 +22,6 @@ export default function TelaLogin() {
 
     const [nome, setNome] = useState("");
     const [email, setEmail] = useState("");
-    const [tipoPessoa, setTipoPessoa] = useState("");
-    const [grau, setGrau] = useState(null);
-    const [ra, setRA] = useState("");
-    const [escola, setEscola] = useState("");
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
 
@@ -36,26 +34,8 @@ export default function TelaLogin() {
         if (valor) {
             // indo para login
             setSenha("");
-        } else {
-            // indo para cadastro
-            setGrau(null);
         }
     };
-
-    // Puxar graus do json
-    const [graus, setGraus] = useState([]);
-    useEffect(() => {
-        const carregarGrausEscolares = async () => {
-            try {
-                const response = await axios.get("/grausEscolar.json");
-                setGraus(response.data);
-            } catch (error) {
-                console.error("Erro ao carregar dados do JSON", error);
-            }
-        }
-
-        carregarGrausEscolares();
-    }, []);
 
     // Validações
     const validarEmail = (value) => {
@@ -94,19 +74,6 @@ export default function TelaLogin() {
             novosErros.email = "Email inválido";
         }
 
-        if (!tipoPessoa) novosErros.tipoPessoa = "Selecione uma opção";
-
-        if (!grau) novosErros.grau = "Selecione o grau de escolaridade";
-
-        if (!ra.trim()) {
-            novosErros.ra = "R.A. é obrigatório";
-        } else if (!/^\d{6}$/.test(ra)) {
-            novosErros.ra = "R.A. deve conter 6 dígitos";
-        }
-
-        if (!escola.trim())
-            novosErros.escola = "Escola é obrigatória";
-
         if (!senha || senha.length < 6)
             novosErros.senha = "Senha deve ter no mínimo 6 caracteres";
 
@@ -131,11 +98,8 @@ export default function TelaLogin() {
             console.log("CADASTRO OK", {
                 nome,
                 email,
-                tipoPessoa,
-                grauEscolaridadeId: grau.id,
-                ra,
-                escola,
-                senha
+                senha,
+                confirmarSenha
             });
         }
     };
@@ -154,10 +118,7 @@ export default function TelaLogin() {
                 localStorage.setItem("usuarioId", usuario.id);
 
                 setErrors({});
-
-                setTimeout(() => {
-                    navigate("/");
-                }, 2000);
+                navigate("/");
             } else {
                 setErrors((prev) => ({
                     ...prev,
@@ -174,15 +135,14 @@ export default function TelaLogin() {
         }
     };
 
+    // Função para troca de senha pelo login
+    const esqueceuSenha = () => {
+        alert("Ainda não tem função");
+    }
+
     // Troca de Logo caso o usuario esteja no modo dark
-    const trocarLogo = () => {
-        const tema = localStorage.getItem("theme-mode");
-
-        if (tema === "dark") {
-            return require("../../imgs/Logo2.png");
-        }
-
-        return require("../../imgs/Logo1.png");
+    const trocarLogo = () =>{
+        return localStorage.getItem("theme-mode") === "dark" ? LogoDark : LogoLight;
     }
 
     return (
@@ -283,81 +243,6 @@ export default function TelaLogin() {
                                 )}
                             </div>
                             <div className={Style.divInput}>
-                                <label>Você é</label>
-                                <div className={Style.divRadio}>
-                                    <div className={Style.inputRadio}>
-                                        <RadioButton inputId="aluno" name="aluno"
-                                            value="Aluno"
-                                            onChange={(e) => {
-                                                setTipoPessoa(e.value);
-                                                limparErro("tipoPessoa");
-                                            }}
-                                            checked={tipoPessoa === 'Aluno'}
-                                        />
-                                        <label htmlFor="aluno">Aluno</label>
-                                    </div>
-                                    <div className={Style.inputRadio}>
-                                        <RadioButton inputId="professor" name="professor"
-                                            value="Professor"
-                                            onChange={(e) => {
-                                                setTipoPessoa(e.value);
-                                                limparErro("tipoPessoa");
-                                            }}
-                                            checked={tipoPessoa === 'Professor'}
-                                        />
-                                        <label htmlFor="professor">Professor(a)</label>
-                                    </div>
-
-                                </div>
-                                {errors.tipoPessoa && (
-                                    <Message severity="error" text={errors.tipoPessoa} />
-                                )}
-                            </div>
-                            <div className={Style.divInput}>
-                                <label>Grau de Escolaridade</label>
-                                <Dropdown value={grau}
-                                    onChange={(e) => {
-                                        setGrau(e.value);
-                                        limparErro("grau");
-                                    }}
-                                    options={graus} optionLabel="name"
-                                    placeholder="Selecione..."
-                                    className={`${Style.input} ${errors.grau ? "p-invalid" : ""}`}
-                                />
-                                {errors.grau && (
-                                    <Message severity="error" text={errors.grau} />
-                                )}
-                            </div>
-                            <div className={Style.divInput}>
-                                <label>R.A. (6 dígitos)</label>
-                                <InputText keyfilter="num" maxLength={6}
-                                    value={ra}
-                                    onChange={(e) => {
-                                        setRA(e.target.value);
-                                        limparErro("ra");
-                                    }}
-                                    className={`${Style.input} ${errors.ra ? "p-invalid" : ""}`}
-                                    placeholder="123456"
-                                />
-                                {errors.ra && (
-                                    <Message severity="error" text={errors.ra} />
-                                )}
-                            </div>
-                            <div className={Style.divInput}>
-                                <label>Escola/Instituição</label>
-                                <InputText value={escola}
-                                    onChange={(e) => {
-                                        setEscola(e.target.value);
-                                        limparErro("escola");
-                                    }}
-                                    className={`${Style.input} ${errors.escola ? "p-invalid" : ""}`}
-                                    placeholder="Escola Estadual..."
-                                />
-                                {errors.escola && (
-                                    <Message severity="error" text={errors.escola} />
-                                )}
-                            </div>
-                            <div className={Style.divInput}>
                                 <label>Senha</label>
                                 <Password value={senha}
                                     onChange={(e) => {
@@ -394,13 +279,11 @@ export default function TelaLogin() {
                     >
                         <p>{trocar ? "Entrar" : "Criar conta grátis"}</p>
                     </div>
-                    <div className={Style.ouContinue}>
-                        <span>OU {trocar ? "CONTINUE" : "CADASTRE-SE"} COM</span>
-                    </div>
-                    <div className={Style.btns + " " + Style.btnEntrarGoogle}>
-                        <i className={`fa-brands fa-google ${Style.googleIcon}`}></i>
-                        <p>{trocar ? "Entrar" : "Cadastrar"} com Google</p>
-                    </div>
+                    {trocar && (
+                        <div className={Style.divEsqueceuSenha} onClick={() => { esqueceuSenha() }}>
+                            <p>Esqueceu a Senha? Clique Aqui!</p>
+                        </div>
+                    )}
                 </div>
             </div>
             {/* Parte da Direita da Tela */}
@@ -412,7 +295,7 @@ export default function TelaLogin() {
                     </h3>
                     <div className={Style.blocoTexto}>
                         <div className={Style.divIcon}>
-                            <i className="fa-regular fa-headphones" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                            <i className="fa-regular fa-headphones" style={{ fontSize: "1.5rem" }}></i>
                         </div>
                         <div className={Style.divMensagem}>
                             <p>Aprenda no seu ritmo</p>
@@ -423,7 +306,7 @@ export default function TelaLogin() {
                     </div>
                     <div className={Style.blocoTexto}>
                         <div className={Style.divIcon}>
-                            <i className="fa-solid fa-book-open" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                            <i className="fa-solid fa-book-open" style={{ fontSize: "1.5rem" }}></i>
                         </div>
                         <div className={Style.divMensagem}>
                             <p>Conteúdo especializado</p>
@@ -434,7 +317,7 @@ export default function TelaLogin() {
                     </div>
                     <div className={Style.blocoTexto}>
                         <div className={Style.divIcon}>
-                            <i className="fa-regular fa-circle-check" style={{ fontSize: "1.5rem", color: "#FF851A" }}></i>
+                            <i className="fa-regular fa-circle-check" style={{ fontSize: "1.5rem" }}></i>
                         </div>
                         <div className={Style.divMensagem}>
                             <p>100% gratuito</p>

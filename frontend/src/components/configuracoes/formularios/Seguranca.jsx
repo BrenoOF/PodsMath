@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Swal from 'sweetalert2';
 
 import Style from "../configuracoes.module.css";
 
@@ -6,31 +7,55 @@ import Style from "../configuracoes.module.css";
 import { Password } from 'primereact/password';
 import { Message } from 'primereact/message';
 
-export default function CompSeguranca({ errors, setErrors, limparErro }) {
+export default function CompSeguranca({ dadosUserSenha, errors, setErrors, limparErro }) {
     // Funções para a Parte de Segurança
-    const [senha, setSenha] = useState("");
+    const [senhaAtual, setSenhaAtual] = useState("");
+    const [senhaNova, setSenhaNova] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
 
     const validarSenha = () => {
         let novosErros = {};
 
-        if (!senha || senha.length < 6) {
-            novosErros.senha = "Senha deve ter no mínimo 6 caracteres";
+        // senha atual
+        if (!senhaAtual) {
+            novosErros.senhaAtual = "Digite sua senha atual";
+        } else if (senhaAtual !== dadosUserSenha) {
+            novosErros.senhaAtual = "Senha atual incorreta";
         }
 
-        if (senha !== confirmarSenha) {
+        // nova senha
+        if (!senhaNova) {
+            novosErros.senhaNova = "Digite a nova senha";
+        } else if (senhaNova.length < 6) {
+            novosErros.senhaNova = "Senha deve ter no mínimo 6 caracteres";
+        } else if (senhaNova === senhaAtual) {
+            novosErros.senhaNova = "A nova senha deve ser diferente da atual";
+        }
+
+        // confirmar senha
+        if (!confirmarSenha) {
+            novosErros.confirmarSenha = "Confirme a nova senha";
+        } else if (senhaNova !== confirmarSenha) {
             novosErros.confirmarSenha = "As senhas não coincidem";
         }
+
 
         setErrors(novosErros);
         return Object.keys(novosErros).length === 0;
     };
 
     const salvarSenha = () => {
+
         if (!validarSenha()) return;
 
-        // aqui depois entra API / backend
-        alert(`Senha válida, pode salvar: ${senha}`);
+        Swal.fire({
+            title: "Senha Alterada com Sucesso",
+            icon: "success",
+        });
+
+        setSenhaAtual("");
+        setSenhaNova("");
+        setConfirmarSenha("");
     };
 
     return (
@@ -41,22 +66,37 @@ export default function CompSeguranca({ errors, setErrors, limparErro }) {
             </div>
             <div className={Style.divInputs}>
                 <div className={Style.divInput}>
-                    <label>Senha</label>
-                    <Password value={senha}
+                    <label>Senha Atual</label>
+                    <Password value={senhaAtual}
                         onChange={(e) => {
-                            setSenha(e.target.value);
-                            limparErro("senha");
+                            setSenhaAtual(e.target.value);
+                            limparErro("senhaAtual");
                         }}
                         toggleMask feedback={false}
-                        inputClassName={`${Style.input} ${errors.senha ? "p-invalid" : ""}`}
+                        inputClassName={`${Style.input} ${errors.senhaAtual ? "p-invalid" : ""}`}
                         placeholder="••••••••"
                     />
-                    {errors?.senha && (
-                        <Message severity="error" text={errors.senha} />
+                    {errors?.senhaAtual && (
+                        <Message severity="error" text={errors.senhaAtual} />
                     )}
                 </div>
                 <div className={Style.divInput}>
-                    <label>Confirmar senha</label>
+                    <label>Nova Senha</label>
+                    <Password value={senhaNova}
+                        onChange={(e) => {
+                            setSenhaNova(e.target.value);
+                            limparErro("senhaNova");
+                        }}
+                        toggleMask feedback={false}
+                        inputClassName={`${Style.input} ${errors.senhaNova ? "p-invalid" : ""}`}
+                        placeholder="••••••••"
+                    />
+                    {errors?.senhaNova && (
+                        <Message severity="error" text={errors.senhaNova} />
+                    )}
+                </div>
+                <div className={Style.divInput}>
+                    <label>Confirmar Nova Senha</label>
                     <Password value={confirmarSenha}
                         onChange={(e) => {
                             setConfirmarSenha(e.target.value);

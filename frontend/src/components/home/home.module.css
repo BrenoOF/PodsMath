@@ -10,7 +10,7 @@
     justify-content: center;
     gap: 2rem;
     background: linear-gradient(264.39deg, #4577A1 -92.12%, #021B33 104.6%);
-    color: #fff;
+    color: var(--branco);
     padding: 2rem 4.6rem;
     min-height: 24rem;
     height: auto;
@@ -23,7 +23,7 @@
     align-items: center;
     gap: 0.7rem;
     font-size: 0.875rem;
-    background: var(--color-white-10, #FFFFFF1A);
+    background: var(--color-white-10, var(--fundo-apagado));
     border-radius: 2rem;
     padding: 0.5rem;
     width: 13rem;
@@ -101,14 +101,14 @@
     font-size: 1rem;
     width: 15rem;
     height: 3rem;
-    background-color: #012663;
-    color: #fff;
+    background-color: var(--cor-azul-escura-padrao);
+    color: var(--branco);
     border-radius: 0.625rem;
     cursor: pointer;
 }
 
 .btnLerMais:hover {
-    background-color: #1a3f8f;
+    background-color: var(--cor-azul-escura-font-bg);
 }
 
 .divImgProf {
