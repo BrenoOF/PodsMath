@@ -25,6 +25,22 @@ export default function CompTopBar({ slidebarAberta }) {
         font: localStorage.getItem("font-size") || "normal"
     });
 
+    // Gerenciamento de Temas
+    const [selectTemaAberto, setSelectTemaAberto] = useState(false);
+    const selectTemaRef = useRef(null);
+
+    // opções de temas (dps simular com json)
+    const temas = [
+        { label: "Modo claro", value: "light" },
+        { label: "Modo escuro", value: "dark" }
+    ];
+
+    const [temaSelecionado, setTemaSelecionado] = useState(localStorage.getItem("theme-mode") || "light");
+    const mudarTemaDropdown = (tema) => {
+        setTemaSelecionado(tema);
+        aplicarTema(tema);
+    };
+
     // Mudança do Tema
     const aplicarTema = (modo) => {
         if (configAtual.tema === modo) return;
@@ -89,24 +105,24 @@ export default function CompTopBar({ slidebarAberta }) {
             severity: 'info',
             summary: 'Tamanho da Fonte Alterado',
             detail:
-                tamanho === "normal" ? "Fonte normal ativada" :
-                    tamanho === "large" ? "Fonte grande ativada" :
-                        tamanho === "xlarge" ? "Fonte muito grande ativada" : " ",
+                tamanho === "small" ? "Fonte pequena ativada" :
+                    tamanho === "normal" ? "Fonte normal ativada" :
+                        tamanho === "large" ? "Fonte grande ativada" : " ",
             life: 2000
         });
     };
     const tamanhoFonte = (tamanho) => {
         let scale = 1;
+        if (tamanho === "small") scale = 0.9;
         if (tamanho === "normal") scale = 1;
         if (tamanho === "large") scale = 1.1;
-        if (tamanho === "xlarge") scale = 1.25;
 
         document.documentElement.style.setProperty("--font-scale", scale);
     }
 
     // ✅ Aplica o tema salvo ao recarregar a página
     useEffect(() => {
-        const temaSalvo = localStorage.getItem("theme-mode" || "light");
+        const temaSalvo = localStorage.getItem("theme-mode") || "light";
         const fonteSalva = localStorage.getItem("font-size") || "normal";
 
         tamanhoFonte(fonteSalva);
@@ -206,7 +222,7 @@ export default function CompTopBar({ slidebarAberta }) {
 
     // Verificação de mobile
     const mobile = useMatchMedia('(max-width: 769px)');
-    
+
     // Fazer Logout
     const logout = () => {
         try {
@@ -231,6 +247,18 @@ export default function CompTopBar({ slidebarAberta }) {
             }
         });
     }
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (selectTemaRef.current && !selectTemaRef.current.contains(event.target)) {
+                setSelectTemaAberto(false);
+            }
+        };
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () =>
+            document.removeEventListener("pointerdown", handleClickOutside);
+
+    }, []);
 
     return (
         <>
@@ -302,15 +330,15 @@ export default function CompTopBar({ slidebarAberta }) {
                                 <h1>{dadosUser.nome}</h1>
                                 <p>{dadosUser.email}</p>
                             </div>
-                            <hr style={{ 
-                                    width: "18rem",
-                                    border: "0.1rem var(--border-color-tema) solid" 
-                                }} 
+                            <hr style={{
+                                width: "18rem",
+                                border: "0.1rem var(--border-color-tema) solid"
+                            }}
                             />
                             <div onClick={() => {
-                                    navigate("/configuracoes");
-                                    setModalUserMobileAberto(false);
-                                }}
+                                navigate("/configuracoes");
+                                setModalUserMobileAberto(false);
+                            }}
                                 className={Style.btnTroca}
                             >
                                 <div>
@@ -335,19 +363,39 @@ export default function CompTopBar({ slidebarAberta }) {
                         ref={menuConfigsRef}
                         className={`${Style.menuConfigs} ${menuConfigsAberto ? Style.menuAberto : ""}`}
                     >
-                        <div onClick={() => aplicarTema("light")} className={Style.btnTroca}>
-                            <div>
-                                <i className="fa-regular fa-moonfa-regular fa-sun"></i>
-                                <p>Modo claro</p>
+                        <div ref={selectTemaRef} className={Style.selectContainer}>
+                            <div className={Style.selectSelecionado} onClick={() => setSelectTemaAberto(!selectTemaAberto)}>
+                                {temas.find(t => t.value === temaSelecionado)?.label}
+                                <span className={Style.selectSeta}>
+                                    <i className="fa-solid fa-angle-down" style={{ fontSize: "0.9rem" }}></i>
+                                </span>
                             </div>
-                            {configAtual.tema === "light" && <i className="fa-solid fa-check"></i>}
+                            {selectTemaAberto && (
+                                <div className={Style.selectMenu}>
+                                    {temas.map((item) => (
+                                        <div
+                                            key={item.value}
+                                            className={Style.btnTroca}
+                                            onClick={() => {
+                                                mudarTemaDropdown(item.value);
+                                                setSelectTemaAberto(false);
+                                            }}
+                                        >
+                                            {item.label}
+                                            {item.value === temaSelecionado &&
+                                                <i className="fa-solid fa-check"></i>
+                                            }
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
-                        <div onClick={() => aplicarTema("dark")} className={Style.btnTroca}>
+                        <div onClick={() => aplicarFonte("small")} className={Style.btnTroca}>
                             <div>
-                                <i className="fa-regular fa-moon"></i>
-                                <p>Modo escuro</p>
+                                <i className="fa-solid fa-a" style={{ fontSize: "0.5rem" }}></i>
+                                <p>Fonte Pequena</p>
                             </div>
-                            {configAtual.tema === "dark" && <i className="fa-solid fa-check"></i>}
+                            {configAtual.font === "small" && <i className="fa-solid fa-check"></i>}
                         </div>
                         <div onClick={() => aplicarFonte("normal")} className={Style.btnTroca}>
                             <div>
@@ -362,13 +410,6 @@ export default function CompTopBar({ slidebarAberta }) {
                                 <p>Fonte Grande</p>
                             </div>
                             {configAtual.font === "large" && <i className="fa-solid fa-check"></i>}
-                        </div>
-                        <div onClick={() => aplicarFonte("xlarge")} className={Style.btnTroca}>
-                            <div>
-                                <i className="fa-solid fa-a" style={{ fontSize: "1.1rem" }}></i>
-                                <p>Fonte Muito Grande</p>
-                            </div>
-                            {configAtual.font === "xlarge" && <i className="fa-solid fa-check"></i>}
                         </div>
                     </div>
                 </div>

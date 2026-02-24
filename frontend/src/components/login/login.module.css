@@ -163,18 +163,6 @@
     background-color: var(--btn-1-hover);
 }
 
-/* Esqueceu a Senha */
-.divEsqueceuSenha {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    cursor: pointer;
-}
-
-.divEsqueceuSenha>p {
-    color: var(--font-paragrafo);
-}
-
 /* Estilo dos Textos que fica na direita da tela */
 .containerTexto {
     display: flex;

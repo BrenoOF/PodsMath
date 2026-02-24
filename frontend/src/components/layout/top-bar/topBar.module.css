@@ -135,8 +135,8 @@
 
 .btnTroca {
     display: flex;
-    align-items: center;
     justify-content: space-between;
+    gap: 1rem;
     cursor: pointer;
     font-size: 0.875rem;
     padding: 0.5rem 0.6rem;
@@ -152,6 +152,45 @@
     display: flex;
     align-items: center;
     gap: 0.5rem;
+}
+
+/* SELECT CUSTOM TEMA */
+.selectContainer {
+    position: relative;
+    width: 100%;
+}
+
+.selectSelecionado {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0.6rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: 0.2s;
+}
+
+.selectSelecionado:hover {
+    border-color: var(--cor-laranja-escuro);
+    background-color: var(--cor-laranja-escuro-hover);
+    color: var(--branco);
+}
+
+.selectSeta {
+    font-size: 0.7rem;
+}
+
+.selectMenu {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 100%;
+    background: var(--surface-card);
+    border-radius: 0.5rem;
+    border: 0.1rem solid var(--border-color-tema);
+    box-shadow: 0 10px 25px var(--sombra);
+    overflow: hidden;
+    z-index: 999;
 }
 
 /* Estilo para quando o usuario estiver logado */

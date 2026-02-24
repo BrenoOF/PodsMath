@@ -7,7 +7,9 @@ import Style from "../configuracoes.module.css";
 import { Password } from 'primereact/password';
 import { Message } from 'primereact/message';
 
-export default function CompSeguranca({ dadosUserSenha, errors, setErrors, limparErro }) {
+import BtnEsqueciSenha from "../../btn-esqueci-senha/EsqueciSenha";
+
+export default function CompSeguranca({ dadosUser, errors, setErrors, limparErro }) {
     // Funções para a Parte de Segurança
     const [senhaAtual, setSenhaAtual] = useState("");
     const [senhaNova, setSenhaNova] = useState("");
@@ -19,7 +21,7 @@ export default function CompSeguranca({ dadosUserSenha, errors, setErrors, limpa
         // senha atual
         if (!senhaAtual) {
             novosErros.senhaAtual = "Digite sua senha atual";
-        } else if (senhaAtual !== dadosUserSenha) {
+        } else if (senhaAtual !== dadosUser?.senha) {
             novosErros.senhaAtual = "Senha atual incorreta";
         }
 
@@ -114,6 +116,7 @@ export default function CompSeguranca({ dadosUserSenha, errors, setErrors, limpa
             <div className={Style.btnEnviarForm} onClick={() => { salvarSenha() }}>
                 <p>Alterar Senha</p>
             </div>
+            <BtnEsqueciSenha tipo="logado" dadosUser={dadosUser?.email || ""} />
         </div>
     );
 }

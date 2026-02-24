@@ -81,7 +81,7 @@ export default function TelaConfiguracoes() {
                     )}
                     {controle === "seguranca" && (
                         <FormSeguranca 
-                            dadosUserSenha={dadosUser?.senha}
+                            dadosUser={dadosUser}
                             errors={errors}
                             setErrors={setErrors}
                             limparErro={limparErro}
