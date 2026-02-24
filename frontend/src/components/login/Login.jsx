@@ -9,6 +9,8 @@ import { InputText } from 'primereact/inputtext';
 import { Password } from 'primereact/password';
 import { Message } from 'primereact/message';
 
+import BtnEsqueciSenha from "../btn-esqueci-senha/EsqueciSenha";
+
 // Import de Imagens
 import LogoLight from "../../imgs/Logo1.png";
 import LogoDark from "../../imgs/Logo2.png";
@@ -39,7 +41,15 @@ export default function TelaLogin() {
 
     // Validações
     const validarEmail = (value) => {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((value ?? "").trim());
+        if (!value || !value.trim()) {
+            return "Email é Obrigatório";
+        }
+
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((value ?? "").trim())) {
+            return "Email inválido";
+        }
+
+        return null;
     }
 
     const limparErro = (campo) => {
@@ -49,10 +59,9 @@ export default function TelaLogin() {
     const validarLogin = () => {
         let novosErros = {};
 
-        if (!email.trim()) {
-            novosErros.email = "Email é obrigatório";
-        } else if (!validarEmail(email)) {
-            novosErros.email = "Email inválido";
+        const erroEmail = validarEmail(email);
+        if (erroEmail) {
+            novosErros.email = erroEmail;
         }
 
         if (!senha) {
@@ -61,6 +70,20 @@ export default function TelaLogin() {
 
         setErrors(novosErros);
         return Object.keys(novosErros).length === 0;
+    };
+
+    const validarEmailEsqueciSenha = async () => {
+        const erroEmail = validarEmail(email);
+
+        if (erroEmail) {
+            setErrors(prev => ({
+                ...prev,
+                email: erroEmail
+            }));
+
+            return false;
+        }
+        return true;
     };
 
     const validarCadastro = () => {
@@ -135,13 +158,8 @@ export default function TelaLogin() {
         }
     };
 
-    // Função para troca de senha pelo login
-    const esqueceuSenha = () => {
-        alert("Ainda não tem função");
-    }
-
     // Troca de Logo caso o usuario esteja no modo dark
-    const trocarLogo = () =>{
+    const trocarLogo = () => {
         return localStorage.getItem("theme-mode") === "dark" ? LogoDark : LogoLight;
     }
 
@@ -280,9 +298,7 @@ export default function TelaLogin() {
                         <p>{trocar ? "Entrar" : "Criar conta grátis"}</p>
                     </div>
                     {trocar && (
-                        <div className={Style.divEsqueceuSenha} onClick={() => { esqueceuSenha() }}>
-                            <p>Esqueceu a Senha? Clique Aqui!</p>
-                        </div>
+                        <BtnEsqueciSenha tipo="visitante" dadosUser={email} onEsqueciSenha={validarEmailEsqueciSenha} />
                     )}
                 </div>
             </div>
