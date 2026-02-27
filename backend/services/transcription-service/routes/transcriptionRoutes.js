@@ -6,7 +6,7 @@ const fs = require('fs');
 const transcriptionController = require('../controllers/transcriptionController');
 
 // Configuração do Multer para salvar arquivos temporariamente
-const uploadDir = 'uploads/';
+const uploadDir = path.join(__dirname, '../uploads/');
 if (!fs.existsSync(uploadDir)){
     fs.mkdirSync(uploadDir);
 }
