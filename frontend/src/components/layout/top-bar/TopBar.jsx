@@ -39,9 +39,31 @@ export default function CompTopBar({ slidebarAberta }) {
     ];
 
     const [temaSelecionado, setTemaSelecionado] = useState(localStorage.getItem("theme-mode") || "light");
-    const mudarTemaDropdown = (tema) => {
+    const mudarTema = (tema) => {
         setTemaSelecionado(tema);
         aplicarTema(tema);
+    };
+
+    // opções de linguas (dps simular com json)
+    const linguas = [
+        { label: "Português", value: "pt-br", icon: "br" },
+        { label: "Inglês", value: "us", icon: "us" },
+        { label: "Espanhol", value: "es", icon: "es" }
+    ];
+
+    const [linguaSelecionada, setLinguaSelecionada] = useState(localStorage.getItem("app-language") || "pt-br");
+    const mudarLingua = (lingua) => {
+        if (linguaSelecionada === lingua) return;
+
+        setLinguaSelecionada(lingua);
+        localStorage.setItem("app-language", lingua);
+
+        toast.current.show({
+            severity: 'info',
+            summary: 'Idioma alterado',
+            detail: `Idioma alterado para ${lingua}`,
+            life: 2000
+        });
     };
 
     // Mudança do Tema
@@ -80,9 +102,7 @@ export default function CompTopBar({ slidebarAberta }) {
         toast.current.show({
             severity: 'info',
             summary: 'Tema alterado',
-            detail: modo === 'dark'
-                ? 'Modo escuro ativado'
-                : 'Modo claro ativado',
+            detail: `Tema alterado para ${modo}`,
             life: 2000
         });
     };
@@ -377,28 +397,29 @@ export default function CompTopBar({ slidebarAberta }) {
                         className={`${Style.menuConfigs} ${menuConfigsAberto ? Style.menuAberto : ""}`}
                     >
                         <div className={Style.divTituloConfig}>
-                            <h1>Linguagem</h1>
+                            <h1>Idioma</h1>
                         </div>
                         <div ref={selectLinguaRef} className={Style.selectContainer}>
                             <div className={Style.selectSelecionado} onClick={() => setSelectLinguaAberto(!selectLinguaAberto)}>
-                                {temas.find(t => t.value === temaSelecionado)?.label}
+                                {linguas.find(t => t.value === linguaSelecionada)?.label}
                                 <span className={Style.selectSeta}>
                                     <i className="fa-solid fa-angle-down" style={{ fontSize: "0.9rem" }}></i>
                                 </span>
                             </div>
                             {selectLinguaAberto && (
                                 <div className={Style.selectMenu}>
-                                    {temas.map((item) => (
+                                    {linguas.map((item) => (
                                         <div
                                             key={item.value}
                                             className={Style.btnTroca}
                                             onClick={() => {
-                                                mudarTemaDropdown(item.value);
+                                                mudarLingua(item.value);
                                                 setSelectLinguaAberto(false);
                                             }}
                                         >
+                                            <span className={`fi fi-${item.icon}`}></span>
                                             {item.label}
-                                            {item.value === temaSelecionado &&
+                                            {item.value === linguaSelecionada &&
                                                 <i className="fa-solid fa-check"></i>
                                             }
                                         </div>
@@ -424,7 +445,7 @@ export default function CompTopBar({ slidebarAberta }) {
                                             key={item.value}
                                             className={Style.btnTroca}
                                             onClick={() => {
-                                                mudarTemaDropdown(item.value);
+                                                mudarTema(item.value);
                                                 setSelectTemaAberto(false);
                                             }}
                                         >
