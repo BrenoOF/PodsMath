@@ -10,6 +10,7 @@ import 'primereact/resources/primereact.min.css';
 // ✅ Ícones
 import 'primeicons/primeicons.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import 'flag-icons/css/flag-icons.min.css';
 // Css Global
 import './style.css';
 

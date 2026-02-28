@@ -54,7 +54,7 @@
     width: clamp(12rem, 34rem, 34rem);
 }
 
-.ajusteInput{
+.ajusteInput {
     display: flex;
     flex: 1 1 34rem;
     max-width: 34rem;
@@ -104,7 +104,7 @@
     background-color: var(--cor-laranja-escuro-hover);
 }
 
-/* Estilo para Modal de Troca de Tema */
+/* Estilo para Modal de configurações */
 .btnConfigs {
     cursor: pointer;
 }
@@ -191,6 +191,17 @@
     box-shadow: 0 10px 25px var(--sombra);
     overflow: hidden;
     z-index: 999;
+}
+
+/* Estilos para titulos das configs */
+.divTituloConfig>h1 {
+    font-size: 1rem;
+    margin-left: 0.5rem;
+}
+
+.hrSeparacaoConfig {
+    border: 0.1rem solid var(--border-color-tema);
+    margin: 0.8rem 0rem;
 }
 
 /* Estilo para quando o usuario estiver logado */

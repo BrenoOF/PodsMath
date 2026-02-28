@@ -9,18 +9,39 @@ import SlideBar from "../slide-bar/SlideBar";
 
 export default function TelaLayout() {
     const [slidebarAberta, setSlidebarAberta] = useState(true);
+    const [mostrarBtnTopo, setMostrarBtnTopo] = useState(false);
     const mainRef = useRef(null);
 
     const { pathname } = useLocation();
 
+    // Função que leva o scroll para o topo
+    const voltarAoTopo = () => {
+        mainRef.current.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    };
+
+    // Seta como padrão o scroll no topo quando muda de tela
     useEffect(() => {
         if (mainRef.current) {
             mainRef.current.scrollTo({
                 top: 0,
-                behavior: "instant"
+                behavior: "auto"
             });
         }
     }, [pathname]);
+
+    // Controle do Btn para aparecer dps que abaixar um pouco a tela
+    useEffect(() => {
+        const elemento = mainRef.current;
+        if (!elemento) return;
+        const handleScroll = () => {
+            setMostrarBtnTopo(elemento.scrollTop > 200);
+        };
+        elemento.addEventListener("scroll", handleScroll);
+        return () => elemento.removeEventListener("scroll", handleScroll);
+    });
 
     return (
         <div className={Style.container}>
@@ -34,6 +55,14 @@ export default function TelaLayout() {
                     <Outlet />
                 </div>
             </main>
+            {mostrarBtnTopo && (
+                <div
+                    className={Style.btnVoltarTopo}
+                    onClick={() => voltarAoTopo()}
+                >
+                    <i className="fa-solid fa-angle-up"></i>
+                </div>
+            )}
         </div>
     );
 }

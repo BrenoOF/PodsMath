@@ -23,7 +23,7 @@ export default function App() {
                     <Route path="/explorar" element={<Explorar />} />
                     <Route path="/historico" element={<h1>Tela Para Histórico será Construida</h1>} />
                     <Route path="/favoritos" element={<h1>Tela Para Favoritos será Construida</h1>} />
-                    <Route path="/configuracoes" element={<Configuracoes />} />
+                    <Route path="/perfil" element={<Configuracoes />} />
                 </Route>
             </Routes>
         </Routers>

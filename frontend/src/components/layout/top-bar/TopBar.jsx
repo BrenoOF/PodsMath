@@ -25,6 +25,9 @@ export default function CompTopBar({ slidebarAberta }) {
         font: localStorage.getItem("font-size") || "normal"
     });
 
+    // Gerenciamento de Linguagens
+    const [selectLinguaAberto, setSelectLinguaAberto] = useState(false);
+    const selectLinguaRef = useRef(null);
     // Gerenciamento de Temas
     const [selectTemaAberto, setSelectTemaAberto] = useState(false);
     const selectTemaRef = useRef(null);
@@ -250,6 +253,17 @@ export default function CompTopBar({ slidebarAberta }) {
 
     useEffect(() => {
         const handleClickOutside = (event) => {
+            if (selectLinguaRef.current && !selectLinguaRef.current.contains(event.target)) {
+                setSelectLinguaAberto(false);
+            }
+        };
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () =>
+            document.removeEventListener("pointerdown", handleClickOutside);
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
             if (selectTemaRef.current && !selectTemaRef.current.contains(event.target)) {
                 setSelectTemaAberto(false);
             }
@@ -257,7 +271,6 @@ export default function CompTopBar({ slidebarAberta }) {
         document.addEventListener("pointerdown", handleClickOutside);
         return () =>
             document.removeEventListener("pointerdown", handleClickOutside);
-
     }, []);
 
     return (
@@ -307,7 +320,7 @@ export default function CompTopBar({ slidebarAberta }) {
                                         if (mobile) {
                                             setModalUserMobileAberto(!modalUserMobileAberto);
                                         } else {
-                                            navigate("/configuracoes");
+                                            navigate("/perfil");
                                         }
                                     }}
                                 />
@@ -336,7 +349,7 @@ export default function CompTopBar({ slidebarAberta }) {
                             }}
                             />
                             <div onClick={() => {
-                                navigate("/configuracoes");
+                                navigate("/perfil");
                                 setModalUserMobileAberto(false);
                             }}
                                 className={Style.btnTroca}
@@ -363,6 +376,40 @@ export default function CompTopBar({ slidebarAberta }) {
                         ref={menuConfigsRef}
                         className={`${Style.menuConfigs} ${menuConfigsAberto ? Style.menuAberto : ""}`}
                     >
+                        <div className={Style.divTituloConfig}>
+                            <h1>Linguagem</h1>
+                        </div>
+                        <div ref={selectLinguaRef} className={Style.selectContainer}>
+                            <div className={Style.selectSelecionado} onClick={() => setSelectLinguaAberto(!selectLinguaAberto)}>
+                                {temas.find(t => t.value === temaSelecionado)?.label}
+                                <span className={Style.selectSeta}>
+                                    <i className="fa-solid fa-angle-down" style={{ fontSize: "0.9rem" }}></i>
+                                </span>
+                            </div>
+                            {selectLinguaAberto && (
+                                <div className={Style.selectMenu}>
+                                    {temas.map((item) => (
+                                        <div
+                                            key={item.value}
+                                            className={Style.btnTroca}
+                                            onClick={() => {
+                                                mudarTemaDropdown(item.value);
+                                                setSelectLinguaAberto(false);
+                                            }}
+                                        >
+                                            {item.label}
+                                            {item.value === temaSelecionado &&
+                                                <i className="fa-solid fa-check"></i>
+                                            }
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <hr className={Style.hrSeparacaoConfig} />
+                        <div className={Style.divTituloConfig}>
+                            <h1>Temas</h1>
+                        </div>
                         <div ref={selectTemaRef} className={Style.selectContainer}>
                             <div className={Style.selectSelecionado} onClick={() => setSelectTemaAberto(!selectTemaAberto)}>
                                 {temas.find(t => t.value === temaSelecionado)?.label}
@@ -389,6 +436,10 @@ export default function CompTopBar({ slidebarAberta }) {
                                     ))}
                                 </div>
                             )}
+                        </div>
+                        <hr className={Style.hrSeparacaoConfig} />
+                        <div className={Style.divTituloConfig}>
+                            <h1>Fonts</h1>
                         </div>
                         <div onClick={() => aplicarFonte("small")} className={Style.btnTroca}>
                             <div>
