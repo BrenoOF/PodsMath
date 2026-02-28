@@ -28,6 +28,10 @@
     .aberta {
         margin-left: 0rem;
     }
+
+    .btnVoltarTopo{
+        bottom: 5rem;
+    }
 }
 
 @media screen and (min-width: 770px) {
@@ -38,4 +42,31 @@
     .aberta {
         margin-left: 16rem;
     }
+
+    .btnVoltarTopo{
+        bottom: 2rem;
+    }
+}
+
+/* Estilo para o Botão que leva o scroll para o topo */
+.btnVoltarTopo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    right: 2rem;
+    z-index: 9999;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 100%;
+    background-color: var(--cor-laranja-escuro);
+    color: var(--branco);
+    font-size: 1.375rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px var(--sombra);
+    transition: 0.2s ease;
+}
+
+.btnVoltarTopo:hover {
+    transform: scale(1.1);
 }
