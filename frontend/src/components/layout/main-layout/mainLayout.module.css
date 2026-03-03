@@ -32,6 +32,10 @@
     .btnVoltarTopo{
         bottom: 5rem;
     }
+
+    .scrollArea{
+        padding-bottom: 9rem;
+    }
 }
 
 @media screen and (min-width: 770px) {
@@ -45,6 +49,10 @@
 
     .btnVoltarTopo{
         bottom: 2rem;
+    }
+
+    .scrollArea{
+        padding-bottom: 2rem;
     }
 }
 

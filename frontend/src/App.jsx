@@ -8,6 +8,7 @@ import Home from "./components/home/Home";
 import Explorar from "./components/explorar/Explorar";
 import Sobre from "./components/sobre-projeto/SobreProjeto";
 import Configuracoes from "./components/configuracoes/Configuracoes";
+import Favoritos from "./components/favoritos/Favoritos";
 
 export default function App() {
     return (
@@ -22,7 +23,7 @@ export default function App() {
 
                     <Route path="/explorar" element={<Explorar />} />
                     <Route path="/historico" element={<h1>Tela Para Histórico será Construida</h1>} />
-                    <Route path="/favoritos" element={<h1>Tela Para Favoritos será Construida</h1>} />
+                    <Route path="/favoritos" element={<Favoritos />} />
                     <Route path="/perfil" element={<Configuracoes />} />
                 </Route>
             </Routes>
