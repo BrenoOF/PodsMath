@@ -4,23 +4,35 @@ import axios from "axios";
 import Style from "./favoritos.module.css";
 
 export default function TelaFavoritos() {
-    const [podcastsFavoritos, setPodcastsFavoritos] = useState(null);
+    const [podcastsFavoritos, setPodcastsFavoritos] = useState([]);
+
+    const toggleFavorito = (id) => {
+        setPodcastsFavoritos((prev) =>
+            prev.map((podcast) =>
+                podcast.id === id
+                    ? { ...podcast, favorito: !podcast.favorito }
+                    : podcast
+            )
+        );
+    };
 
     useEffect(() => {
         const carregarDados = async () => {
             try {
                 const response = await axios.get("/podcasts.json");
-                setPodcastsFavoritos(response.data.novidades);
+
+                const dadosComFavorito = response.data.novidades.map(item => ({
+                    ...item,
+                    favorito: true
+                }));
+
+                setPodcastsFavoritos(dadosComFavorito);
             } catch (error) {
-                console.error("Erro ao carregar dados da home", error);
+                console.error("Erro ao carregar dados", error);
             }
         }
         carregarDados();
     }, []);
-
-    if (!podcastsFavoritos) {
-        return <p>Carregando...</p>;
-    }
 
     return (
         <div className={Style.containerFavoritos}>
@@ -29,7 +41,12 @@ export default function TelaFavoritos() {
                     <i className="fa-solid fa-heart"></i>
                     <h1>Meus Favoritos</h1>
                 </div>
-                <p>3 podcasts salvos</p>
+                <p>
+                    {podcastsFavoritos.length === 0 ? "Você não possui nenhum podcast salvo" : `
+                        ${podcastsFavoritos.length} 
+                        ${podcastsFavoritos.length === 1 ? "podcast salvo" : "podcasts salvos"}
+                    `}
+                </p>
             </div>
             <div className={Style.divCardNovidade}>
                 {podcastsFavoritos.map(item => (
@@ -42,8 +59,22 @@ export default function TelaFavoritos() {
                         </div>
                         <h1>{item.titulo}</h1>
                         <p>{item.descricao}</p>
-                        <div className={Style.btnAssunto}>
-                            <p>{item.assunto}</p>
+                        <div className={Style.divAcoesBottom}>
+                            <div className={Style.btnAssunto}>
+                                <p>{item.assunto}</p>
+                            </div>
+                            <div className={`
+                                ${Style.divCoracao}
+                                ${!item.favorito ? Style.apagadaCoracao : ""}
+                            `}
+                                onClick={() => { toggleFavorito(item.id) }}
+                            >
+                                {item.favorito ? (
+                                    <i className="fa-solid fa-heart"></i>
+                                ) : (
+                                    <i className="fa-solid fa-heart-crack"></i>
+                                )}
+                            </div>
                         </div>
                     </div>
                 ))}

@@ -121,6 +121,13 @@
     filter: brightness(0.8);
 }
 
+/* Estilo para as ações que estão mais abaixo no card */
+.divAcoesBottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .btnAssunto {
     display: flex;
     justify-content: center;
@@ -140,4 +147,26 @@
 .btnAssunto:hover {
     background-color: var(--cor-semibtn-normal);
     color: var(--cor-azul-font-borda);
+}
+
+.divCoracao{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    margin: 1rem;
+    background-color: var(--cor-laranja-escuro);
+    border-radius: 100%;
+}
+.divCoracao>i{
+    color: var(--branco);
+    font-size: 1rem;
+}
+
+.apagadaCoracao{
+    opacity: 0.5;
+    transition: 0.3s;
 }
