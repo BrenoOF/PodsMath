@@ -36,7 +36,6 @@ export default function CompPodcastNovidades({ podcasts }) {
                     <img src={item.img} alt={item.titulo}
                         className={Style.imgCard} draggable="false"
                     />
-                    <i className={`fa-solid fa-circle-play ${Style.iconPlay}`}></i>
                 </div>
                 <h1>{item.titulo}</h1>
                 <p>{item.descricao}</p>
