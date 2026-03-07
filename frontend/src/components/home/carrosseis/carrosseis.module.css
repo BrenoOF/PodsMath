@@ -1,16 +1,104 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .divTitulosDosPodcasts {
+        font-size: 1.2rem;
+    }
+
+    .btnAssunto {
+        font-size: 0.625rem;
+    }
+
+    /* Podcasts Novidade */
+    .cardNovidade:hover {
+        transform: scale(1);
+    }
+
+    /* Podcasts Proprios */
+    .cardProprio {
+        padding: 0.5rem;
+    }
+
+    .cardProprio:hover {
+        transform: scale(1);
+    }
+
+    .cardProprio>.imgCard {
+        width: 8rem;
+    }
+
+    .divTextosProprio {
+        max-width: 50%;
+    }
+
+    .divTextosProprio>h1 {
+        font-size: 0.8rem;
+    }
+
+    .divTextosProprio>p {
+        font-size: 0.625rem;
+    }
+
+    .iconPlayProprio {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .divTitulosDosPodcasts {
+        font-size: 1.5rem;
+    }
+
+    .btnAssunto {
+        font-size: 0.875rem;
+    }
+
+    /* Podcasts Novidade */
+    .cardNovidade:hover {
+        transform: scale(1.1);
+    }
+
+    /* Podcasts Proprios */
+    .cardProprio {
+        padding: 1.5rem;
+    }
+
+    .cardProprio:hover {
+        transform: scale(1.01);
+    }
+
+    .imgCard {
+        width: 18.75rem;
+    }
+
+    .divTextosProprio {
+        max-width: 35%;
+    }
+
+    .divTextosProprio>h1 {
+        font-size: 1.5rem;
+    }
+
+    .divTextosProprio>p {
+        font-size: 1rem;
+    }
+
+    .iconPlayProprio {
+        font-size: 3.5rem;
+    }
+}
+
 /* Estilo padrão para os títulos de cada 'Carrossel' */
 .divTitulosDosPodcasts {
     display: flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 2rem;
 }
 
 /* Estilo Padrão */
 .imgCard {
-    width: 18.75rem;
+    max-width: 100%;
     aspect-ratio: 18.75 / 12;
     border-radius: 1rem;
 }
@@ -28,7 +116,6 @@
     cursor: pointer;
     transition: 0.5s ease;
     margin: 1rem;
-    font-size: 0.875rem;
 }
 
 .btnAssunto:hover {
@@ -88,12 +175,12 @@
     width: 18.85rem;
     border-radius: 1rem;
     background-color: var(--app-background);
+    border: 0.05rem solid transparent;
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 
 .cardNovidade:hover {
-    transform: scale(1.1);
     border: 0.05rem solid var(--cor-laranja-escuro);
     box-shadow: 0px 2px 12px 0px var(--sombra);
 }
@@ -124,25 +211,22 @@
     color: var(--font-paragrafo);
 }
 
+/* Apartir daqui (apagar esse comentario dps) */
 .divPodcastsProprio {
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    margin-bottom: 3.5rem;
+    width: 100%;
 }
 
 .cardProprio {
     display: flex;
     align-items: center;
-    padding: 1.5rem;
     border: 0.1rem solid var(--border-color-tema);
     border-radius: 1rem;
     box-shadow: 5px 5px 14px 1px var(--sombra);
     transition: transform 0.2s ease;
-}
-
-.cardProprio:hover {
-    transform: scale(1.01);
+    cursor: pointer;
 }
 
 .divTextosProprio {
@@ -152,15 +236,9 @@
     gap: 1rem;
     flex: 1;
     margin-left: 1rem;
-    max-width: 35%;
-}
-
-.divTextosProprio>h1 {
-    font-size: 1.5rem;
 }
 
 .divTextosProprio>p {
-    font-size: 1rem;
     color: var(--font-paragrafo);
 }
 
@@ -179,8 +257,6 @@
 
 .iconPlayProprio {
     color: var(--cor-azul-escura-padrao);
-    font-size: 3.5rem;
-    cursor: pointer;
     transition: transform 0.2s ease, color 0.2s ease;
 }
 

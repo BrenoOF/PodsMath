@@ -1,0 +1,96 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerHistorico {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+
+    .menuTop {
+        margin-top: 0rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerHistorico {
+        display: block;
+        padding: 2rem;
+    }
+
+    .menuTop {
+        margin-top: 3rem;
+    }
+}
+
+.containerHistorico {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+/* Estilo para o Título */
+.divTitulo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.divTitulo>p {
+    font-size: 1rem;
+    color: var(--font-meio-apagada);
+    margin-left: 0.8rem;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.titulo>i {
+    font-size: 1.75rem;
+}
+
+/* Estilo para o menu de troca */
+.menuTop {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--app-background);
+    padding: 0.5rem;
+    border-radius: 0.625rem;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.opcoesMenuTop {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    padding: 0.5rem;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.opcoesMenuTop>p {
+    font-size: 0.875rem;
+}
+
+.opcaoSelecionada {
+    border-bottom: 0.125rem solid var(--border-color-tema);
+    opacity: 1;
+}
+
+/* Estilo para caso o usuario não tenha um histórico */
+.divNaoTemPodcast {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+}
+
+.divNaoTemPodcast>p {
+    color: var(--font-meio-apagada);
+}
