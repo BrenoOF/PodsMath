@@ -34,6 +34,7 @@
     background-color: var(--app-background);
     padding: 0.5rem;
     border-radius: 0.625rem;
+    width: 100%;
 }
 
 .opcoesMenuTop {
