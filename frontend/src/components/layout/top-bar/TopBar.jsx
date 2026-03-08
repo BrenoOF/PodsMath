@@ -180,7 +180,7 @@ export default function CompTopBar({ slidebarAberta }) {
             };
 
             try {
-                const response = await axios.get("/users.json");
+                const response = await axios.get("/dados/users.json");
                 const usuarioEncontrado = response.data.find(
                     (user) => String(user.id) === String(usuarioId)
                 );

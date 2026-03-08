@@ -16,7 +16,7 @@ export default function TelaHome() {
     useEffect(() => {
         const carregarDados = async () => {
             try {
-                const response = await axios.get("/podcasts.json");
+                const response = await axios.get("/dados/podcasts.json");
                 setDadosHome(response.data);
             } catch (error) {
                 console.error("Erro ao carregar dados da home", error);

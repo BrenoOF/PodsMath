@@ -11,7 +11,7 @@ export default function TelaHistorico() {
     useEffect(() => {
         const carregarDados = async () => {
             try {
-                const response = await axios.get("/podcasts.json");
+                const response = await axios.get("/dados/podcasts.json");
 
                 const dadosComHistorico = response.data.podcastsProprios.map(item => ({
                     ...item,

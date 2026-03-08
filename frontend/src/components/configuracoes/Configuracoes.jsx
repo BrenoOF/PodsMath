@@ -24,7 +24,7 @@ export default function TelaConfiguracoes() {
                 const usuarioId = Number(localStorage.getItem("usuarioId"));
                 if (!usuarioId) return;
 
-                const response = await axios.get("/users.json");
+                const response = await axios.get("/dados/users.json");
                 const usuarios = response.data;
 
                 const usuarioEncontrado = usuarios.find((u)=>u.id === usuarioId);

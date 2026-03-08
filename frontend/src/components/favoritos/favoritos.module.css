@@ -44,10 +44,6 @@
     color: var(--cor-laranja-escuro);
 }
 
-.titulo>h1 {
-    font-size: 2.25rem;
-}
-
 /* Estilo para os cards */
 .divCardNovidade {
     display: grid;
