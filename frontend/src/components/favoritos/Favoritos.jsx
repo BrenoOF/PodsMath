@@ -20,7 +20,7 @@ export default function TelaFavoritos() {
     useEffect(() => {
         const carregarDados = async () => {
             try {
-                const response = await axios.get("/podcasts.json");
+                const response = await axios.get("/dados/podcasts.json");
 
                 const dadosComFavorito = response.data.novidades.map(item => ({
                     ...item,

@@ -1,0 +1,40 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerTemas {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerTemas {
+        display: block;
+        padding: 2rem;
+    }
+}
+
+.containerTemas {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+.divTitulo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.divTitulo>p {
+    font-size: 1rem;
+    color: var(--font-meio-apagada);
+}
+
+.divCardNovidade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+}

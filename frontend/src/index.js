@@ -24,3 +24,17 @@ root.render(
 );
 
 reportWebVitals();
+
+// PWA (descomentar caso for usar a PWA)
+// if ("serviceWorker" in navigator) {
+//     window.addEventListener("load", () => {
+//         navigator.serviceWorker
+//             .register("/service-worker.js")
+//             .then((registration) => {
+//                 console.log("SW registrado:", registration);
+//             })
+//             .catch((error) => {
+//                 console.log("Erro ao registrar SW:", error);
+//             });
+//     });
+// }

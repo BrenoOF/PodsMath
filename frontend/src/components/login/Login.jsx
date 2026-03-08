@@ -130,7 +130,7 @@ export default function TelaLogin() {
     const logar = async () => {
         try {
             // Lê o JSON completo
-            const response = await axios.get("/users.json");
+            const response = await axios.get("/dados/users.json");
             const usuarios = response.data;
 
             // Procura usuário que bate com email e senha

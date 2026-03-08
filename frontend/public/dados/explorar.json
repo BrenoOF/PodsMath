@@ -1,0 +1,256 @@
+{
+  "assuntos": [
+    {
+      "id": 1,
+      "titulo": "Álgebra",
+      "slug": "algebra",
+      "subTitulo": "Explore equações, funções e estruturas algébricas",
+      "icon": "calculator",
+      "bg": "#a855f7, #ec4899",
+      "temas": [
+        {
+          "id": 101,
+          "titulo": "Álgebra Essencial",
+          "slug": "algebra-essencial",
+          "subTitulo": "Desvende os fundamentos da álgebra de forma prática e envolvente",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 1001,
+              "titulo": "Equações do 1º Grau",
+              "slug": "equacoes-do-1-grau",
+              "subTitulo": "Aprenda a resolver equações simples",
+              "dt_adicao": "05 de mar. de 2025",
+              "duracao": "6:30"
+            },
+            {
+              "id": 1002,
+              "titulo": "Equações do 2º Grau",
+              "slug": "equacoes-do-2-grau",
+              "subTitulo": "Resolvendo equações quadráticas",
+              "dt_adicao": "07 de mar. de 2025",
+              "duracao": "8:15"
+            },
+            {
+              "id": 1003,
+              "titulo": "Fórmula de Bhaskara",
+              "slug": "formula-de-bhaskara",
+              "subTitulo": "Usando a Fórmula de Bhaskara",
+              "dt_adicao": "09 de mar. de 2025",
+              "duracao": "7:57"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "titulo": "Geometria",
+      "slug": "geometria",
+      "subTitulo": "Formas, espaços e suas propriedades",
+      "icon": "shapes",
+      "bg": "#3b82f6, #06b6d4",
+      "temas": [
+        {
+          "id": 201,
+          "titulo": "Geometria Plana",
+          "slug": "geometria-plana",
+          "subTitulo": "Estudo das formas no plano",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 2001,
+              "titulo": "Triângulos",
+              "slug": "triangulos",
+              "subTitulo": "Tipos e propriedades dos triângulos",
+              "dt_adicao": "02 de mar. de 2025",
+              "duracao": "7:20"
+            },
+            {
+              "id": 2002,
+              "titulo": "Teorema de Pitágoras",
+              "slug": "teorema-de-pitagoras",
+              "subTitulo": "Relação entre os lados do triângulo retângulo",
+              "dt_adicao": "04 de mar. de 2025",
+              "duracao": "8:05"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "titulo": "Estatística",
+      "slug": "estatistica",
+      "subTitulo": "Análise de dados e probabilidade",
+      "icon": "chart-pie",
+      "bg": "#22c55e, #10b981",
+      "temas": [
+        {
+          "id": 301,
+          "titulo": "Estatística Básica",
+          "slug": "estatistica-basica",
+          "subTitulo": "Fundamentos da análise de dados",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 3001,
+              "titulo": "Média, Moda e Mediana",
+              "slug": "media-moda-e-mediana",
+              "subTitulo": "Medidas de tendência central",
+              "dt_adicao": "01 de mar. de 2025",
+              "duracao": "7:50"
+            },
+            {
+              "id": 3002,
+              "titulo": "Desvio Padrão",
+              "slug": "desvio-padrao",
+              "subTitulo": "Entendendo dispersão de dados",
+              "dt_adicao": "03 de mar. de 2025",
+              "duracao": "9:30"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "titulo": "Cálculo",
+      "slug": "calculo",
+      "subTitulo": "Derivadas, integrais e análise matemática",
+      "icon": "arrow-trend-up",
+      "bg": "#f97316, #ef4444",
+      "temas": [
+        {
+          "id": 401,
+          "titulo": "Limites",
+          "slug": "limites",
+          "subTitulo": "Base para cálculo diferencial",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 4001,
+              "titulo": "Introdução aos Limites",
+              "slug": "introducao-aos-limites",
+              "subTitulo": "Entenda o conceito de limite",
+              "dt_adicao": "05 de mar. de 2025",
+              "duracao": "8:40"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "titulo": "Trigonometria",
+      "slug": "trigonometria",
+      "subTitulo": "Relações entre ângulo e lados",
+      "icon": "ruler",
+      "bg": "#6366f1, #a855f7",
+      "temas": [
+        {
+          "id": 501,
+          "titulo": "Fundamentos da Trigonometria",
+          "slug": "fundamentos-da-trigonometria",
+          "subTitulo": "Entenda seno, cosseno e tangente",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 5001,
+              "titulo": "Seno, Cosseno e Tangente",
+              "slug": "seno-cosseno-e-tangente",
+              "subTitulo": "As principais razões trigonométricas",
+              "dt_adicao": "02 de mar. de 2025",
+              "duracao": "8:20"
+            },
+            {
+              "id": 5002,
+              "titulo": "Círculo Trigonométrico",
+              "slug": "circulo-trigonometrico",
+              "subTitulo": "Entendendo os ângulos no círculo",
+              "dt_adicao": "04 de mar. de 2025",
+              "duracao": "9:10"
+            }
+          ]
+        },
+        {
+          "id": 502,
+          "titulo": "Identidades Trigonométricas",
+          "slug": "identidades-trigonometricas",
+          "subTitulo": "Relações importantes entre funções trigonométricas",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 5003,
+              "titulo": "Identidade Fundamental",
+              "slug": "identidade-fundamental",
+              "subTitulo": "A famosa relação trigonométrica",
+              "dt_adicao": "06 de mar. de 2025",
+              "duracao": "7:40"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "titulo": "Matemática Financeira",
+      "slug": "matematica-financeira",
+      "subTitulo": "Juros, investimentos e análise financeira",
+      "icon": "money-bill-wave",
+      "bg": "#eab308, #f97316",
+      "temas": [
+        {
+          "id": 601,
+          "titulo": "Juros Simples",
+          "slug": "juros-simples",
+          "subTitulo": "Cálculo básico de juros",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 6001,
+              "titulo": "Introdução aos Juros Simples",
+              "slug": "introducao-aos-juros-simples",
+              "subTitulo": "Como calcular juros simples",
+              "dt_adicao": "03 de mar. de 2025",
+              "duracao": "6:50"
+            },
+            {
+              "id": 6002,
+              "titulo": "Aplicações Práticas",
+              "slug": "aplicacoes-praticas",
+              "subTitulo": "Exemplos do dia a dia",
+              "dt_adicao": "05 de mar. de 2025",
+              "duracao": "7:30"
+            }
+          ]
+        },
+        {
+          "id": 602,
+          "titulo": "Juros Compostos",
+          "slug": "juros-compostos",
+          "subTitulo": "O poder dos juros ao longo do tempo",
+          "img": "/imgs/cardExemplo.jpg",
+          "playlists": [
+            {
+              "id": 6003,
+              "titulo": "Fórmula dos Juros Compostos",
+              "slug": "formula-dos-juros-compostos",
+              "subTitulo": "Aprenda a calcular montante",
+              "dt_adicao": "07 de mar. de 2025",
+              "duracao": "8:25"
+            },
+            {
+              "id": 6004,
+              "titulo": "Investimentos e Crescimento",
+              "slug": "investimentos-e-crescimento",
+              "subTitulo": "Simulação de investimentos",
+              "dt_adicao": "08 de mar. de 2025",
+              "duracao": "9:15"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
