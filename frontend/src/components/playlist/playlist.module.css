@@ -59,7 +59,7 @@
     transition: 0.2s ease;
 }
 
-.imgTitulo{
+.imgTitulo {
     width: 15rem;
     height: 15rem;
     border-radius: 0.75rem;
@@ -81,17 +81,19 @@
 }
 
 /* Estilo para o menu antes da tabela */
-.divMenu{
+.divMenu {
     display: flex;
     align-items: center;
     gap: 2.5rem;
     margin: 2rem;
 }
-.divMenu>i{
+
+.divMenu>i {
     font-size: 1.5rem;
     cursor: pointer;
 }
-.divIconPlay{
+
+.divIconPlay {
     padding: 1rem;
     background-color: var(--cor-laranja-escuro);
     border-radius: 100%;
@@ -99,26 +101,98 @@
     cursor: pointer;
     transition: 0.2s ease;
 }
-.divIconPlay:hover{
+
+.divIconPlay:hover {
     transform: scale(1.01);
     background-color: var(--cor-laranja-escuro-hover);
 }
 
-/* Estilo para separação */
-.hrSeparacao{
-    border: 0.1rem solid var(--border-color-tema);
-    margin-bottom: 2rem;
+/* Estilo para Tabela */
+.tabelaPlaylist {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 0.8rem;
 }
 
-/* Estilo para Tabela */
+.tabelaPlaylist thead {
+    text-align: left;
+    font-size: 0.875rem;
+    color: var(--font-meio-apagada);
+}
+.tabelaPlaylist thead th {
+    border-top: 0.2rem solid var(--border-color-tema);
+    border-bottom: 0.2rem solid var(--border-color-tema);
+}
 
-.celulaTitulo{
+.tabelaPlaylist th,
+.tabelaPlaylist td {
+    padding: 0.75rem;
+}
+
+.tabelaCenter {
+    text-align: center;
+}
+
+.linhaTabela {
+    margin-bottom: 2rem;
+    cursor: pointer;
+}
+
+/* Estilo para Fazer o Id do Podcast virar Icon */
+.colunaNumero {
+    position: relative;
+}
+
+.idPodcast {
+    transition: opacity 0.2s;
+}
+
+.playIcon {
+    color: var(--cor-azul-font-borda);
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.linhaTabela:hover .idPodcast {
+    opacity: 0;
+}
+
+.linhaTabela:hover .playIcon {
+    opacity: 1;
+}
+
+.linhaTabela:hover .divTextoTituloPodcast>h1 {
+    color: var(--cor-azul-font-borda);
+}
+
+/* Estilo para Mini Card de Foto, Título e SubTítulo da Tabela */
+.celulaTitulo {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
-.imgTabela{
+.imgTabela {
     width: 3.5rem;
+    height: 3.5rem;
+    object-fit: cover;
     border-radius: 0.75rem;
+}
+
+.divTextoTituloPodcast {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.divTextoTituloPodcast>h1 {
+    font-size: 1rem;
+}
+
+.divTextoTituloPodcast>p {
+    font-size: 0.875rem;
+    color: var(--font-meio-apagada);
 }
