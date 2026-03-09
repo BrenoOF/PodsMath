@@ -34,7 +34,7 @@ export default function TelaExplorar() {
                 {dadosExplorar.map(item => (
                     <div key={item.id} className={Style.card}
                         onClick={() => {
-                            navigate(`/explorar/${item.slug}`);
+                            navigate(`/explorar/${item.id}`);
                         }}
                     >
                         <div

@@ -1,0 +1,124 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {}
+
+@media screen and (min-width: 770px) {}
+
+.containerPlaylist {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+}
+
+
+/* Estilo para primeira div onde tem a Apresentação */
+.divApresentacao {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: var(--branco);
+    padding: 2rem 2rem;
+    gap: 4rem;
+    background: linear-gradient(to bottom right, #045d8c, #045d8ce6, #ff4000);
+}
+
+.btnVoltar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 5.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border-radius: 0.625rem;
+}
+
+.btnVoltar:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.divOrganizarTextos {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.semiBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--cor-semibtn-normal);
+    border: 0.1rem solid var(--branco);
+    color: var(--branco);
+    padding: 0.25rem 0.625rem;
+    width: 7rem;
+    border-radius: 2rem;
+    font-size: 0.875rem;
+    transition: 0.2s ease;
+}
+
+.imgTitulo{
+    width: 15rem;
+    height: 15rem;
+    border-radius: 0.75rem;
+    box-shadow: 0px 0px 12px var(--sombra);
+}
+
+.divTextos {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.divTextos>h1 {
+    font-size: 3.75rem;
+}
+
+.divTextos>p {
+    font-size: 1rem;
+}
+
+/* Estilo para o menu antes da tabela */
+.divMenu{
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    margin: 2rem;
+}
+.divMenu>i{
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.divIconPlay{
+    padding: 1rem;
+    background-color: var(--cor-laranja-escuro);
+    border-radius: 100%;
+    color: var(--branco);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+.divIconPlay:hover{
+    transform: scale(1.01);
+    background-color: var(--cor-laranja-escuro-hover);
+}
+
+/* Estilo para separação */
+.hrSeparacao{
+    border: 0.1rem solid var(--border-color-tema);
+    margin-bottom: 2rem;
+}
+
+/* Estilo para Tabela */
+
+.celulaTitulo{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.imgTabela{
+    width: 3.5rem;
+    border-radius: 0.75rem;
+}
