@@ -35,6 +35,7 @@ export default function TelaPlaylist() {
 
     return (
         <div className={Style.containerPlaylist}>
+            {/* Parte que Aparece no Topo */}
             <div className={Style.divApresentacao}>
                 <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                     <i className="fa-solid fa-angle-left"></i>
@@ -72,38 +73,41 @@ export default function TelaPlaylist() {
                 <i className="fa-solid fa-heart" style={{ color: "#f00"}}></i>
                 <i className="fa-solid fa-share-nodes"></i>
             </div>
-            <hr className={Style.hrSeparacao}/>
             {/* Tabela para colocar podcasts */}
             <table className={Style.tabelaPlaylist}>
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th className={Style.tabelaCenter}>#</th>
                         <th>Título</th>
                         <th>Data de adição</th>
-                        <th><i className="fa-regular fa-clock"></i></th>
+                        <th className={Style.tabelaCenter}><i className="fa-regular fa-clock"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                     {dadosPlaylist.map((item, index) => (
                         <tr
                             key={item.id}
+                            className={Style.linhaTabela}
                             onClick={() => {
                                 navigate(`/explorar/${idTema}/${playlistTema}/${item.id}`);
                             }}
                         >
-                            <td>{index + 1}</td>
+                            <td className={`${Style.tabelaCenter} ${Style.colunaNumero}`}>
+                                <span className={Style.idPodcast}>{index + 1}</span>
+                                <i className={`fa-solid fa-play ${Style.playIcon}`}></i>
+                            </td>
                             <td className={Style.celulaTitulo}>
                                 <img src="/imgs/cardExemplo.jpg" alt={item.titulo}
                                     className={Style.imgTabela} draggable="false"
                                     onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
                                 />
-                                <div>
-                                    <p className={Style.titulo}>{item.titulo}</p>
+                                <div className={Style.divTextoTituloPodcast}>
+                                    <h1 className={Style.titulo}>{item.titulo}</h1>
                                     <p className={Style.subTitulo}>{item.subTitulo}</p>
                                 </div>
                             </td>
                             <td>{item.dt_adicao}</td>
-                            <td>{item.duracao}</td>
+                            <td className={Style.tabelaCenter}>{item.duracao}</td>
                         </tr>
                     ))}
                 </tbody>
