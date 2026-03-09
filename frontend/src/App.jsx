@@ -12,6 +12,7 @@ import Favoritos from "./components/favoritos/Favoritos";
 import Historico from "./components/historico/Historico";
 
 import Temas from "./components/tema/Tema";
+import Playlist from "./components/playlist/Playlist";
 
 export default function App() {
     return (
@@ -25,9 +26,9 @@ export default function App() {
                     <Route path="/sobre-o-projeto" element={<Sobre />} />
 
                     <Route path="/explorar" element={<Explorar />} />
-                    <Route path="/explorar/:nomeTema" element={<Temas />} />
-                    <Route path="/explorar/:nomeTema/:playlistTema" element={<h1>Playlist Não Está Pronto</h1>} />
-                    <Route path="/explorar/:nomeTema/:playlistTema/:idPodcast" element={<h1>Player Não Está Pronto</h1>} />
+                    <Route path="/explorar/:idTema" element={<Temas />} />
+                    <Route path="/explorar/:idTema/:playlistTema" element={<Playlist />} />
+                    <Route path="/explorar/:idTema/:playlistTema/:idPodcast" element={<h1>Player Não Está Pronto</h1>} />
 
                     <Route path="/historico" element={<Historico />} />
                     <Route path="/favoritos" element={<Favoritos />} />
