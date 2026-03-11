@@ -1,7 +1,143 @@
 /* Responsividade */
-@media screen and (max-width: 769px) {}
+@media screen and (max-width: 769px) {
 
-@media screen and (min-width: 770px) {}
+    /* Estilo para a parte do topo */
+    .divApresentacao {
+        padding: 0.5rem 0rem;
+        gap: 1rem;
+    }
+
+    .divOrganizarTextos {
+        flex-direction: column;
+    }
+
+    .imgTitulo {
+        width: 12rem;
+        height: 12rem;
+    }
+
+    .divTextos {
+        align-items: center;
+    }
+
+    .divTextos>h1 {
+        font-size: 2.25rem;
+        text-align: center;
+    }
+
+    .divTextos>p {
+        font-size: 0.875rem;
+        text-align: center;
+    }
+
+    /* Estilo para o menu antes da tabela */
+    .divMenu {
+        justify-content: space-between;
+        gap: 0rem;
+        margin: 1.5rem;
+    }
+
+    /* Estilos para Tabela */
+    .colunaNumero {
+        width: 10%;
+    }
+
+    .colunaTitulo {
+        width: 70%;
+    }
+
+    .colunaDataAdicao {
+        display: none;
+    }
+
+    .divTextoTituloPodcast>h1 {
+        font-size: 0.875rem;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+
+        overflow: hidden;
+    }
+
+    .divTextoTituloPodcast>p {
+        font-size: 0.75rem;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+
+        overflow: hidden;
+    }
+}
+
+@media screen and (min-width: 770px) {
+
+    /* Estilo para a parte do topo */
+    .divApresentacao {
+        padding: 2rem 2rem;
+        gap: 4rem;
+    }
+
+    .divOrganizarTextos {
+        flex-direction: row;
+    }
+
+    .imgTitulo {
+        width: 15rem;
+        height: 15rem;
+    }
+
+    .divTextos {
+        align-items: flex-start;
+    }
+
+    .divTextos>h1 {
+        font-size: 3.75rem;
+    }
+
+    .divTextos>p {
+        font-size: 1rem;
+    }
+
+    /* Estilo para o menu antes da tabela */
+    .divMenu {
+        justify-content: flex-start;
+        gap: 2.5rem;
+        margin: 2rem;
+    }
+
+    /* Estilos para Tabela */
+    .colunaNumero {
+        width: 5rem;
+    }
+
+    .colunaTitulo {
+        width: 60%;
+    }
+
+    .colunaDataAdicao {
+        display: table-cell;
+    }
+
+    .divTextoTituloPodcast>h1 {
+        font-size: 1rem;
+
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .divTextoTituloPodcast>p {
+        font-size: 0.875rem;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+
+        overflow: hidden;
+    }
+}
 
 .containerPlaylist {
     display: flex;
@@ -9,15 +145,12 @@
     width: auto;
 }
 
-
 /* Estilo para primeira div onde tem a Apresentação */
 .divApresentacao {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     color: var(--branco);
-    padding: 2rem 2rem;
-    gap: 4rem;
     background: linear-gradient(to bottom right, #045d8c, #045d8ce6, #ff4000);
 }
 
@@ -39,7 +172,6 @@
 
 .divOrganizarTextos {
     display: flex;
-    flex-direction: row;
     justify-content: center;
     align-items: center;
     gap: 1rem;
@@ -60,8 +192,6 @@
 }
 
 .imgTitulo {
-    width: 15rem;
-    height: 15rem;
     border-radius: 0.75rem;
     box-shadow: 0px 0px 12px var(--sombra);
 }
@@ -72,20 +202,10 @@
     gap: 1rem;
 }
 
-.divTextos>h1 {
-    font-size: 3.75rem;
-}
-
-.divTextos>p {
-    font-size: 1rem;
-}
-
 /* Estilo para o menu antes da tabela */
 .divMenu {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
-    margin: 2rem;
 }
 
 .divMenu>i {
@@ -112,6 +232,7 @@
     width: 100%;
     border-collapse: separate;
     border-spacing: 0 0.8rem;
+    table-layout: fixed;
 }
 
 .tabelaPlaylist thead {
@@ -119,6 +240,7 @@
     font-size: 0.875rem;
     color: var(--font-meio-apagada);
 }
+
 .tabelaPlaylist thead th {
     border-top: 0.2rem solid var(--border-color-tema);
     border-bottom: 0.2rem solid var(--border-color-tema);
@@ -129,20 +251,22 @@
     padding: 0.75rem;
 }
 
-.tabelaCenter {
+.colunaNumero {
+    position: relative;
+    text-align: center;
+}
+
+.colunaDuracao{
     text-align: center;
 }
 
 .linhaTabela {
     margin-bottom: 2rem;
     cursor: pointer;
+    min-width: 0;
 }
 
 /* Estilo para Fazer o Id do Podcast virar Icon */
-.colunaNumero {
-    position: relative;
-}
-
 .idPodcast {
     transition: opacity 0.2s;
 }
@@ -173,6 +297,7 @@
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    min-width: 0;
 }
 
 .imgTabela {
@@ -180,19 +305,17 @@
     height: 3.5rem;
     object-fit: cover;
     border-radius: 0.75rem;
+    flex-shrink: 0;
 }
 
 .divTextoTituloPodcast {
     display: flex;
     flex-direction: column;
     gap: 0.2rem;
-}
-
-.divTextoTituloPodcast>h1 {
-    font-size: 1rem;
+    word-break: break-word;
+    min-width: 0;
 }
 
 .divTextoTituloPodcast>p {
-    font-size: 0.875rem;
     color: var(--font-meio-apagada);
 }

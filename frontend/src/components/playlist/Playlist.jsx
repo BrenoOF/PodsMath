@@ -77,10 +77,10 @@ export default function TelaPlaylist() {
             <table className={Style.tabelaPlaylist}>
                 <thead>
                     <tr>
-                        <th className={Style.tabelaCenter}>#</th>
-                        <th>Título</th>
-                        <th>Data de adição</th>
-                        <th className={Style.tabelaCenter}><i className="fa-regular fa-clock"></i></th>
+                        <th className={Style.colunaNumero}>#</th>
+                        <th className={Style.colunaTitulo}>Título</th>
+                        <th className={Style.colunaDataAdicao}>Data de adição</th>
+                        <th className={Style.colunaDuracao}><i className="fa-regular fa-clock"></i></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,22 +92,22 @@ export default function TelaPlaylist() {
                                 navigate(`/explorar/${idTema}/${playlistTema}/${item.id}`);
                             }}
                         >
-                            <td className={`${Style.tabelaCenter} ${Style.colunaNumero}`}>
+                            <td className={Style.colunaNumero}>
                                 <span className={Style.idPodcast}>{index + 1}</span>
                                 <i className={`fa-solid fa-play ${Style.playIcon}`}></i>
                             </td>
                             <td className={Style.celulaTitulo}>
-                                <img src="/imgs/cardExemplo.jpg" alt={item.titulo}
+                                <img src={item.img} alt={item.titulo}
                                     className={Style.imgTabela} draggable="false"
                                     onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
                                 />
                                 <div className={Style.divTextoTituloPodcast}>
-                                    <h1 className={Style.titulo}>{item.titulo}</h1>
-                                    <p className={Style.subTitulo}>{item.subTitulo}</p>
+                                    <h1>{item.titulo}</h1>
+                                    <p>{item.subTitulo}</p>
                                 </div>
                             </td>
-                            <td>{item.dt_adicao}</td>
-                            <td className={Style.tabelaCenter}>{item.duracao}</td>
+                            <td className={Style.colunaDataAdicao}>{item.dt_adicao}</td>
+                            <td className={Style.colunaDuracao}>{item.duracao}</td>
                         </tr>
                     ))}
                 </tbody>

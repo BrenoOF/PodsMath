@@ -363,11 +363,7 @@ export default function CompTopBar({ slidebarAberta }) {
                                 <h1>{dadosUser.nome}</h1>
                                 <p>{dadosUser.email}</p>
                             </div>
-                            <hr style={{
-                                width: "18rem",
-                                border: "0.1rem var(--border-color-tema) solid"
-                            }}
-                            />
+                            <hr className={Style.hrSeparacao} />
                             <div onClick={() => {
                                 navigate("/perfil");
                                 setModalUserMobileAberto(false);
