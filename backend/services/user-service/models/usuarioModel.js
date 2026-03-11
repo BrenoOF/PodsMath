@@ -2,36 +2,107 @@ const pool = require('../db/connections');
 
 const Usuario = {
     getAll: async () => {
-        const [rows] = await pool.query('SELECT * FROM usuarios');
-        return rows;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM usuarios');
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     getById: async (id) => {
-        const [rows] = await pool.query('SELECT * FROM usuarios WHERE idusuarios = ?', [id]);
-        return rows[0];
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM usuarios WHERE idusuarios = ?', [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    findByEmail: async (email) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     create: async (usuarioData) => {
-        const { idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados } = usuarioData;
-        const [result] = await pool.query(
-            'INSERT INTO usuarios (idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-            [idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados]
-        );
-        return { idusuarios: result.insertId, ...usuarioData };
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const { idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados } = usuarioData;
+            const [result] = await connection.query(
+                'INSERT INTO usuarios (idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados]
+            );
+            await connection.commit();
+            return { idusuarios: result.insertId, ...usuarioData };
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     update: async (id, usuarioData) => {
-        const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados } = usuarioData;
-        const [result] = await pool.query(
-            'UPDATE usuarios SET instituicoes_idinstituicoes = ?, nome = ?, email = ?, senha = ?, id_usuario_professor = ?, nivel_acesso_idnivel_acesso = ?, paletaCor_idpaletaCor = ?, audiosEscutados = ? WHERE idusuarios = ?',
-            [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, id]
-        );
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados } = usuarioData;
+            const [result] = await connection.query(
+                'UPDATE usuarios SET instituicoes_idinstituicoes = ?, nome = ?, email = ?, senha = ?, id_usuario_professor = ?, nivel_acesso_idnivel_acesso = ?, paletaCor_idpaletaCor = ?, audiosEscutados = ? WHERE idusuarios = ?',
+                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     delete: async (id) => {
-        const [result] = await pool.query('DELETE FROM usuarios WHERE idusuarios = ?', [id]);
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM usuarios WHERE idusuarios = ?', [id]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 

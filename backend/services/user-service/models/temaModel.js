@@ -2,34 +2,89 @@ const pool = require('../db/connections');
 
 const Tema = {
     getAll: async () => {
-        const [rows] = await pool.query('SELECT * FROM temas');
-        return rows;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM temas');
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     getById: async (id) => {
-        const [rows] = await pool.query('SELECT * FROM temas WHERE idtemas = ?', [id]);
-        return rows[0];
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM temas WHERE idtemas = ?', [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     create: async ({ titulo }) => {
-        const [result] = await pool.query(
-            'INSERT INTO temas (titulo) VALUES (?)',
-            [titulo]
-        );
-        return { idtemas: result.insertId, titulo };
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'INSERT INTO temas (titulo) VALUES (?)',
+                [titulo]
+            );
+            await connection.commit();
+            return { idtemas: result.insertId, titulo };
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     update: async (id, { titulo }) => {
-        const [result] = await pool.query(
-            'UPDATE temas SET titulo = ? WHERE idtemas = ?',
-            [titulo, id]
-        );
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'UPDATE temas SET titulo = ? WHERE idtemas = ?',
+                [titulo, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     delete: async (id) => {
-        const [result] = await pool.query('DELETE FROM temas WHERE idtemas = ?', [id]);
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM temas WHERE idtemas = ?', [id]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 

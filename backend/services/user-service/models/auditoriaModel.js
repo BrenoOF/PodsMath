@@ -2,34 +2,89 @@ const pool = require('../db/connections');
 
 const Auditoria = {
     getAll: async () => {
-        const [rows] = await pool.query('SELECT * FROM auditoria');
-        return rows;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM auditoria');
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     getById: async (id) => {
-        const [rows] = await pool.query('SELECT * FROM auditoria WHERE idauditoria = ?', [id]);
-        return rows[0];
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM auditoria WHERE idauditoria = ?', [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     create: async ({ idauditoria, usuarios_idusuarios, mensagem, dataHora }) => {
-        const [result] = await pool.query(
-            'INSERT INTO auditoria (idauditoria, usuarios_idusuarios, mensagem, dataHora) VALUES (?, ?, ?, ?)',
-            [idauditoria, usuarios_idusuarios, mensagem, dataHora]
-        );
-        return { idauditoria: result.insertId, usuarios_idusuarios, mensagem, dataHora };
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'INSERT INTO auditoria (idauditoria, usuarios_idusuarios, mensagem, dataHora) VALUES (?, ?, ?, ?)',
+                [idauditoria, usuarios_idusuarios, mensagem, dataHora]
+            );
+            await connection.commit();
+            return { idauditoria: result.insertId, usuarios_idusuarios, mensagem, dataHora };
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     update: async (id, { usuarios_idusuarios, mensagem, dataHora }) => {
-        const [result] = await pool.query(
-            'UPDATE auditoria SET usuarios_idusuarios = ?, mensagem = ?, dataHora = ? WHERE idauditoria = ?',
-            [usuarios_idusuarios, mensagem, dataHora, id]
-        );
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'UPDATE auditoria SET usuarios_idusuarios = ?, mensagem = ?, dataHora = ? WHERE idauditoria = ?',
+                [usuarios_idusuarios, mensagem, dataHora, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     delete: async (id) => {
-        const [result] = await pool.query('DELETE FROM auditoria WHERE idauditoria = ?', [id]);
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM auditoria WHERE idauditoria = ?', [id]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 
