@@ -1,5 +1,6 @@
 const express = require('express');
 
+const authRoutes = require('./routes/authRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const audioRoutes = require('./routes/audioRoutes');
 const auditoriaRoutes = require('./routes/auditoriaRoutes');
@@ -16,6 +17,7 @@ const app = express();
 
 app.use(express.json());
 
+app.use('/auth', authRoutes);
 app.use('/usuarios', usuarioRoutes);
 app.use('/audios', audioRoutes);
 app.use('/auditorias', auditoriaRoutes);

@@ -2,34 +2,89 @@ const pool = require('../db/connections');
 
 const PaletaCor = {
     getAll: async () => {
-        const [rows] = await pool.query('SELECT * FROM paletacor');
-        return rows;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM paletacor');
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     getById: async (id) => {
-        const [rows] = await pool.query('SELECT * FROM paletacor WHERE idpaletaCor = ?', [id]);
-        return rows[0];
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM paletacor WHERE idpaletaCor = ?', [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     create: async ({ idpaletaCor, nome, ativado }) => {
-        const [result] = await pool.query(
-            'INSERT INTO paletacor (idpaletaCor, nome, ativado) VALUES (?, ?, ?)',
-            [idpaletaCor, nome, ativado]
-        );
-        return { idpaletaCor: result.insertId, nome, ativado };
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'INSERT INTO paletacor (idpaletaCor, nome, ativado) VALUES (?, ?, ?)',
+                [idpaletaCor, nome, ativado]
+            );
+            await connection.commit();
+            return { idpaletaCor: result.insertId, nome, ativado };
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     update: async (id, { nome, ativado }) => {
-        const [result] = await pool.query(
-            'UPDATE paletacor SET nome = ?, ativado = ? WHERE idpaletaCor = ?',
-            [nome, ativado, id]
-        );
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'UPDATE paletacor SET nome = ?, ativado = ? WHERE idpaletaCor = ?',
+                [nome, ativado, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     delete: async (id) => {
-        const [result] = await pool.query('DELETE FROM paletacor WHERE idpaletaCor = ?', [id]);
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM paletacor WHERE idpaletaCor = ?', [id]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 

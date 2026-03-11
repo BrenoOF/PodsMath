@@ -1,4 +1,5 @@
 const Usuario = require('../models/usuarioModel');
+const bcrypt = require('bcrypt');
 
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
@@ -25,7 +26,11 @@ const usuarioController = {
 
     createUsuario: async (req, res) => {
         try {
-            const newUsuario = await Usuario.create(req.body);
+            const userData = { ...req.body };
+            if (userData.senha) {
+                userData.senha = await bcrypt.hash(userData.senha, 10);
+            }
+            const newUsuario = await Usuario.create(userData);
             res.status(201).json(newUsuario);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -34,7 +39,11 @@ const usuarioController = {
 
     updateUsuario: async (req, res) => {
         try {
-            const updated = await Usuario.update(req.params.id, req.body);
+            const userData = { ...req.body };
+            if (userData.senha) {
+                userData.senha = await bcrypt.hash(userData.senha, 10);
+            }
+            const updated = await Usuario.update(req.params.id, userData);
             if (updated) {
                 res.json({ message: 'Usuario atualizado' });
             } else {

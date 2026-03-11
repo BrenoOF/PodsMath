@@ -2,34 +2,89 @@ const pool = require('../db/connections');
 
 const Imagem = {
     getAll: async () => {
-        const [rows] = await pool.query('SELECT * FROM imagens');
-        return rows;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM imagens');
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     getById: async (id) => {
-        const [rows] = await pool.query('SELECT * FROM imagens WHERE idimagens = ?', [id]);
-        return rows[0];
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM imagens WHERE idimagens = ?', [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     create: async ({ idimagens, caminho_imagem }) => {
-        const [result] = await pool.query(
-            'INSERT INTO imagens (idimagens, caminho_imagem) VALUES (?, ?)',
-            [idimagens, caminho_imagem]
-        );
-        return { idimagens: result.insertId, caminho_imagem };
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'INSERT INTO imagens (idimagens, caminho_imagem) VALUES (?, ?)',
+                [idimagens, caminho_imagem]
+            );
+            await connection.commit();
+            return { idimagens: result.insertId, caminho_imagem };
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     update: async (id, { caminho_imagem }) => {
-        const [result] = await pool.query(
-            'UPDATE imagens SET caminho_imagem = ? WHERE idimagens = ?',
-            [caminho_imagem, id]
-        );
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'UPDATE imagens SET caminho_imagem = ? WHERE idimagens = ?',
+                [caminho_imagem, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     },
 
     delete: async (id) => {
-        const [result] = await pool.query('DELETE FROM imagens WHERE idimagens = ?', [id]);
-        return result.affectedRows > 0;
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM imagens WHERE idimagens = ?', [id]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 
