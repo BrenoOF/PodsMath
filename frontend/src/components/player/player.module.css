@@ -1,0 +1,148 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerPlayer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerPlayer {
+        display: block;
+        padding: 2rem;
+    }
+}
+
+.containerPlayer {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+.btnVoltar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 5.5rem;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    border-radius: 0.625rem;
+    background-color: var(--btn-1);
+    color: var(--branco);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btnVoltar:hover {
+    background-color: var(--btn-1-hover);
+}
+
+/* Estilo para a primeira div onde tem uma pequena apresentacao do podcast */
+.divApresentacaoPodcast {
+    display: flex;
+    gap: 2rem;
+}
+
+.imgApresentacaoPodcast {
+    width: 20rem;
+    height: 20rem;
+    border-radius: 1rem;
+    box-shadow: 0px 0px 12px var(--sombra);
+}
+
+.divTextosApresentacao {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.divTextosApresentacao>h1 {
+    font-size: 3rem;
+}
+
+.divTextosApresentacao>p {
+    font-size: 1.125rem;
+    color: var(--font-meio-apagada);
+}
+
+.ultimaDivApresentacao {
+    display: flex;
+    gap: 2rem;
+    color: var(--font-meio-apagada);
+}
+
+/* Estilo para separação de conteúdos  */
+.hrSeparacao {
+    border: 0.1rem solid var(--border-color-tema);
+    margin: 2rem 0rem;
+}
+
+/* Estilos para a descrição do podcast */
+.divDescricao>h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.divDescricao>p {
+    font-size: 1rem;
+    color: var(--font-meio-apagada);
+}
+
+/* Estilos para a Transcrição */
+.divTranscricao {}
+
+.divTranscricaoTitulo {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+}
+
+.divTranscricaoTitulo>h1 {
+    font-size: 1.5rem;
+}
+
+.btnTranscricao{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.7rem;
+    border: 0.1rem solid var(--border-color-tema);
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+/* Estilo para Modal de troca de Transcrição */
+.menuIdiomas{
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    padding: 0.75rem;
+
+    position: absolute;
+    top: 2.5rem;
+    right: 0rem;
+
+    background: var(--surface-card, var(--branco));
+    border-radius: 0.8rem;
+    border: solid 0.1rem var(--border-color-tema);
+    box-shadow: 0px 4px 10px var(--sombra);
+}
+
+.opcaoIdioma{
+    display: flex;
+    gap: 1rem;
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.4rem;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.opcaoIdioma:hover{
+    background-color: var(--cor-laranja-escuro);
+    color: var(--branco);
+}
