@@ -38,10 +38,10 @@ const Audio = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio } = audioData;
+            const { temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas } = audioData;
             const [result] = await connection.query(
-                'INSERT INTO audios (usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio) VALUES (?, ?, ?, ?, ?, ?, ?)',
-                [usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio]
+                'INSERT INTO audios (temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                [temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes || 0, titulo, descricao, idiomas_ididiomas]
             );
             await connection.commit();
             return { idaudios: result.insertId, ...audioData };
@@ -58,10 +58,10 @@ const Audio = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio } = audioData;
+            const { temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas } = audioData;
             const [result] = await connection.query(
-                'UPDATE audios SET usuarios_idusuarios = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ?, caminho_audio = ? WHERE idaudios = ?',
-                [usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, caminho_audio, id]
+                'UPDATE audios SET temas_idtemas = ?, usuarios_idusuarios = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ? WHERE idaudios = ?',
+                [temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, id]
             );
             await connection.commit();
             return result.affectedRows > 0;

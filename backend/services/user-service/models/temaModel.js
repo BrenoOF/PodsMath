@@ -33,17 +33,17 @@ const Tema = {
         }
     },
 
-    create: async ({ titulo }) => {
+    create: async ({ titulo, categorias_idcategorias, imagens_idimagens }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'INSERT INTO temas (titulo) VALUES (?)',
-                [titulo]
+                'INSERT INTO temas (titulo, categorias_idcategorias, imagens_idimagens) VALUES (?, ?, ?)',
+                [titulo, categorias_idcategorias, imagens_idimagens]
             );
             await connection.commit();
-            return { idtemas: result.insertId, titulo };
+            return { idtemas: result.insertId, titulo, categorias_idcategorias, imagens_idimagens };
         } catch (error) {
             if (connection) await connection.rollback();
             throw error;
@@ -52,14 +52,14 @@ const Tema = {
         }
     },
 
-    update: async (id, { titulo }) => {
+    update: async (id, { titulo, categorias_idcategorias, imagens_idimagens }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'UPDATE temas SET titulo = ? WHERE idtemas = ?',
-                [titulo, id]
+                'UPDATE temas SET titulo = ?, categorias_idcategorias = ?, imagens_idimagens = ? WHERE idtemas = ?',
+                [titulo, categorias_idcategorias, imagens_idimagens, id]
             );
             await connection.commit();
             return result.affectedRows > 0;

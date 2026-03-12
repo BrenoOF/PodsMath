@@ -33,6 +33,22 @@ const Transcricao = {
         }
     },
 
+    getByAudioId: async (audioId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM transcricao WHERE audios_idaudios = ?', [audioId]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
     create: async ({ textoTranscricao, audios_idaudios, idiomas_ididiomas }) => {
         let connection;
         try {

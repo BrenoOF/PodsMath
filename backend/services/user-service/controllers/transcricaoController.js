@@ -32,6 +32,19 @@ const transcricaoController = {
         }
     },
 
+    getTranscricaoByAudioId: async (req, res) => {
+        try {
+            const transcricao = await Transcricao.getByAudioId(req.params.audioId);
+            if (transcricao) {
+                res.json(transcricao);
+            } else {
+                res.status(404).json({ message: 'Transcrição não encontrada para este áudio' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
     updateTranscricao: async (req, res) => {
         try {
             const updated = await Transcricao.update(req.params.id, req.body);
