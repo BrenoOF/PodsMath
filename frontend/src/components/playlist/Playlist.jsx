@@ -66,11 +66,14 @@ export default function TelaPlaylist() {
             </div>
             {/* Menuzinho Básico */}
             <div className={Style.divMenu}>
-                <div className={Style.divIconPlay}>
+                <div className={Style.divIconPlay} 
+                // Ideia Futura para pegar o Histórico e quando clicar ir para o ultimo ep assistido
+                // onClick={() => {
+                //     navigate(`/explorar/${idTema}/${playlistTema}/${dadosPlaylist[0].id}`);
+                // }}
+                >
                     <i className="fa-solid fa-play"></i>
                 </div>
-                {/* perguntar para o breno */}
-                <i className="fa-solid fa-heart" style={{ color: "#f00"}}></i>
                 <i className="fa-solid fa-share-nodes"></i>
             </div>
             {/* Tabela para colocar podcasts */}

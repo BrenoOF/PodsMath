@@ -13,6 +13,7 @@ import Historico from "./components/historico/Historico";
 
 import Temas from "./components/tema/Tema";
 import Playlist from "./components/playlist/Playlist";
+import Player from "./components/player/Player";
 
 export default function App() {
     return (
@@ -28,7 +29,7 @@ export default function App() {
                     <Route path="/explorar" element={<Explorar />} />
                     <Route path="/explorar/:idTema" element={<Temas />} />
                     <Route path="/explorar/:idTema/:playlistTema" element={<Playlist />} />
-                    <Route path="/explorar/:idTema/:playlistTema/:idPodcast" element={<h1>Player Não Está Pronto</h1>} />
+                    <Route path="/explorar/:idTema/:playlistTema/:idPodcast" element={<Player />} />
 
                     <Route path="/historico" element={<Historico />} />
                     <Route path="/favoritos" element={<Favoritos />} />
