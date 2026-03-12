@@ -9,9 +9,60 @@ export default function TelaPlayer() {
     const { idTema, playlistTema, idPodcast } = useParams();
     const [dadosPlayer, setDadosPlayer] = useState(null);
 
+    // States para o Player em si
+    const [pause, setPause] = useState(false);
+    const [favoritar, setFavoritar] = useState(false);
+    const [tempoAtual, setTempoAtual] = useState(0);
+    const [duracaoTotal, setDuracaoTotal] = useState(477);
+    const [arrastando, setArrastando] = useState(false);
+
+    const progresso = (tempoAtual / duracaoTotal) * 100;
+
+    const formatarTempo = (segundos) => {
+        const min = Math.floor(segundos / 60);
+        const sec = segundos % 60;
+        return `${min}:${sec < 10 ? "0" : ""}${sec}`;
+    }
+
+    const duracaoParaSegundos = (tempo) => {
+        const [min, sec] = tempo.split(":").map(Number);
+        return min * 60 + sec;
+    }
+
+    const barraRef = useRef(null);
+
+    const handleClickBarra = (e) => {
+        const barra = barraRef.current;
+        const rect = barra.getBoundingClientRect();
+
+        const clickX = e.clientX - rect.left;
+        const largura = rect.width;
+
+        const porcentagem = clickX / largura;
+
+        const novoTempo = Math.floor(porcentagem * duracaoTotal);
+
+        setTempoAtual(novoTempo);
+    };
+
+    const atualizarTempo = React.useCallback((clientX) => {
+        const barra = barraRef.current;
+        const rect = barra.getBoundingClientRect();
+
+        let posicao = clientX - rect.left;
+        let porcentagem = posicao / rect.width;
+
+        if (porcentagem < 0) porcentagem = 0;
+        if (porcentagem > 1) porcentagem = 1;
+
+        const novoTempo = Math.floor(porcentagem * duracaoTotal);
+        setTempoAtual(novoTempo);
+    }, [duracaoTotal]);
+
+    // Código para Fazer a parte da transcrição
     const [menuAberto, setMenuAberto] = useState(false);
     const [linguaSelecionada, setLinguaSelecionada] = useState("pt-br");
-    // Código para Fazer a parte da transcrição
+
     const linguas = [
         { label: "Português", value: "pt-br", icon: "br" },
         { label: "Inglês", value: "us", icon: "us" },
@@ -53,6 +104,7 @@ export default function TelaPlayer() {
                 );
                 if (episodio) {
                     setDadosPlayer(episodio);
+                    setDuracaoTotal(duracaoParaSegundos(episodio.duracao));
                 }
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
@@ -60,6 +112,45 @@ export default function TelaPlayer() {
         }
         carregarDados();
     }, [idTema, playlistTema, idPodcast]);
+
+    // Simular passagem de tempo
+    useEffect(() => {
+        let intervalo;
+
+        if (pause) {
+            intervalo = setInterval(() => {
+                setTempoAtual((prev) => {
+                    if (prev >= duracaoTotal) {
+                        clearInterval(intervalo);
+                        setPause(false);
+                        return duracaoTotal;
+                    }
+                    return prev + 1;
+                });
+            }, 1000);
+        }
+
+        return () => clearInterval(intervalo);
+    }, [pause, duracaoTotal]);
+
+    useEffect(() => {
+        const moverMouse = (e) => {
+            if (!arrastando) return;
+            atualizarTempo(e.clientX);
+        };
+
+        const pararArrastar = () => {
+            setArrastando(false);
+        };
+
+        document.addEventListener("mousemove", moverMouse);
+        document.addEventListener("mouseup", pararArrastar);
+
+        return () => {
+            document.removeEventListener("mousemove", moverMouse);
+            document.removeEventListener("mouseup", pararArrastar);
+        };
+    }, [arrastando, atualizarTempo]);
 
     return (
         <div className={Style.containerPlayer}>
@@ -129,7 +220,61 @@ export default function TelaPlayer() {
                 </div>
             </div>
             <div>
-                {/* Player */}
+                <div>
+                    <p>{formatarTempo(tempoAtual)}</p>
+                    {/* Barra de Progresso */}
+                    <div className={Style.barraProgresso} onClick={handleClickBarra}
+                        ref={barraRef}
+                    >
+                        {/* Barra em si */}
+                        <div className={Style.progresso} style={{ width: `${progresso}%` }}></div>
+                        {/* Bolinha da Barra */}
+                        <div className={Style.thumb} style={{ left: `${progresso}%` }}
+                            onMouseDown={() => setArrastando(true)}
+                        ></div>
+                    </div>
+                    {/*  */}
+                    <p>{formatarTempo(duracaoTotal)}</p>
+                </div>
+                <div>
+                    <div>
+                        <i className="fa-solid fa-backward"
+                            onClick={() => setTempoAtual((t) => Math.max(t - 10, 0))}
+                        ></i>
+                        <div className={Style.divIconPlay}
+                            onClick={() => { setPause(!pause) }}
+                        >
+                            {!pause ? (
+                                <i className="fa-solid fa-play"></i>
+                            ) : (
+                                <i className="fa-solid fa-pause"></i>
+                            )}
+                        </div>
+                        <i className="fa-solid fa-forward"
+                            onClick={() => setTempoAtual((t) => Math.min(t + 10, duracaoTotal))}
+                        ></i>
+                    </div>
+                    <div>
+                        <i className="fa-solid fa-gear"></i>
+                        <div>
+                            <i className="fa-solid fa-volume"></i>
+                            <i className="fa-solid fa-volume-low"></i>
+                            <i className="fa-solid fa-volume-xmark"></i>
+                        </div>
+                        <i className="fa-solid fa-repeat"></i>
+                        <div>
+                            {!favoritar ? (
+                                <i className="fa-regular fa-heart"
+                                    onClick={() => { setFavoritar(!favoritar) }}
+                                ></i>
+                            ) : (
+                                <i className="fa-solid fa-heart"
+                                    onClick={() => { setFavoritar(!favoritar) }}
+                                ></i>
+                            )}
+                        </div>
+                    </div>
+                </div>
             </div>
         </div >
     );

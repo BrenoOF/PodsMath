@@ -14,6 +14,9 @@ export default function TelaLayout() {
 
     const { pathname } = useLocation();
 
+    const partesUrl = pathname.split("/").filter(Boolean);
+    const estaNaPaginaPlayer = partesUrl[0] === "explorar" && partesUrl.length === 4;
+
     // Função que leva o scroll para o topo
     const voltarAoTopo = () => {
         mainRef.current.scrollTo({
@@ -55,7 +58,7 @@ export default function TelaLayout() {
                     <Outlet />
                 </div>
             </main>
-            {mostrarBtnTopo && (
+            {mostrarBtnTopo && !estaNaPaginaPlayer && (
                 <div
                     className={Style.btnVoltarTopo}
                     onClick={() => voltarAoTopo()}
