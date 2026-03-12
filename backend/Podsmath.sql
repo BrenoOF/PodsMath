@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `podsmath`.`usuarios` (
   `instituicoes_idinstituicoes` INT(11) NULL DEFAULT NULL,
   `nome` VARCHAR(45) NULL DEFAULT NULL,
   `email` VARCHAR(45) NULL DEFAULT NULL,
-  `senha` VARCHAR(45) NULL DEFAULT NULL,
+  `senha` VARCHAR(60) NULL DEFAULT NULL,
   `id_usuario_professor` INT(11) NULL DEFAULT NULL,
   `nivel_acesso_idnivel_acesso` INT(11) NOT NULL,
   `paletaCor_idpaletaCor` INT(11) NOT NULL,
