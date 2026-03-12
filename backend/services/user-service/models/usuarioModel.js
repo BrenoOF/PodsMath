@@ -54,10 +54,10 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados } = usuarioData;
+            const { idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
             const [result] = await connection.query(
-                'INSERT INTO usuarios (idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados]
+                'INSERT INTO usuarios (idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens]
             );
             await connection.commit();
             return { idusuarios: result.insertId, ...usuarioData };

@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Transcription Service</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: system-ui, sans-serif; background: #0f0f0f; color: #e0e0e0; padding: 2rem; }
+        h1 { color: #7c8aff; margin-bottom: 2rem; }
+        h2 { color: #a0a8ff; margin-bottom: 1rem; }
+        .card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
+        label { display: block; margin-bottom: .3rem; font-size: .85rem; color: #888; }
+        input { width: 100%; padding: .5rem; margin-bottom: .8rem; border: 1px solid #333; border-radius: 6px; background: #111; color: #eee; font-size: .9rem; }
+        button { padding: .6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: .9rem; font-weight: 600; }
+        .btn-post { background: #4c6ef5; color: #fff; }
+        .btn-get { background: #37b24d; color: #fff; }
+        button:hover { opacity: .85; }
+        button:disabled { opacity: .4; cursor: not-allowed; }
+        .result { margin-top: 1rem; padding: 1rem; background: #111; border-radius: 8px; white-space: pre-wrap; font-family: monospace; font-size: .8rem; min-height: 40px; }
+        audio { margin-top: 1rem; width: 100%; }
+        .transcription-text { margin-top: 1rem; padding: 1rem; background: #1e1e3a; border-radius: 8px; line-height: 1.6; }
+        .row { display: flex; gap: 1rem; }
+        .row > * { flex: 1; }
+        .status-badge { display: inline-block; padding: .3rem .8rem; border-radius: 20px; font-size: .75rem; font-weight: 600; text-transform: uppercase; }
+        .status-queued { background: #ffa94d33; color: #ffa94d; }
+        .status-transcribing { background: #4c6ef533; color: #748ffc; }
+        .status-saving { background: #7c3aed33; color: #b197fc; }
+        .status-completed { background: #37b24d33; color: #69db7c; }
+        .status-error { background: #f0383833; color: #ff6b6b; }
+        .status-processing { background: #4c6ef533; color: #748ffc; }
+        #statusArea { margin-top: 1rem; }
+    </style>
+</head>
+<body>
+    <h1>🎙️ Transcription Service - Teste</h1>
+
+    <!-- POST -->
+    <div class="card">
+        <h2>📤 POST /transcricao</h2>
+        <form id="postForm">
+            <label>Arquivo de áudio</label>
+            <input type="file" id="audioFile" accept="audio/*" required>
+            <div class="row">
+                <div><label>Título</label><input type="text" id="titulo" value="Teste de transcrição"></div>
+                <div><label>Descrição</label><input type="text" id="descricao" value="Audio de teste"></div>
+            </div>
+            <div class="row">
+                <div><label>temas_idtemas</label><input type="number" id="temas_idtemas" value="2"></div>
+                <div><label>usuarios_idusuarios</label><input type="number" id="usuarios_idusuarios" value="2"></div>
+                <div><label>idiomas_ididiomas</label><input type="number" id="idiomas_ididiomas" value="2"></div>
+                <div><label>imagens_idimagens</label><input type="number" id="imagens_idimagens" value="2"></div>
+            </div>
+            <button type="submit" class="btn-post" id="postBtn">Enviar Áudio</button>
+        </form>
+        <div class="result" id="postResult"></div>
+    </div>
+
+    <!-- GET -->
+    <div class="card">
+        <h2>📥 GET /transcricao/:id</h2>
+        <div class="row">
+            <div><label>ID do áudio</label><input type="number" id="audioId" placeholder="Ex: 1"></div>
+            <div style="display:flex; align-items:flex-end;">
+                <button type="button" class="btn-get" onclick="buscarTranscricao()">Buscar</button>
+            </div>
+        </div>
+        <div id="statusArea"></div>
+        <div class="result" id="getResult"></div>
+        <div id="audioPlayer"></div>
+        <div id="transcricaoTexto"></div>
+    </div>
+
+    <script>
+        let pollInterval = null;
+
+        // POST
+        document.getElementById('postForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('postBtn');
+            const result = document.getElementById('postResult');
+            btn.disabled = true;
+            btn.textContent = '⏳ Enviando...';
+            result.textContent = '';
+
+            const fd = new FormData();
+            fd.append('audio', document.getElementById('audioFile').files[0]);
+            fd.append('titulo', document.getElementById('titulo').value);
+            fd.append('descricao', document.getElementById('descricao').value);
+            fd.append('temas_idtemas', document.getElementById('temas_idtemas').value);
+            fd.append('usuarios_idusuarios', document.getElementById('usuarios_idusuarios').value);
+            fd.append('idiomas_ididiomas', document.getElementById('idiomas_ididiomas').value);
+            fd.append('imagens_idimagens', document.getElementById('imagens_idimagens').value);
+
+            try {
+                const res = await fetch('/transcricao', { method: 'POST', body: fd });
+                const data = await res.json();
+                result.textContent = JSON.stringify(data, null, 2);
+
+                if (data.audioId) {
+                    document.getElementById('audioId').value = data.audioId;
+                    // Auto-poll status
+                    startPolling(data.audioId);
+                }
+            } catch (err) {
+                result.textContent = 'ERRO: ' + err.message;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Enviar Áudio';
+            }
+        });
+
+        function startPolling(id) {
+            if (pollInterval) clearInterval(pollInterval);
+            document.getElementById('statusArea').innerHTML = '<span class="status-badge status-queued">Acompanhando...</span>';
+
+            pollInterval = setInterval(async () => {
+                await buscarTranscricao(id, true);
+            }, 2000);
+        }
+
+        // GET
+        async function buscarTranscricao(idOverride, isPolling) {
+            const id = idOverride || document.getElementById('audioId').value;
+            if (!id) return alert('Digite um ID');
+
+            const statusArea = document.getElementById('statusArea');
+            const resultDiv = document.getElementById('getResult');
+            const playerDiv = document.getElementById('audioPlayer');
+            const textoDiv = document.getElementById('transcricaoTexto');
+
+            if (!isPolling) {
+                resultDiv.textContent = '';
+                playerDiv.innerHTML = '';
+                textoDiv.innerHTML = '';
+            }
+
+            try {
+                const res = await fetch(`/transcricao/${id}`);
+                const data = await res.json();
+
+                // Status badge + progress
+                const status = data.status || 'unknown';
+                let statusHtml = `<span class="status-badge status-${status}">${status}</span>`;
+
+                if (data.posicaoFila) statusHtml += ` Posição na fila: ${data.posicaoFila}`;
+                if (data.queuedAt) statusHtml += ` | Na fila desde: ${new Date(data.queuedAt).toLocaleTimeString()}`;
+
+                if (status === 'transcribing') {
+                    const pct = data.progressPercent || 0;
+                    const remaining = data.estimatedRemainingSec;
+                    const elapsed = data.elapsedMs ? Math.round(data.elapsedMs / 1000) : 0;
+                    statusHtml += `<div style="margin-top:.8rem">`;
+                    statusHtml += `<div style="background:#222;border-radius:8px;height:24px;overflow:hidden;position:relative">`;
+                    statusHtml += `<div style="background:linear-gradient(90deg,#4c6ef5,#748ffc);height:100%;width:${pct}%;transition:width .5s;border-radius:8px;"></div>`;
+                    statusHtml += `<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.75rem;font-weight:700">${pct}%</span>`;
+                    statusHtml += `</div>`;
+                    statusHtml += `<div style="margin-top:.4rem;font-size:.8rem;color:#888">`;
+                    statusHtml += `⏱️ ${elapsed}s decorridos`;
+                    if (remaining !== undefined) statusHtml += ` · ~${remaining}s restantes`;
+                    statusHtml += `</div></div>`;
+                }
+
+                statusArea.innerHTML = statusHtml;
+
+                if (status === 'completed') {
+                    // Para de fazer polling
+                    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+
+                    resultDiv.textContent = JSON.stringify({
+                        audioId: data.audioId,
+                        titulo: data.titulo,
+                        descricao: data.descricao,
+                        status: data.status
+                    }, null, 2);
+
+                    playerDiv.innerHTML = '';
+                    if (data.audio && data.audio.dataUrl) {
+                        const audio = document.createElement('audio');
+                        audio.controls = true;
+                        audio.src = data.audio.dataUrl;
+                        playerDiv.appendChild(audio);
+                    }
+
+                    textoDiv.innerHTML = '';
+                    if (data.transcricao && data.transcricao.texto) {
+                        textoDiv.innerHTML = '<strong>Transcrição:</strong><br>' + data.transcricao.texto;
+                        textoDiv.classList.add('transcription-text');
+                    }
+                } else if (status === 'error') {
+                    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                }
+
+            } catch (err) {
+                resultDiv.textContent = 'ERRO: ' + err.message;
+                if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+            }
+        }
+    </script>
+</body>
+</html>

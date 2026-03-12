@@ -1,28 +1,16 @@
 require('dotenv').config({ path: '../../config/.env' });
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 
-// URL de conexão padrão ou via variável de ambiente
-const url = process.env.MONGO_URI || 'mongodb://localhost:27017';
-const client = new MongoClient(url);
-const dbName = 'podsmath_transcriptions';
+const mongoUri = process.env.MONGO_URI || 'mongodb://localhost:27017/podsmath';
 
-let db = null;
-
-async function connectToDatabase() {
+async function connectMongo() {
     try {
-        if (db) return db;
-        await client.connect();
-        console.log('Conectado ao MongoDB no serviço de transcrição');
-        db = client.db(dbName);
-        return db;
+        await mongoose.connect(mongoUri);
+        console.log('Conectado ao MongoDB (Mongoose) no serviço de transcrição');
     } catch (error) {
         console.error('Erro ao conectar ao MongoDB:', error);
         throw error;
     }
 }
 
-function getDb() {
-    return db;
-}
-
-module.exports = { connectToDatabase, getDb };
+module.exports = { connectMongo };

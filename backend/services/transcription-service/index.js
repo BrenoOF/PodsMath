@@ -1,11 +1,14 @@
 const express = require('express');
-const { connectToDatabase } = require('./db/connection');
+const path = require('path');
+const { connectMongo } = require('./db/connection');
 const transcriptionRoutes = require('./routes/transcriptionRoutes');
 
 const app = express();
 const PORT = 3002;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Rotas
 app.use('/transcricao', transcriptionRoutes);
@@ -13,8 +16,9 @@ app.use('/transcricao', transcriptionRoutes);
 // Inicialização
 const startServer = async () => {
     try {
-        await connectToDatabase();
-        
+        // Conecta ao MongoDB (Mongoose)
+        await connectMongo();
+
         app.listen(PORT, () => {
             console.log(`Transcription Service rodando na porta ${PORT}`);
         });

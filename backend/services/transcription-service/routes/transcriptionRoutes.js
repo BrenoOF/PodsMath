@@ -23,7 +23,10 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-// Rota POST /transcricao
+// POST /transcricao — Upload de áudio + transcrição
 router.post('/', upload.single('audio'), transcriptionController.createTranscription);
+
+// GET /transcricao/:id — Busca áudio + transcrição
+router.get('/:id', transcriptionController.getTranscription);
 
 module.exports = router;
