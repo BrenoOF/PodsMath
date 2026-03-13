@@ -8,7 +8,6 @@ import StyleExterno from "../home/carrosseis/carrosseis.module.css";
 export default function TelaTema() {
     const navigate = useNavigate();
     const { idTema } = useParams();
-    const { playlistTema } = useParams();
     const [tituloAssunto, setTituloAssunto] = useState("");
     const [dadosTemas, setDadosTemas] = useState([]);
 

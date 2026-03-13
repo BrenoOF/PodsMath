@@ -9,56 +9,6 @@ export default function TelaPlayer() {
     const { idTema, playlistTema, idPodcast } = useParams();
     const [dadosPlayer, setDadosPlayer] = useState(null);
 
-    // States para o Player em si
-    const [pause, setPause] = useState(false);
-    const [favoritar, setFavoritar] = useState(false);
-    const [tempoAtual, setTempoAtual] = useState(0);
-    const [duracaoTotal, setDuracaoTotal] = useState(477);
-    const [arrastando, setArrastando] = useState(false);
-
-    const progresso = (tempoAtual / duracaoTotal) * 100;
-
-    const formatarTempo = (segundos) => {
-        const min = Math.floor(segundos / 60);
-        const sec = segundos % 60;
-        return `${min}:${sec < 10 ? "0" : ""}${sec}`;
-    }
-
-    const duracaoParaSegundos = (tempo) => {
-        const [min, sec] = tempo.split(":").map(Number);
-        return min * 60 + sec;
-    }
-
-    const barraRef = useRef(null);
-
-    const handleClickBarra = (e) => {
-        const barra = barraRef.current;
-        const rect = barra.getBoundingClientRect();
-
-        const clickX = e.clientX - rect.left;
-        const largura = rect.width;
-
-        const porcentagem = clickX / largura;
-
-        const novoTempo = Math.floor(porcentagem * duracaoTotal);
-
-        setTempoAtual(novoTempo);
-    };
-
-    const atualizarTempo = React.useCallback((clientX) => {
-        const barra = barraRef.current;
-        const rect = barra.getBoundingClientRect();
-
-        let posicao = clientX - rect.left;
-        let porcentagem = posicao / rect.width;
-
-        if (porcentagem < 0) porcentagem = 0;
-        if (porcentagem > 1) porcentagem = 1;
-
-        const novoTempo = Math.floor(porcentagem * duracaoTotal);
-        setTempoAtual(novoTempo);
-    }, [duracaoTotal]);
-
     // Código para Fazer a parte da transcrição
     const [menuAberto, setMenuAberto] = useState(false);
     const [linguaSelecionada, setLinguaSelecionada] = useState("pt-br");
@@ -89,6 +39,75 @@ export default function TelaPlayer() {
         return () => { document.removeEventListener("pointerdown", handleClickOutside) };
     }, [menuAberto]);
 
+    // States para o Player em si
+    const [favoritar, setFavoritar] = useState(false);
+    const [tocando, setTocando] = useState(false);
+    const [volume, setVolume] = useState(1);
+
+    const [tempoAtual, setTempoAtual] = useState(0);
+    const [duracaoTotal, setDuracaoTotal] = useState(477);
+
+    const [arrastando, setArrastando] = useState(false);
+
+    const audioRef = useRef(null);
+    const barraRef = useRef(null);
+
+    const progresso = (tempoAtual / duracaoTotal) * 100 || 0;
+
+    const formatarTempo = (s) => {
+        const m = Math.floor(s / 60);
+        const sec = Math.floor(s % 60).toString().padStart(2, "0");
+        return `${m}:${sec}`;
+    };
+
+    // Pause
+    const togglePlay = () => {
+        const audio = audioRef.current;
+        if (audio.paused) {
+            audio.play();
+            setTocando(true);
+        } else {
+            audio.pause();
+            setTocando(false);
+        }
+    };
+    // Volume
+    const iconeVolume = () => {
+        if (volume === 0) return "fa-volume-xmark";
+        if (volume <= 0.5) return "fa-volume-low";
+        return "fa-volume-high";
+    };
+    const alterarVolume = (valor) => {
+        const novoVolume = Math.min(Math.max(valor, 0), 1);
+        setVolume(novoVolume);
+    };
+    // Avançar pela Barra
+    const handleClickBarra = (e) => {
+        const rect = barraRef.current.getBoundingClientRect();
+
+        const porcentagem = (e.clientX - rect.left) / rect.width;
+        const novoTempo = porcentagem * duracaoTotal;
+
+        audioRef.current.currentTime = novoTempo;
+        setTempoAtual(novoTempo);
+    };
+
+    const atualizarTempo = React.useCallback((clientX) => {
+        const barra = barraRef.current;
+        const rect = barra.getBoundingClientRect();
+
+        let posicao = clientX - rect.left;
+        let porcentagem = posicao / rect.width;
+
+        if (porcentagem < 0) porcentagem = 0;
+        if (porcentagem > 1) porcentagem = 1;
+
+        const novoTempo = Math.floor(porcentagem * duracaoTotal);
+        audioRef.current.currentTime = novoTempo;
+        setTempoAtual(novoTempo);
+    }, [duracaoTotal]);
+
+    // Carregar dados do Podcast
     useEffect(() => {
         const carregarDados = async () => {
             try {
@@ -104,7 +123,6 @@ export default function TelaPlayer() {
                 );
                 if (episodio) {
                     setDadosPlayer(episodio);
-                    setDuracaoTotal(duracaoParaSegundos(episodio.duracao));
                 }
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
@@ -113,35 +131,46 @@ export default function TelaPlayer() {
         carregarDados();
     }, [idTema, playlistTema, idPodcast]);
 
-    // Simular passagem de tempo
+    // Tocar Audio
     useEffect(() => {
-        let intervalo;
+        const audio = audioRef.current;
 
-        if (pause) {
-            intervalo = setInterval(() => {
-                setTempoAtual((prev) => {
-                    if (prev >= duracaoTotal) {
-                        clearInterval(intervalo);
-                        setPause(false);
-                        return duracaoTotal;
-                    }
-                    return prev + 1;
-                });
-            }, 1000);
+        const atualizarTempo = () => {
+            setTempoAtual(audio.currentTime);
+        };
+
+        const carregarDuracao = () => {
+            setDuracaoTotal(Math.floor(audio.duration));
+        };
+
+        const terminouAudio = () => {
+            setTocando(false);
+        };
+
+        audio.addEventListener("timeupdate", atualizarTempo);
+        audio.addEventListener("loadedmetadata", carregarDuracao);
+        audio.addEventListener("ended", terminouAudio);
+
+        return () => {
+            audio.removeEventListener("timeupdate", atualizarTempo);
+            audio.removeEventListener("loadedmetadata", carregarDuracao);
+            audio.removeEventListener("ended", terminouAudio);
+        };
+    }, []);
+
+    // Controle de Volume
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
         }
+    }, [volume]);
 
-        return () => clearInterval(intervalo);
-    }, [pause, duracaoTotal]);
-
+    // Fazer o click arrastar do mouse na barra de progesso funcione
     useEffect(() => {
-        const moverMouse = (e) => {
-            if (!arrastando) return;
-            atualizarTempo(e.clientX);
-        };
+        if (!arrastando) return;
 
-        const pararArrastar = () => {
-            setArrastando(false);
-        };
+        const moverMouse = (e) => atualizarTempo(e.clientX);
+        const pararArrastar = () => setArrastando(false);
 
         document.addEventListener("mousemove", moverMouse);
         document.addEventListener("mouseup", pararArrastar);
@@ -152,8 +181,27 @@ export default function TelaPlayer() {
         };
     }, [arrastando, atualizarTempo]);
 
+    // Deixar a Barra de Progresso em 60fps
+    useEffect(() => {
+        let frame;
+
+        const atualizar = () => {
+            if (audioRef.current) {
+                setTempoAtual(audioRef.current.currentTime);
+            }
+            frame = requestAnimationFrame(atualizar);
+        };
+
+        frame = requestAnimationFrame(atualizar);
+
+        return () => cancelAnimationFrame(frame);
+    }, []);
+
     return (
         <div className={Style.containerPlayer}>
+            {/* Audio do Podcast */}
+            <audio ref={audioRef} src="/audio/teste.mp3"></audio>
+            {/* Apresentção do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
                 <p>Voltar</p>
@@ -219,8 +267,8 @@ export default function TelaPlayer() {
                     {/* Parte onde aparecerá a transcrição */}
                 </div>
             </div>
-            <div>
-                <div>
+            <div className={Style.containerTocador}>
+                <div className={Style.barraAudio}>
                     <p>{formatarTempo(tempoAtual)}</p>
                     {/* Barra de Progresso */}
                     <div className={Style.barraProgresso} onClick={handleClickBarra}
@@ -230,39 +278,58 @@ export default function TelaPlayer() {
                         <div className={Style.progresso} style={{ width: `${progresso}%` }}></div>
                         {/* Bolinha da Barra */}
                         <div className={Style.thumb} style={{ left: `${progresso}%` }}
-                            onMouseDown={() => setArrastando(true)}
+                            onMouseDown={(e) => {
+                                e.stopPropagation();
+                                setArrastando(true);
+                            }}
                         ></div>
                     </div>
                     {/*  */}
                     <p>{formatarTempo(duracaoTotal)}</p>
                 </div>
-                <div>
-                    <div>
+                <div className={Style.divParteBaixoTocador}>
+                    <div className={Style.menuManipulacaoAudio}>
                         <i className="fa-solid fa-backward"
-                            onClick={() => setTempoAtual((t) => Math.max(t - 10, 0))}
+                            onClick={() => {
+                                audioRef.current.currentTime = Math.max(
+                                    audioRef.current.currentTime - 10,
+                                    0
+                                );
+                            }}
                         ></i>
                         <div className={Style.divIconPlay}
-                            onClick={() => { setPause(!pause) }}
+                            onClick={togglePlay}
                         >
-                            {!pause ? (
+                            {!tocando ? (
                                 <i className="fa-solid fa-play"></i>
                             ) : (
                                 <i className="fa-solid fa-pause"></i>
                             )}
                         </div>
                         <i className="fa-solid fa-forward"
-                            onClick={() => setTempoAtual((t) => Math.min(t + 10, duracaoTotal))}
+                            onClick={() => {
+                                audioRef.current.currentTime = Math.min(
+                                    audioRef.current.currentTime + 10,
+                                    duracaoTotal
+                                );
+                            }}
                         ></i>
                     </div>
-                    <div>
+                    <div className={Style.divConfigsPlus}>
                         <i className="fa-solid fa-gear"></i>
-                        <div>
-                            <i className="fa-solid fa-volume"></i>
-                            <i className="fa-solid fa-volume-low"></i>
-                            <i className="fa-solid fa-volume-xmark"></i>
+                        <div className={Style.divVolume}>
+                            <i className={`fa-solid ${iconeVolume()}`}></i>
+                            <input
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                value={volume}
+                                onChange={(e) => alterarVolume(parseFloat(e.target.value))}
+                            />
                         </div>
                         <i className="fa-solid fa-repeat"></i>
-                        <div>
+                        <div className={Style.divFavoritar}>
                             {!favoritar ? (
                                 <i className="fa-regular fa-heart"
                                     onClick={() => { setFavoritar(!favoritar) }}
