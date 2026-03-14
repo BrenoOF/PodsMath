@@ -319,7 +319,7 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `podsmath`.`transcricao` (
   `idTranscricao` INT(11) NOT NULL AUTO_INCREMENT,
-  `textoTranscricao` TEXT NOT NULL,
+  `textoTranscricao` MEDIUMTEXT NOT NULL,
   `audios_idaudios` INT(11) NOT NULL,
   `idiomas_ididiomas` INT(11) NOT NULL,
   PRIMARY KEY (`idTranscricao`),

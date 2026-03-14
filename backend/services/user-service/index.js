@@ -1,3 +1,4 @@
+require('dotenv').config({ path: '../../config/.env' });
 const express = require('express');
 
 const authRoutes = require('./routes/authRoutes');
@@ -18,8 +19,10 @@ const categoriaNivelAcessoRoutes = require('./routes/categoriaNivelAcessoRoutes'
 const configNivelAcessoRoutes = require('./routes/configNivelAcessoRoutes');
 
 const app = express();
+const PORT = process.env.USER_SERVICE_PORT || 3001;
 
-app.use(express.json());
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 app.use('/auth', authRoutes);
 app.use('/usuarios', usuarioRoutes);
@@ -38,6 +41,6 @@ app.use('/favoritos', favoritoRoutes);
 app.use('/categorias-nivel-acesso', categoriaNivelAcessoRoutes);
 app.use('/config-nivel-acesso', configNivelAcessoRoutes);
 
-app.listen(3001, () => {
-    console.log('User Service rodando na porta 3001');
+app.listen(PORT, () => {
+    console.log(`User Service rodando na porta ${PORT}`);
 });

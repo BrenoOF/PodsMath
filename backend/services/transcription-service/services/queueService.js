@@ -92,6 +92,8 @@ const queueService = {
         });
 
         const transcribeStartTime = Date.now();
+        let absolutePath = '';
+        let wavPath = '';
 
         try {
             // --- TRANSCRIBING ---
@@ -104,11 +106,15 @@ const queueService = {
             });
             console.log(`Iniciando transcrição para áudio ID: ${task.audioId}`);
 
-            const absolutePath = path.resolve(task.filePath);
+            absolutePath = path.resolve(task.filePath);
 
             if (!fs.existsSync(absolutePath)) {
                 throw new Error(`Arquivo não encontrado: ${absolutePath}`);
             }
+
+            // O nodewhisper vai converter o arquivo para .wav se não for
+            const ext = path.extname(absolutePath);
+            wavPath = absolutePath.replace(ext, '.wav');
 
             await nodewhisper(absolutePath, {
                 modelName: 'base',
@@ -126,14 +132,11 @@ const queueService = {
             if (task.fileSizeBytes > 0) {
                 const ratio = transcribeTimeMs / task.fileSizeBytes;
                 processingHistory.push(ratio);
-                // Mantém apenas os últimos 10 registros
                 if (processingHistory.length > 10) processingHistory.shift();
                 console.log(`Ratio real: ${ratio.toFixed(4)} ms/byte (${(transcribeTimeMs / 1000).toFixed(1)}s para ${(task.fileSizeBytes / 1024).toFixed(0)}KB)`);
             }
 
-            // Localiza o JSON gerado pelo Whisper
-            const ext = path.extname(absolutePath);
-            const wavPath = absolutePath.replace(ext, '.wav');
+            // Localiza o JSON gerado
             const jsonPath = [
                 absolutePath + '.json',
                 absolutePath.replace(ext, '.json'),
@@ -146,8 +149,13 @@ const queueService = {
             if (jsonPath) {
                 const transcriptData = JSON.parse(fs.readFileSync(jsonPath, 'utf8'));
                 textoTranscricao = Array.isArray(transcriptData.transcription)
-                    ? transcriptData.transcription.map(s => s.text.trim()).join('\n')
-                    : (transcriptData.text || '');
+                    ? transcriptData.transcription.map(s => {
+                        const from = s.timestamps?.from || '';
+                        const to = s.timestamps?.to || '';
+                        const timeStr = from && to ? `[${from} --> ${to}] ` : '';
+                        return `${timeStr}${s.text.trim()}`;
+                    }).join(' ')  // Retira nova linha, dividindo por espaço
+                    : (transcriptData.text || '').replace(/\n/g, ' ');
                 fs.unlinkSync(jsonPath);
             } else {
                 console.warn('JSON da transcrição não encontrado para:', absolutePath);
@@ -173,10 +181,6 @@ const queueService = {
             });
             console.log(`Áudio ID ${task.audioId} processado com sucesso.`);
 
-            // Remove arquivos temporários (original + WAV convertido)
-            if (fs.existsSync(absolutePath)) fs.unlinkSync(absolutePath);
-            if (ext !== '.wav' && fs.existsSync(wavPath)) fs.unlinkSync(wavPath);
-
         } catch (error) {
             console.error(`Erro ao processar áudio ID ${task.audioId}:`, error);
             jobStatus.set(audioIdStr, {
@@ -185,6 +189,14 @@ const queueService = {
                 failedAt: new Date().toISOString()
             });
         } finally {
+            // Remove arquivos temporários sempre (original + WAV convertido) independente de erro
+            if (absolutePath && fs.existsSync(absolutePath)) {
+                try { fs.unlinkSync(absolutePath); } catch (e) { console.error('Limpeza de absolutePath falhou', e); }
+            }
+            if (wavPath && absolutePath !== wavPath && fs.existsSync(wavPath)) {
+                try { fs.unlinkSync(wavPath); } catch (e) { console.error('Limpeza de wavPath falhou', e); }
+            }
+
             isProcessing = false;
             queueService.processQueue();
         }

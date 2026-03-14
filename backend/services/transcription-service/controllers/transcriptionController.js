@@ -68,8 +68,11 @@ const transcriptionController = {
             // 1. Verifica status in-memory (fila/processamento)
             const jobInfo = queueService.getStatus(id);
 
+            // Tentar sempre buscar o áudio do banco para retornar logo após o upload
+            const result = await getAudioWithTranscription(id);
+
             if (jobInfo && jobInfo.status !== 'completed') {
-                // Ainda processando
+                // Ainda processando, mas retorna o áudio se já estiver no banco (GridFS)
                 return res.json({
                     audioId: parseInt(id),
                     status: jobInfo.status,
@@ -80,12 +83,16 @@ const transcriptionController = {
                     ...(jobInfo.error && { error: jobInfo.error }),
                     ...(jobInfo.queuedAt && { queuedAt: jobInfo.queuedAt }),
                     ...(jobInfo.startedAt && { startedAt: jobInfo.startedAt }),
-                    ...(jobInfo.failedAt && { failedAt: jobInfo.failedAt })
+                    ...(jobInfo.failedAt && { failedAt: jobInfo.failedAt }),
+                    titulo: result?.titulo,
+                    descricao: result?.descricao,
+                    usuario_nome: result?.usuario_nome,
+                    tema_nome: result?.tema_nome,
+                    idioma_nome: result?.idioma_nome,
+                    imagem_caminho: result?.imagem_caminho,
+                    hasAudio: result?.hasAudio
                 });
             }
-
-            // 2. Completo ou não está na fila → busca no banco
-            const result = await getAudioWithTranscription(id);
 
             if (!result) {
                 return res.status(404).json({ message: 'Áudio não encontrado.' });
@@ -95,18 +102,18 @@ const transcriptionController = {
             const hasTranscription = result.transcricao != null && result.transcricao.texto != null;
 
             const response = {
-                audioId: result.id,
+                audioId: result.audioId,
                 status: hasTranscription ? 'completed' : 'processing',
                 titulo: result.titulo,
                 descricao: result.descricao,
                 visualizacoes: result.visualizacoes,
+                usuario_nome: result.usuario_nome,
+                tema_nome: result.tema_nome,
+                idioma_nome: result.idioma_nome,
+                imagem_caminho: result.imagem_caminho,
+                hasAudio: result.hasAudio,
                 ...(hasTranscription && {
-                    transcricao: result.transcricao,
-                    audio: result.audio ? {
-                        mimeType: result.audio.mimeType,
-                        base64: result.audio.buffer.toString('base64'),
-                        dataUrl: `data:${result.audio.mimeType};base64,${result.audio.buffer.toString('base64')}`
-                    } : null
+                    transcricao: result.transcricao
                 })
             };
 
@@ -115,6 +122,79 @@ const transcriptionController = {
         } catch (error) {
             console.error(error);
             res.status(500).json({ message: 'Erro interno ao buscar transcrição.' });
+        }
+    },
+
+    /**
+     * DELETE /transcricao/:id
+     * Deleta o áudio do MongoDB e do MySQL via user-service.
+     */
+    deleteTranscription: async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            if (!id) {
+                return res.status(400).json({ message: 'ID é obrigatório.' });
+            }
+
+            const { deleteAudioRecord } = require('../services/audioService');
+            await deleteAudioRecord(id);
+
+            res.status(200).json({ message: `Vínculo de áudio ID ${id} e transcrições removidos com sucesso.` });
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro interno ao deletar áudio e transcrição.' });
+        }
+    },
+
+    /**
+     * GET /transcricao/:id/audio
+     * Realiza o stream com suporte a Range requests para permitir pular (seek) no áudio
+     */
+    streamAudio: async (req, res) => {
+        try {
+            const { id } = req.params;
+            if (!id) return res.status(400).json({ message: 'ID é obrigatório.' });
+
+            const { getAudioFileInfo, getAudioStreamById } = require('../services/audioService');
+            const fileInfo = await getAudioFileInfo(id);
+
+            if (!fileInfo) {
+                return res.status(404).json({ message: 'Áudio não encontrado no banco.' });
+            }
+
+            const range = req.headers.range;
+            if (range) {
+                const parts = range.replace(/bytes=/, '').split('-');
+                const partialstart = parts[0];
+                const partialend = parts[1];
+
+                const start = parseInt(partialstart, 10);
+                const end = partialend ? parseInt(partialend, 10) : fileInfo.fileSize - 1;
+                const chunksize = (end - start) + 1;
+
+                res.writeHead(206, {
+                    'Content-Range': `bytes ${start}-${end}/${fileInfo.fileSize}`,
+                    'Accept-Ranges': 'bytes',
+                    'Content-Length': chunksize,
+                    'Content-Type': fileInfo.mimeType
+                });
+
+                // GridFS openDownloadStream options.end is EXCLUSIVE, so we add 1
+                const stream = getAudioStreamById(fileInfo.fileId, { start, end: end + 1 });
+                stream.pipe(res);
+            } else {
+                res.writeHead(200, {
+                    'Content-Length': fileInfo.fileSize,
+                    'Content-Type': fileInfo.mimeType
+                });
+                const stream = getAudioStreamById(fileInfo.fileId);
+                stream.pipe(res);
+            }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro interno ao realizar stream do áudio.' });
         }
     }
 };

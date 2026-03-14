@@ -29,4 +29,10 @@ router.post('/', upload.single('audio'), transcriptionController.createTranscrip
 // GET /transcricao/:id — Busca áudio + transcrição
 router.get('/:id', transcriptionController.getTranscription);
 
+// GET /transcricao/:id/audio — Stream do áudio
+router.get('/:id/audio', transcriptionController.streamAudio);
+
+// DELETE /transcricao/:id — Deleta áudio + transcrição do MongoDB e MySQL
+router.delete('/:id', transcriptionController.deleteTranscription);
+
 module.exports = router;

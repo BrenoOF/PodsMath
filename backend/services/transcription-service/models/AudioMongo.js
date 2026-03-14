@@ -6,8 +6,9 @@ const AudioSchema = new mongoose.Schema({
         required: true,
         index: true
     },
-    audioBuffer: {
-        type: Buffer,
+    // ID do arquivo correspondente no GridFS
+    fileId: {
+        type: mongoose.Schema.Types.ObjectId,
         required: true
     },
     mimeType: {

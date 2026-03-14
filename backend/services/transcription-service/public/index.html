@@ -71,6 +71,18 @@
         <div id="transcricaoTexto"></div>
     </div>
 
+    <!-- DELETE -->
+    <div class="card">
+        <h2>🗑️ DELETE /transcricao/:id</h2>
+        <div class="row">
+            <div><label>ID do áudio</label><input type="number" id="deleteAudioId" placeholder="Ex: 1"></div>
+            <div style="display:flex; align-items:flex-end;">
+                <button type="button" class="btn-delete" style="background:#e03131; color:#fff;" onclick="deletarTranscricao()">Deletar</button>
+            </div>
+        </div>
+        <div class="result" id="deleteResult"></div>
+    </div>
+
     <script>
         let pollInterval = null;
 
@@ -87,10 +99,13 @@
             fd.append('audio', document.getElementById('audioFile').files[0]);
             fd.append('titulo', document.getElementById('titulo').value);
             fd.append('descricao', document.getElementById('descricao').value);
-            fd.append('temas_idtemas', document.getElementById('temas_idtemas').value);
-            fd.append('usuarios_idusuarios', document.getElementById('usuarios_idusuarios').value);
-            fd.append('idiomas_ididiomas', document.getElementById('idiomas_ididiomas').value);
-            fd.append('imagens_idimagens', document.getElementById('imagens_idimagens').value);
+            
+            // Apenas enviar se tiver valor
+            const addIfVal = (id) => { const v = document.getElementById(id).value; if(v) fd.append(id, v); };
+            addIfVal('temas_idtemas');
+            addIfVal('usuarios_idusuarios');
+            addIfVal('idiomas_ididiomas');
+            addIfVal('imagens_idimagens');
 
             try {
                 const res = await fetch('/transcricao', { method: 'POST', body: fd });
@@ -99,7 +114,8 @@
 
                 if (data.audioId) {
                     document.getElementById('audioId').value = data.audioId;
-                    // Auto-poll status
+                    // Auto-poll status e renderiza instantemente o player
+                    await buscarTranscricao(data.audioId, false);
                     startPolling(data.audioId);
                 }
             } catch (err) {
@@ -163,6 +179,14 @@
 
                 statusArea.innerHTML = statusHtml;
 
+                // Renderiza áudio usando a rota de stream
+                if (!isPolling && data.hasAudio && !playerDiv.innerHTML.includes('<audio')) {
+                    const audio = document.createElement('audio');
+                    audio.controls = true;
+                    audio.src = `/transcricao/${data.audioId || id}/audio`;
+                    playerDiv.appendChild(audio);
+                }
+
                 if (status === 'completed') {
                     // Para de fazer polling
                     if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
@@ -171,32 +195,48 @@
                         audioId: data.audioId,
                         titulo: data.titulo,
                         descricao: data.descricao,
+                        usuario: data.usuario_nome,
+                        tema: data.tema_nome,
+                        idioma: data.idioma_nome,
+                        imagem: data.imagem_caminho,
                         status: data.status
                     }, null, 2);
 
-                    playerDiv.innerHTML = '';
-                    if (data.audio && data.audio.dataUrl) {
-                        const audio = document.createElement('audio');
-                        audio.controls = true;
-                        audio.src = data.audio.dataUrl;
-                        playerDiv.appendChild(audio);
-                    }
-
                     textoDiv.innerHTML = '';
                     if (data.transcricao && data.transcricao.texto) {
-                        textoDiv.innerHTML = '<strong>Transcrição:</strong><br>' + data.transcricao.texto;
+                        textoDiv.innerHTML = '<strong>Transcrição:</strong><br><br>' + data.transcricao.texto;
                         textoDiv.classList.add('transcription-text');
                     }
                 } else if (status === 'error') {
                     if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
                     resultDiv.textContent = JSON.stringify(data, null, 2);
                 } else {
-                    resultDiv.textContent = JSON.stringify(data, null, 2);
+                    // Atualiza JSON da reposta p/ visualização rápida, sem apagar player
+                    const logData = { ...data };
+                    delete logData.audio; // Oculta o base64 massivo para debug
+                    resultDiv.textContent = JSON.stringify(logData, null, 2);
                 }
 
             } catch (err) {
                 resultDiv.textContent = 'ERRO: ' + err.message;
                 if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+            }
+        }
+
+        // DELETE
+        async function deletarTranscricao() {
+            const id = document.getElementById('deleteAudioId').value;
+            if (!id) return alert('Digite um ID para deletar');
+
+            const resultDiv = document.getElementById('deleteResult');
+            resultDiv.textContent = '⏳ Deletando...';
+
+            try {
+                const res = await fetch(`/transcricao/${id}`, { method: 'DELETE' });
+                const data = await res.json();
+                resultDiv.textContent = JSON.stringify(data, null, 2);
+            } catch (err) {
+                resultDiv.textContent = 'ERRO: ' + err.message;
             }
         }
     </script>
