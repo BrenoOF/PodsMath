@@ -40,6 +40,7 @@ export default function TelaPlayer() {
     }, [menuAberto]);
 
     // States para o Player em si
+    const [loop, setLoop] = useState(false);
     const [favoritar, setFavoritar] = useState(false);
     const [tocando, setTocando] = useState(false);
     const [volume, setVolume] = useState(1);
@@ -197,10 +198,49 @@ export default function TelaPlayer() {
         return () => cancelAnimationFrame(frame);
     }, []);
 
+    // Controle de Velocidade do Audio
+    const [menuAbertoVelocidade, setMenuAbertoVelocidade] = useState(false);
+    const [velocidadeSelecionada, setVelocidadeSelecionada] = useState(1);
+
+    const velocidades = [
+        { label: "0.5x", value: 0.5 },
+        { label: "0.75x", value: 0.75 },
+        { label: "1x", value: 1 },
+        { label: "1.5x", value: 1.5 },
+        { label: "1.75x", value: 1.75 },
+        { label: "2x", value: 2 }
+    ];
+
+    const menuVelocidadeRef = useRef(null);
+    const btnVelocidadeRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                menuAbertoVelocidade &&
+                menuVelocidadeRef.current &&
+                !menuVelocidadeRef.current.contains(event.target) &&
+                btnVelocidadeRef.current &&
+                !btnVelocidadeRef.current.contains(event.target)
+            ) {
+                setMenuAbertoVelocidade(false);
+            }
+        };
+
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => { document.removeEventListener("pointerdown", handleClickOutside) };
+    }, [menuAbertoVelocidade]);
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.playbackRate = velocidadeSelecionada;
+        }
+    }, [velocidadeSelecionada]);
+
     return (
         <div className={Style.containerPlayer}>
             {/* Audio do Podcast */}
-            <audio ref={audioRef} src="/audio/teste.mp3"></audio>
+            <audio ref={audioRef} src="/audio/teste.mp3" loop={loop}></audio>
             {/* Apresentção do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
@@ -247,7 +287,7 @@ export default function TelaPlayer() {
                             {linguas.map((item) => (
                                 <div
                                     key={item.value}
-                                    className={Style.opcaoIdioma}
+                                    className={Style.opcaoMenu}
                                     onClick={() => {
                                         setLinguaSelecionada(item.value);
                                         setMenuAberto(false);
@@ -287,7 +327,9 @@ export default function TelaPlayer() {
                     {/*  */}
                     <p>{formatarTempo(duracaoTotal)}</p>
                 </div>
+                {/* Parte de Baixo do Tocador */}
                 <div className={Style.divParteBaixoTocador}>
+                    <div></div>
                     <div className={Style.menuManipulacaoAudio}>
                         <i className="fa-solid fa-backward"
                             onClick={() => {
@@ -316,7 +358,6 @@ export default function TelaPlayer() {
                         ></i>
                     </div>
                     <div className={Style.divConfigsPlus}>
-                        <i className="fa-solid fa-gear"></i>
                         <div className={Style.divVolume}>
                             <i className={`fa-solid ${iconeVolume()}`}></i>
                             <input
@@ -328,8 +369,41 @@ export default function TelaPlayer() {
                                 onChange={(e) => alterarVolume(parseFloat(e.target.value))}
                             />
                         </div>
-                        <i className="fa-solid fa-repeat"></i>
-                        <div className={Style.divFavoritar}>
+                        <div ref={btnVelocidadeRef}
+                            onClick={() => setMenuAbertoVelocidade(!menuAbertoVelocidade)}
+                            className={`${Style.divVelocidade} ${menuAbertoVelocidade ? Style.selecionado : ""}`}
+                        >
+                            <i className="fa-solid fa-gear"></i>
+                            {/* Modal Troca de Velocidade */}
+                            {menuAbertoVelocidade && (
+                                <div
+                                    ref={menuVelocidadeRef}
+                                    className={Style.menuVelocidade}
+                                >
+                                    {velocidades.map((item) => (
+                                        <div
+                                            key={item.value}
+                                            className={Style.opcaoMenu}
+                                            onClick={() => {
+                                                setVelocidadeSelecionada(item.value);
+                                                setMenuAbertoVelocidade(false);
+                                            }}
+                                        >
+                                            {item.label}
+                                            {item.value === velocidadeSelecionada &&
+                                                <i className="fa-solid fa-check"></i>
+                                            }
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                        <div className={`${loop ? Style.selecionado : ""}`}>
+                            <i className="fa-solid fa-repeat"
+                                onClick={() => { setLoop(!loop) }}
+                            ></i>
+                        </div>
+                        <div className={`${favoritar ? Style.selecionado : ""}`}>
                             {!favoritar ? (
                                 <i className="fa-regular fa-heart"
                                     onClick={() => { setFavoritar(!favoritar) }}
