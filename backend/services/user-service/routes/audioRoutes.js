@@ -4,6 +4,7 @@ const audioController = require('../controllers/audioController');
 
 router.get('/', audioController.getAllAudios);
 router.get('/:id', audioController.getAudioById);
+router.get('/:id/details', audioController.getAudioDetailsById);
 router.post('/', audioController.createAudio);
 router.put('/:id', audioController.updateAudio);
 router.delete('/:id', audioController.deleteAudio);

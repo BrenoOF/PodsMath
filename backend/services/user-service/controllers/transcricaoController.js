@@ -69,6 +69,20 @@ const transcricaoController = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+
+    deleteTranscricaoByAudioId: async (req, res) => {
+        try {
+            const deleted = await Transcricao.deleteByAudioId(req.params.audioId);
+            if (deleted) {
+                res.json({ message: 'Transcrição deletada com sucesso' });
+            } else {
+                // Return 200 even if not found because sometimes there's just no transcription yet
+                res.status(200).json({ message: 'Nenhuma transcrição para deletar' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 };
 

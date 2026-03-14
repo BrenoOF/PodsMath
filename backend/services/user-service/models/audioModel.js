@@ -33,6 +33,36 @@ const Audio = {
         }
     },
 
+    getDetailsById: async (id) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const query = `
+                SELECT 
+                    a.*, 
+                    u.nome AS usuario_nome, 
+                    t.titulo AS tema_nome, 
+                    i.nomeIdiomas AS idioma_nome, 
+                    img.caminho_imagem AS imagem_caminho 
+                FROM audios a
+                LEFT JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
+                LEFT JOIN temas t ON a.temas_idtemas = t.idtemas
+                LEFT JOIN idiomas i ON a.idiomas_ididiomas = i.ididiomas
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                WHERE a.idaudios = ?
+            `;
+            const [rows] = await connection.query(query, [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
     create: async (audioData) => {
         let connection;
         try {

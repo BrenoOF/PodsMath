@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');
+require('dotenv').config({ path: '../../config/.env' });
 const { connectMongo } = require('./db/connection');
 const transcriptionRoutes = require('./routes/transcriptionRoutes');
 
 const app = express();
-const PORT = 3002;
+const PORT = process.env.TRANSCRIPTION_SERVICE_PORT || 3002;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

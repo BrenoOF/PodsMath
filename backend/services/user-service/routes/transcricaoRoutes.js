@@ -8,5 +8,6 @@ router.get('/:id', transcricaoController.getTranscricaoById);
 router.post('/', transcricaoController.createTranscricao);
 router.put('/:id', transcricaoController.updateTranscricao);
 router.delete('/:id', transcricaoController.deleteTranscricao);
+router.delete('/audio/:audioId', transcricaoController.deleteTranscricaoByAudioId);
 
 module.exports = router;
