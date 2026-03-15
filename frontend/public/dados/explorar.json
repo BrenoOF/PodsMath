@@ -19,30 +19,33 @@
               "id": 1001,
               "titulo": "Equações do 1º Grau",
               "slug": "equacoes-do-1-grau",
-              "subTitulo": "Aprenda a resolver equações simples",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "05/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste1.mp3",
               "duracao": "6:30"
             },
             {
               "id": 1002,
               "titulo": "Equações do 2º Grau",
               "slug": "equacoes-do-2-grau",
-              "subTitulo": "Resolvendo equações quadráticas",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "07/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste2.mp3",
               "duracao": "8:15"
             },
             {
               "id": 1003,
               "titulo": "Fórmula de Bhaskara",
               "slug": "formula-de-bhaskara",
-              "subTitulo": "Usando a Fórmula de Bhaskara",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "09/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste3.mp3",
               "duracao": "7:57"
             }
           ]
@@ -68,20 +71,22 @@
               "id": 2001,
               "titulo": "Triângulos",
               "slug": "triangulos",
-              "subTitulo": "Tipos e propriedades dos triângulos",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "02/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste4.mp3",
               "duracao": "7:20"
             },
             {
               "id": 2002,
               "titulo": "Teorema de Pitágoras",
               "slug": "teorema-de-pitagoras",
-              "subTitulo": "Relação entre os lados do triângulo retângulo",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "04/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste5.mp3",
               "duracao": "8:05"
             }
           ]
@@ -107,20 +112,22 @@
               "id": 3001,
               "titulo": "Média, Moda e Mediana",
               "slug": "media-moda-e-mediana",
-              "subTitulo": "Medidas de tendência central",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "01/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste6.mp3",
               "duracao": "7:50"
             },
             {
               "id": 3002,
               "titulo": "Desvio Padrão",
               "slug": "desvio-padrao",
-              "subTitulo": "Entendendo dispersão de dados",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "03/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste1.mp3",
               "duracao": "9:30"
             }
           ]
@@ -146,10 +153,11 @@
               "id": 4001,
               "titulo": "Introdução aos Limites",
               "slug": "introducao-aos-limites",
-              "subTitulo": "Entenda o conceito de limite",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "05/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste2.mp3",
               "duracao": "8:40"
             }
           ]
@@ -175,20 +183,22 @@
               "id": 5001,
               "titulo": "Seno, Cosseno e Tangente",
               "slug": "seno-cosseno-e-tangente",
-              "subTitulo": "As principais razões trigonométricas",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "02/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste3.mp3",
               "duracao": "8:20"
             },
             {
               "id": 5002,
               "titulo": "Círculo Trigonométrico",
               "slug": "circulo-trigonometrico",
-              "subTitulo": "Entendendo os ângulos no círculo",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "04/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste4.mp3",
               "duracao": "9:10"
             }
           ]
@@ -204,10 +214,11 @@
               "id": 5003,
               "titulo": "Identidade Fundamental",
               "slug": "identidade-fundamental",
-              "subTitulo": "A famosa relação trigonométrica",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "06/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste5.mp3",
               "duracao": "7:40"
             }
           ]
@@ -233,20 +244,22 @@
               "id": 6001,
               "titulo": "Introdução aos Juros Simples",
               "slug": "introducao-aos-juros-simples",
-              "subTitulo": "Como calcular juros simples",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "03/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste6.mp3",
               "duracao": "6:50"
             },
             {
               "id": 6002,
               "titulo": "Aplicações Práticas",
               "slug": "aplicacoes-praticas",
-              "subTitulo": "Exemplos do dia a dia",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "05/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste1.mp3",
               "duracao": "7:30"
             }
           ]
@@ -262,20 +275,22 @@
               "id": 6003,
               "titulo": "Fórmula dos Juros Compostos",
               "slug": "formula-dos-juros-compostos",
-              "subTitulo": "Aprenda a calcular montante",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "07/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste2.mp3",
               "duracao": "8:25"
             },
             {
               "id": 6004,
               "titulo": "Investimentos e Crescimento",
               "slug": "investimentos-e-crescimento",
-              "subTitulo": "Simulação de investimentos",
+              "autor": "Adriana",
               "descricao": "Neste episódio você vai aprender passo a passo como resolver equações do primeiro grau, entendendo o conceito de incógnita e como isolar valores.",
               "dt_adicao": "08/03/2025",
               "img": "/imgs/cardExemplo.jpg",
+              "audio": "teste3.mp3",
               "duracao": "9:15"
             }
           ]

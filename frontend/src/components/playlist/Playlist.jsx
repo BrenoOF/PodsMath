@@ -67,10 +67,9 @@ export default function TelaPlaylist() {
             {/* Menuzinho Básico */}
             <div className={Style.divMenu}>
                 <div className={Style.divIconPlay} 
-                // Ideia Futura para pegar o Histórico e quando clicar ir para o ultimo ep assistido
-                // onClick={() => {
-                //     navigate(`/explorar/${idTema}/${playlistTema}/${dadosPlaylist[0].id}`);
-                // }}
+                    onClick={() => {
+                        navigate(`/explorar/${idTema}/${playlistTema}/${dadosPlaylist[0].id}`);
+                    }}
                 >
                     <i className="fa-solid fa-play"></i>
                 </div>
@@ -106,7 +105,7 @@ export default function TelaPlaylist() {
                                 />
                                 <div className={Style.divTextoTituloPodcast}>
                                     <h1>{item.titulo}</h1>
-                                    <p>{item.subTitulo}</p>
+                                    <p>Feito por: {item.autor}</p>
                                 </div>
                             </td>
                             <td className={Style.colunaDataAdicao}>{item.dt_adicao}</td>

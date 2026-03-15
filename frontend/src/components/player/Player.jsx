@@ -240,7 +240,7 @@ export default function TelaPlayer() {
     return (
         <div className={Style.containerPlayer}>
             {/* Audio do Podcast */}
-            <audio ref={audioRef} src="/audio/teste.mp3" loop={loop}></audio>
+            <audio ref={audioRef} src={`/audio/${dadosPlayer?.audio}`} loop={loop}></audio>
             {/* Apresentção do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
@@ -252,7 +252,7 @@ export default function TelaPlayer() {
                 />
                 <div className={Style.divTextosApresentacao}>
                     <h1>{dadosPlayer?.titulo}</h1>
-                    <p>{dadosPlayer?.subTitulo}</p>
+                    <p>Feito por: {dadosPlayer?.autor}</p>
                     <div className={Style.ultimaDivApresentacao}>
                         <p>
                             <i className="fa-regular fa-clock"></i>
@@ -303,8 +303,17 @@ export default function TelaPlayer() {
                         </div>
                     )}
                 </div>
-                <div>
-                    {/* Parte onde aparecerá a transcrição */}
+                <div className={Style.transcricao}>
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus dolor nibh, 
+                        sed dictum ipsum molestie eget. Proin malesuada justo libero, a dictum tortor convallis eget. 
+                        Aenean convallis ex ante, eget consectetur neque venenatis a. Nullam porta velit 
+                        vel mauris viverra, nec fringilla eros posuere. Pellentesque lobortis ipsum libero, 
+                        dapibus tincidunt mauris laoreet sit amet. Morbi euismod rutrum commodo. In mattis 
+                        posuere mi, eu mattis ipsum bibendum nec. Vestibulum interdum elit ut porttitor accumsan. 
+                        Phasellus pellentesque arcu in aliquet tempus. Quisque sit amet eros vitae erat porttitor 
+                        efficitur.
+                    </p>
                 </div>
             </div>
             <div className={Style.containerTocador}>
