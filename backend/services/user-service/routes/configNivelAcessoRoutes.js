@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const configNivelAcessoController = require('../controllers/configNivelAcessoController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', configNivelAcessoController.getAllConfigNivelAcesso);
-router.get('/:id', configNivelAcessoController.getConfigNivelAcessoById);
-router.post('/', configNivelAcessoController.createConfigNivelAcesso);
-router.put('/:id', configNivelAcessoController.updateConfigNivelAcesso);
-router.delete('/:id', configNivelAcessoController.deleteConfigNivelAcesso);
+router.get('/', authMiddleware, configNivelAcessoController.getAllConfigNivelAcesso);
+router.get('/:id', authMiddleware, configNivelAcessoController.getConfigNivelAcessoById);
+router.post('/', authMiddleware, configNivelAcessoController.createConfigNivelAcesso);
+router.put('/:id', authMiddleware, configNivelAcessoController.updateConfigNivelAcesso);
+router.delete('/:id', authMiddleware, configNivelAcessoController.deleteConfigNivelAcesso);
 
 module.exports = router;

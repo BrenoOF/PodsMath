@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const imagemController = require('../controllers/imagemController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', imagemController.getAllImagems);
-router.get('/:id', imagemController.getImagemById);
-router.post('/', imagemController.createImagem);
-router.put('/:id', imagemController.updateImagem);
-router.delete('/:id', imagemController.deleteImagem);
+router.get('/', authMiddleware, imagemController.getAllImagems);
+router.get('/:id', authMiddleware, imagemController.getImagemById);
+router.post('/', authMiddleware, imagemController.createImagem);
+router.put('/:id', authMiddleware, imagemController.updateImagem);
+router.delete('/:id', authMiddleware, imagemController.deleteImagem);
 
 module.exports = router;
