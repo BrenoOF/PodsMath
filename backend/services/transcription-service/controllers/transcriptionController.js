@@ -18,10 +18,12 @@ const transcriptionController = {
                 titulo = 'Sem título',
                 descricao = '',
                 temas_idtemas = 1,
-                usuarios_idusuarios = 1,
                 idiomas_ididiomas = 1,
                 imagens_idimagens = 1
             } = req.body;
+
+            const usuarios_idusuarios = req.usuario.idusuarios;
+            const token = req.headers.authorization?.split(' ')[1] || req.query.token;
 
             const filePath = req.file.path;
             const mimeType = req.file.mimetype || 'audio/wav';
@@ -35,11 +37,12 @@ const transcriptionController = {
                 temas_idtemas,
                 usuarios_idusuarios,
                 idiomas_ididiomas,
-                imagens_idimagens
+                imagens_idimagens,
+                token
             });
 
             // 2. Adiciona à fila do Whisper (transcrição será salva depois)
-            queueService.addToQueue(filePath, audioId, idiomas_ididiomas);
+            queueService.addToQueue(filePath, audioId, idiomas_ididiomas, token);
 
             res.status(202).json({
                 message: 'Áudio criado e adicionado à fila de transcrição.',
@@ -67,9 +70,10 @@ const transcriptionController = {
 
             // 1. Verifica status in-memory (fila/processamento)
             const jobInfo = queueService.getStatus(id);
+            const token = req.headers.authorization?.split(' ')[1] || req.query.token;
 
             // Tentar sempre buscar o áudio do banco para retornar logo após o upload
-            const result = await getAudioWithTranscription(id);
+            const result = await getAudioWithTranscription(id, token);
 
             if (jobInfo && jobInfo.status !== 'completed') {
                 // Ainda processando, mas retorna o áudio se já estiver no banco (GridFS)
@@ -138,7 +142,8 @@ const transcriptionController = {
             }
 
             const { deleteAudioRecord } = require('../services/audioService');
-            await deleteAudioRecord(id);
+            const token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            await deleteAudioRecord(id, token);
 
             res.status(200).json({ message: `Vínculo de áudio ID ${id} e transcrições removidos com sucesso.` });
 

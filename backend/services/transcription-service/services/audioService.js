@@ -16,14 +16,14 @@ async function createAudioRecord({
     titulo,
     descricao,
     temas_idtemas,
-    usuarios_idusuarios = 1,
+    usuarios_idusuarios,
     idiomas_ididiomas,
-    imagens_idimagens
+    imagens_idimagens,
+    token
 }) {
     // 1. Cria registro na tabela 'audios' via user-service
     
     const payload = {
-        usuarios_idusuarios,
         visualizacoes: 0,
         titulo: titulo || 'Sem título',
         descricao: descricao || ''
@@ -31,10 +31,14 @@ async function createAudioRecord({
     if (temas_idtemas) payload.temas_idtemas = temas_idtemas;
     if (idiomas_ididiomas) payload.idiomas_ididiomas = idiomas_ididiomas;
     if (imagens_idimagens) payload.imagens_idimagens = imagens_idimagens;
+    // usuarios_idusuarios removed from payload since it's from token in user-service
 
     const audioResponse = await fetch(`${USER_SERVICE_URL}/audios`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(payload)
     });
 
@@ -85,10 +89,15 @@ async function createAudioRecord({
  * Salva a transcrição no MySQL (via user-service) para um áudio já existente.
  * Chamado APÓS o Whisper finalizar.
  */
-async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas = 1 }) {
+async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas = 1, token }) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: headers,
         body: JSON.stringify({
             textoTranscricao,
             audios_idaudios: audioId,
@@ -107,10 +116,12 @@ async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas 
 /**
  * Busca o áudio (MongoDB GridFS) e a transcrição (MySQL via user-service) pelo ID do áudio.
  */
-async function getAudioWithTranscription(audioId) {
+async function getAudioWithTranscription(audioId, token) {
         try {
             // 1. Busca dados do MySQL (user-service) COM DETALHES (JOIN)
-            const audioResponse = await fetch(`${USER_SERVICE_URL}/audios/${audioId}/details`);
+            const audioResponse = await fetch(`${USER_SERVICE_URL}/audios/${audioId}/details`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             if (!audioResponse.ok) {
                 if (audioResponse.status === 404) return null;
                 throw new Error(`Erro ao buscar áudio no user-service: ${audioResponse.statusText}`);
@@ -118,7 +129,9 @@ async function getAudioWithTranscription(audioId) {
             const audioData = await audioResponse.json();
 
             // 2. Busca transcrição via user-service
-            const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`);
+            const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             let transcricao = null;
             if (transcricaoResponse.ok) {
                 transcricao = await transcricaoResponse.json();
@@ -127,6 +140,7 @@ async function getAudioWithTranscription(audioId) {
             // 3. Busca o áudio original no GridFS (se existir transcrição ou se estivermos buscando para tocar logo)
             const audioMongo = await AudioMongo.findOne({ mysqlAudioId: audioId }).lean();
             let hasAudio = false;
+            let mimeType = 'audio/wav';
 
             if (audioMongo && audioMongo.fileId) {
                 hasAudio = true;
@@ -157,7 +171,7 @@ async function getAudioWithTranscription(audioId) {
 /**
  * Deleta o áudio do MongoDB (GridFS e AudioMongo) e do MySQL (via user-service API).
  */
-async function deleteAudioRecord(audioId) {
+async function deleteAudioRecord(audioId, token) {
     try {
         console.log(`Iniciando deleção do áudio ID: ${audioId}`);
         
@@ -179,7 +193,10 @@ async function deleteAudioRecord(audioId) {
 
         // 2. Deletar transcrições no MySQL via user-service
         const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
         if (!transcricaoResponse.ok) {
             console.warn(`Aviso: Falha ao deletar transcrições no MySQL. HTTP Status: ${transcricaoResponse.status}`);
@@ -189,7 +206,10 @@ async function deleteAudioRecord(audioId) {
 
         // 3. Deletar o registro de áudio no MySQL via user-service
         const audioResponse = await fetch(`${USER_SERVICE_URL}/audios/${audioId}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         });
         if (!audioResponse.ok && audioResponse.status !== 404) {
             const err = await audioResponse.json();

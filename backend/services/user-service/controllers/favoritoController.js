@@ -12,7 +12,7 @@ const favoritoController = {
 
     getFavoritosByUsuarioId: async (req, res) => {
         try {
-            const favoritos = await Favorito.getByUsuarioId(req.params.usuarioId);
+            const favoritos = await Favorito.getByUsuarioId(req.usuario.idusuarios);
             if (favoritos) {
                 res.json(favoritos);
             } else {
@@ -25,7 +25,10 @@ const favoritoController = {
 
     createFavorito: async (req, res) => {
         try {
-            const novoFavorito = await Favorito.create(req.body);
+            const novoFavorito = await Favorito.create({
+                ...req.body,
+                usuarios_idusuarios: req.usuario.idusuarios
+            });
             res.status(201).json(novoFavorito);
         } catch (error) {
             res.status(500).json({ message: error.message });
@@ -34,7 +37,7 @@ const favoritoController = {
 
     deleteFavorito: async (req, res) => {
         try {
-            const deletada = await Favorito.delete(req.params.usuarioId, req.params.audioId);
+            const deletada = await Favorito.delete(req.usuario.idusuarios, req.params.audioId);
             if (deletada) {
                 res.json({ message: 'Favorito deletado' });
             } else {
