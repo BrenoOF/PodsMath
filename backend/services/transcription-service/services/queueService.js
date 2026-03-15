@@ -25,7 +25,7 @@ const queueService = {
     /**
      * Adiciona à fila de transcrição. O áudio já deve existir no MySQL/MongoDB.
      */
-    addToQueue: (filePath, audioId, idiomas_ididiomas) => {
+    addToQueue: (filePath, audioId, idiomas_ididiomas, token) => {
         const position = queue.length + 1;
         let fileSizeBytes = 0;
         try { fileSizeBytes = fs.statSync(filePath).size; } catch {}
@@ -39,7 +39,7 @@ const queueService = {
             estimatedMs: estimatedMs > 0 ? estimatedMs : null,
             queuedAt: new Date().toISOString()
         });
-        queue.push({ filePath, audioId, idiomas_ididiomas, fileSizeBytes });
+        queue.push({ filePath, audioId, idiomas_ididiomas, fileSizeBytes, token });
         console.log(`Áudio ID ${audioId} adicionado à fila. Posição: ${position}. Tamanho: ${(fileSizeBytes / 1024).toFixed(0)}KB`);
         queueService.processQueue();
     },
@@ -96,7 +96,6 @@ const queueService = {
         let wavPath = '';
 
         try {
-            // --- TRANSCRIBING ---
             const estimatedMs = Math.round((task.fileSizeBytes || 0) * getAvgRatio());
             jobStatus.set(audioIdStr, {
                 status: 'transcribing',
@@ -161,7 +160,6 @@ const queueService = {
                 console.warn('JSON da transcrição não encontrado para:', absolutePath);
             }
 
-            // --- SAVING ---
             jobStatus.set(audioIdStr, {
                 status: 'saving',
                 startedAt: new Date().toISOString()
@@ -171,10 +169,10 @@ const queueService = {
             await saveTranscription({
                 audioId: task.audioId,
                 textoTranscricao,
-                idiomas_ididiomas: task.idiomas_ididiomas
+                idiomas_ididiomas: task.idiomas_ididiomas,
+                token: task.token
             });
 
-            // --- COMPLETED ---
             jobStatus.set(audioIdStr, {
                 status: 'completed',
                 completedAt: new Date().toISOString()

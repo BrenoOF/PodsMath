@@ -47,6 +47,15 @@ const transcricaoController = {
 
     updateTranscricao: async (req, res) => {
         try {
+            const Audio = require('../models/audioModel');
+            const transcricao = await Transcricao.getById(req.params.id);
+            if (!transcricao) return res.status(404).json({ message: 'Transcricao não encontrada' });
+
+            const audio = await Audio.getById(transcricao.audios_idaudios);
+            if (audio && audio.usuarios_idusuarios !== req.usuario.idusuarios) {
+                return res.status(403).json({ message: 'Sem permissão para alterar esta transcrição' });
+            }
+
             const updated = await Transcricao.update(req.params.id, req.body);
             if (updated) {
                 res.json({ message: 'Transcricao atualizada' });
@@ -60,6 +69,15 @@ const transcricaoController = {
 
     deleteTranscricao: async (req, res) => {
         try {
+            const Audio = require('../models/audioModel');
+            const transcricao = await Transcricao.getById(req.params.id);
+            if (!transcricao) return res.status(404).json({ message: 'Transcricao não encontrada' });
+
+            const audio = await Audio.getById(transcricao.audios_idaudios);
+            if (audio && audio.usuarios_idusuarios !== req.usuario.idusuarios) {
+                return res.status(403).json({ message: 'Sem permissão para deletar esta transcrição' });
+            }
+
             const deleted = await Transcricao.delete(req.params.id);
             if (deleted) {
                 res.json({ message: 'Transcricao deletada' });
@@ -73,11 +91,16 @@ const transcricaoController = {
 
     deleteTranscricaoByAudioId: async (req, res) => {
         try {
+            const Audio = require('../models/audioModel');
+            const audio = await Audio.getById(req.params.audioId);
+            if (audio && audio.usuarios_idusuarios !== req.usuario.idusuarios) {
+                return res.status(403).json({ message: 'Sem permissão para deletar transcrições deste áudio' });
+            }
+
             const deleted = await Transcricao.deleteByAudioId(req.params.audioId);
             if (deleted) {
                 res.json({ message: 'Transcrição deletada com sucesso' });
             } else {
-                // Return 200 even if not found because sometimes there's just no transcription yet
                 res.status(200).json({ message: 'Nenhuma transcrição para deletar' });
             }
         } catch (error) {

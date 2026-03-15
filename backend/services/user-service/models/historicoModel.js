@@ -33,6 +33,22 @@ const Historico = {
         }
     },
 
+    getByUsuarioId: async (usuarioId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM historico WHERE usuarios_idusuarios = ?', [usuarioId]);
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
     create: async ({ idhistorico, usuarios_idusuarios, audios_idaudios, tempo_audio }) => {
         let connection;
         try {

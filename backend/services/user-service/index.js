@@ -1,5 +1,6 @@
 require('dotenv').config({ path: '../../config/.env' });
 const express = require('express');
+const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const usuarioRoutes = require('./routes/usuarioRoutes');
@@ -21,6 +22,7 @@ const configNivelAcessoRoutes = require('./routes/configNivelAcessoRoutes');
 const app = express();
 const PORT = process.env.USER_SERVICE_PORT || 3001;
 
+app.use(cors());
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 

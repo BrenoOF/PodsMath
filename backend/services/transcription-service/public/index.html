@@ -12,12 +12,15 @@
         .card { background: #1a1a2e; border: 1px solid #2a2a4a; border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; }
         label { display: block; margin-bottom: .3rem; font-size: .85rem; color: #888; }
         input { width: 100%; padding: .5rem; margin-bottom: .8rem; border: 1px solid #333; border-radius: 6px; background: #111; color: #eee; font-size: .9rem; }
-        button { padding: .6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: .9rem; font-weight: 600; }
+        button { padding: .6rem 1.5rem; border: none; border-radius: 6px; cursor: pointer; font-size: .9rem; font-weight: 600; transition: all 0.2s; }
         .btn-post { background: #4c6ef5; color: #fff; }
         .btn-get { background: #37b24d; color: #fff; }
-        button:hover { opacity: .85; }
+        .btn-auth { background: #7c3aed; color: #fff; }
+        .btn-logout { background: #e03131; color: #fff; margin-left: 10px; }
+        button:hover { opacity: .85; transform: translateY(-1px); }
+        button:active { transform: translateY(0); }
         button:disabled { opacity: .4; cursor: not-allowed; }
-        .result { margin-top: 1rem; padding: 1rem; background: #111; border-radius: 8px; white-space: pre-wrap; font-family: monospace; font-size: .8rem; min-height: 40px; }
+        .result { margin-top: 1rem; padding: 1rem; background: #111; border-radius: 8px; white-space: pre-wrap; font-family: monospace; font-size: .8rem; min-height: 40px; overflow-x: auto; }
         audio { margin-top: 1rem; width: 100%; }
         .transcription-text { margin-top: 1rem; padding: 1rem; background: #1e1e3a; border-radius: 8px; line-height: 1.6; }
         .row { display: flex; gap: 1rem; }
@@ -30,10 +33,49 @@
         .status-error { background: #f0383833; color: #ff6b6b; }
         .status-processing { background: #4c6ef533; color: #748ffc; }
         #statusArea { margin-top: 1rem; }
+        #authStatus { margin-bottom: 1rem; padding: 0.5rem; border-radius: 6px; display: none; }
+        .auth-success { background: #2b8a3e33; color: #40c057; display: block !important; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
     <h1>🎙️ Transcription Service - Teste</h1>
+
+    <!-- AUTHENTICATION -->
+    <div class="card" id="authCard">
+        <h2>🔐 Autenticação (User Service)</h2>
+        <div id="authStatus"></div>
+        
+        <div id="loginForms">
+            <div class="row">
+                <div id="loginSection">
+                    <h3>Login</h3>
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" value="teste@teste.com">
+                    <label>Senha</label>
+                    <input type="password" id="loginSenha" value="123456">
+                    <button class="btn-auth" onclick="login()">Entrar</button>
+                </div>
+                <div id="registerSection">
+                    <h3>Cadastro</h3>
+                    <label>Nome</label>
+                    <input type="text" id="regNome" placeholder="Seu Nome">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="email@teste.com">
+                    <label>Senha</label>
+                    <input type="password" id="regSenha" placeholder="Senha">
+                    <button class="btn-auth" onclick="register()">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="userInfo" class="hidden">
+            <p>Conectado como: <strong id="userName"></strong> (<span id="userEmail"></span>)</p>
+            <p>ID: <code id="userId"></code></p>
+            <button class="btn-logout" onclick="logout()">Sair</button>
+        </div>
+        <div class="result" id="authResult"></div>
+    </div>
 
     <!-- POST -->
     <div class="card">
@@ -46,11 +88,11 @@
                 <div><label>Descrição</label><input type="text" id="descricao" value="Audio de teste"></div>
             </div>
             <div class="row">
-                <div><label>temas_idtemas</label><input type="number" id="temas_idtemas" value="2"></div>
-                <div><label>usuarios_idusuarios</label><input type="number" id="usuarios_idusuarios" value="2"></div>
-                <div><label>idiomas_ididiomas</label><input type="number" id="idiomas_ididiomas" value="2"></div>
-                <div><label>imagens_idimagens</label><input type="number" id="imagens_idimagens" value="2"></div>
+                <div><label>temas_idtemas</label><input type="number" id="temas_idtemas" value="1"></div>
+                <div><label>idiomas_ididiomas</label><input type="number" id="idiomas_ididiomas" value="1"></div>
+                <div><label>imagens_idimagens</label><input type="number" id="imagens_idimagens" value="1"></div>
             </div>
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 0.8rem;">* usuarios_idusuarios será preenchido automaticamente pelo token.</p>
             <button type="submit" class="btn-post" id="postBtn">Enviar Áudio</button>
         </form>
         <div class="result" id="postResult"></div>
@@ -84,13 +126,114 @@
     </div>
 
     <script>
+        const USER_SERVICE_URL = 'http://localhost:3001'; // Ajuste se necessário
         let pollInterval = null;
+
+        // AUTH FUNCTIONS
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const senha = document.getElementById('loginSenha').value;
+            const result = document.getElementById('authResult');
+            
+            try {
+                const res = await fetch(`${USER_SERVICE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, senha })
+                });
+                const data = await res.json();
+                
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.usuario));
+                    updateAuthUI();
+                    result.textContent = 'Login realizado com sucesso!';
+                } else {
+                    result.textContent = 'Erro no Login: ' + data.message;
+                }
+            } catch (err) {
+                result.textContent = 'Erro de conexão: ' + err.message;
+            }
+        }
+
+        async function register() {
+            const nome = document.getElementById('regNome').value;
+            const email = document.getElementById('regEmail').value;
+            const senha = document.getElementById('regSenha').value;
+            const result = document.getElementById('authResult');
+
+            try {
+                const res = await fetch(`${USER_SERVICE_URL}/auth/register`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome, email, senha })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.usuario));
+                    updateAuthUI();
+                    result.textContent = 'Cadastro realizado com sucesso!';
+                } else {
+                    result.textContent = 'Erro no Cadastro: ' + data.message;
+                }
+            } catch (err) {
+                result.textContent = 'Erro de conexão: ' + err.message;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            updateAuthUI();
+            document.getElementById('authResult').textContent = 'Sessão encerrada.';
+        }
+
+        function updateAuthUI() {
+            const token = localStorage.getItem('token');
+            const userJson = localStorage.getItem('user');
+            const loginForms = document.getElementById('loginForms');
+            const userInfo = document.getElementById('userInfo');
+            const authStatus = document.getElementById('authStatus');
+
+            if (token && userJson) {
+                const user = JSON.parse(userJson);
+                loginForms.classList.add('hidden');
+                userInfo.classList.remove('hidden');
+                authStatus.textContent = '✅ Autenticado';
+                authStatus.className = 'auth-success';
+                document.getElementById('userName').textContent = user.nome;
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userId').textContent = user.idusuarios;
+            } else {
+                loginForms.classList.remove('hidden');
+                userInfo.classList.add('hidden');
+                authStatus.style.display = 'none';
+            }
+        }
+
+        // Initialize UI
+        updateAuthUI();
+
+        // Helper to get headers
+        function getHeaders() {
+            const token = localStorage.getItem('token');
+            return token ? { 'Authorization': `Bearer ${token}` } : {};
+        }
 
         // POST
         document.getElementById('postForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('postBtn');
             const result = document.getElementById('postResult');
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                alert('Você precisa estar logado para enviar áudios!');
+                return;
+            }
+
             btn.disabled = true;
             btn.textContent = '⏳ Enviando...';
             result.textContent = '';
@@ -100,21 +243,22 @@
             fd.append('titulo', document.getElementById('titulo').value);
             fd.append('descricao', document.getElementById('descricao').value);
             
-            // Apenas enviar se tiver valor
             const addIfVal = (id) => { const v = document.getElementById(id).value; if(v) fd.append(id, v); };
             addIfVal('temas_idtemas');
-            addIfVal('usuarios_idusuarios');
             addIfVal('idiomas_ididiomas');
             addIfVal('imagens_idimagens');
 
             try {
-                const res = await fetch('/transcricao', { method: 'POST', body: fd });
+                const res = await fetch('/transcricao', { 
+                    method: 'POST', 
+                    headers: getHeaders(),
+                    body: fd 
+                });
                 const data = await res.json();
                 result.textContent = JSON.stringify(data, null, 2);
 
                 if (data.audioId) {
                     document.getElementById('audioId').value = data.audioId;
-                    // Auto-poll status e renderiza instantemente o player
                     await buscarTranscricao(data.audioId, false);
                     startPolling(data.audioId);
                 }
@@ -152,69 +296,36 @@
             }
 
             try {
-                const res = await fetch(`/transcricao/${id}`);
+                const res = await fetch(`/transcricao/${id}`, {
+                    headers: getHeaders()
+                });
                 const data = await res.json();
 
-                // Status badge + progress
                 const status = data.status || 'unknown';
                 let statusHtml = `<span class="status-badge status-${status}">${status}</span>`;
 
                 if (data.posicaoFila) statusHtml += ` Posição na fila: ${data.posicaoFila}`;
-                if (data.queuedAt) statusHtml += ` | Na fila desde: ${new Date(data.queuedAt).toLocaleTimeString()}`;
-
-                if (status === 'transcribing') {
-                    const pct = data.progressPercent || 0;
-                    const remaining = data.estimatedRemainingSec;
-                    const elapsed = data.elapsedMs ? Math.round(data.elapsedMs / 1000) : 0;
-                    statusHtml += `<div style="margin-top:.8rem">`;
-                    statusHtml += `<div style="background:#222;border-radius:8px;height:24px;overflow:hidden;position:relative">`;
-                    statusHtml += `<div style="background:linear-gradient(90deg,#4c6ef5,#748ffc);height:100%;width:${pct}%;transition:width .5s;border-radius:8px;"></div>`;
-                    statusHtml += `<span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.75rem;font-weight:700">${pct}%</span>`;
-                    statusHtml += `</div>`;
-                    statusHtml += `<div style="margin-top:.4rem;font-size:.8rem;color:#888">`;
-                    statusHtml += `⏱️ ${elapsed}s decorridos`;
-                    if (remaining !== undefined) statusHtml += ` · ~${remaining}s restantes`;
-                    statusHtml += `</div></div>`;
-                }
-
+                
                 statusArea.innerHTML = statusHtml;
 
-                // Renderiza áudio usando a rota de stream
                 if (!isPolling && data.hasAudio && !playerDiv.innerHTML.includes('<audio')) {
                     const audio = document.createElement('audio');
                     audio.controls = true;
-                    audio.src = `/transcricao/${data.audioId || id}/audio`;
+                    const token = localStorage.getItem('token');
+                    audio.src = `/transcricao/${data.audioId || id}/audio?token=${token}`; 
                     playerDiv.appendChild(audio);
                 }
 
                 if (status === 'completed') {
-                    // Para de fazer polling
                     if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-
-                    resultDiv.textContent = JSON.stringify({
-                        audioId: data.audioId,
-                        titulo: data.titulo,
-                        descricao: data.descricao,
-                        usuario: data.usuario_nome,
-                        tema: data.tema_nome,
-                        idioma: data.idioma_nome,
-                        imagem: data.imagem_caminho,
-                        status: data.status
-                    }, null, 2);
-
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
                     textoDiv.innerHTML = '';
                     if (data.transcricao && data.transcricao.texto) {
                         textoDiv.innerHTML = '<strong>Transcrição:</strong><br><br>' + data.transcricao.texto;
                         textoDiv.classList.add('transcription-text');
                     }
-                } else if (status === 'error') {
-                    if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-                    resultDiv.textContent = JSON.stringify(data, null, 2);
                 } else {
-                    // Atualiza JSON da reposta p/ visualização rápida, sem apagar player
-                    const logData = { ...data };
-                    delete logData.audio; // Oculta o base64 massivo para debug
-                    resultDiv.textContent = JSON.stringify(logData, null, 2);
+                    resultDiv.textContent = JSON.stringify(data, null, 2);
                 }
 
             } catch (err) {
@@ -232,7 +343,10 @@
             resultDiv.textContent = '⏳ Deletando...';
 
             try {
-                const res = await fetch(`/transcricao/${id}`, { method: 'DELETE' });
+                const res = await fetch(`/transcricao/${id}`, { 
+                    method: 'DELETE',
+                    headers: getHeaders()
+                });
                 const data = await res.json();
                 resultDiv.textContent = JSON.stringify(data, null, 2);
             } catch (err) {
