@@ -1,3 +1,142 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .btnVoltar {
+        display: none;
+    }
+
+    /* Estilos dos Textos da Apresentação */
+    .divTextos>h1 {
+        font-size: 1.875rem;
+    }
+
+    .divTextos>p {
+        font-size: 1.125rem;
+    }
+
+    /* Estilos padrão para Títulos */
+    .divTitulos>h1 {
+        font-size: 1.5rem;
+    }
+
+    /* Estilos Nossos Princípios */
+    .divCardsPrincipio {
+        flex-direction: column;
+    }
+
+    .cardPrincipio {
+        width: 100%;
+    }
+
+    /* Estilos Nossa Equipe */
+    .divNossaEquipe {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .divTextoNossaEquipe {
+        align-items: center;
+        margin-right: 0rem;
+    }
+
+    .divTextoNossaEquipe>p {
+        text-align: center;
+    }
+
+    /* Estilos Parceiros do Projeto */
+    .divCardsParceiros {
+        grid-template-columns: auto;
+    }
+
+    /* Estilos para o Rodapé/Footer */
+    .divFooter>h1 {
+        font-size: 1.5rem;
+    }
+
+    .divFooter>p {
+        margin: 0 0rem;
+    }
+
+    .containerInformacoesFooter {
+        display: grid;
+        grid-template-columns: auto auto;
+        width: 100%;
+        gap: 2rem;
+    }
+
+    .divInformacoesFooter>h1 {
+        font-size: 1.875rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .btnVoltar {
+        display: flex;
+    }
+
+    /* Estilos dos Textos da Apresentação */
+    .divTextos>h1 {
+        font-size: 3rem;
+    }
+
+    .divTextos>p {
+        font-size: 1.25rem;
+    }
+
+    /* Estilos padrão para Títulos */
+    .divTitulos>h1 {
+        font-size: 1.875rem;
+    }
+
+    /* Estilos Nossos Princípios */
+    .divCardsPrincipio {
+        flex-direction: row;
+    }
+
+    .cardPrincipio {
+        width: 35%;
+    }
+
+    /* Estilos Nossa Equipe */
+    .divNossaEquipe {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .divTextoNossaEquipe {
+        align-items: flex-start;
+        margin-right: 6rem;
+    }
+
+    .divTextoNossaEquipe>p {
+        text-align: left;
+    }
+
+    /* Estilos Parceiros do Projeto */
+    .divCardsParceiros {
+        grid-template-columns: auto auto;
+    }
+
+    /* Estilos para o Rodapé/Footer */
+    .divFooter>h1 {
+        font-size: 1.875rem;
+    }
+
+    .divFooter>p {
+        margin: 0 5rem;
+    }
+
+    .containerInformacoesFooter {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        gap: 0rem;
+    }
+
+    .divInformacoesFooter>h1 {
+        font-size: 2.25rem;
+    }
+}
+
 /* Estilo para primeira div onde tem a Apresentação */
 .divApresentacao {
     color: var(--branco);
@@ -6,7 +145,6 @@
 }
 
 .btnVoltar {
-    display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
@@ -54,13 +192,8 @@
     max-width: 52rem;
 }
 
-.divTextos>h1 {
-    font-size: 3rem;
-}
-
 .divTextos>p {
     width: 90%;
-    font-size: 1.25rem;
     text-align: center;
 }
 
@@ -70,10 +203,6 @@
     align-items: center;
     gap: 1rem;
     margin: 3rem 0rem 1.5rem 0rem;
-}
-
-.divTitulos>h1 {
-    font-size: 1.875rem;
 }
 
 /* Estilos para Segunda Parte */
@@ -123,7 +252,6 @@
 
 .cardPrincipio {
     padding: 1.5rem;
-    width: 35%;
     max-width: 25rem;
 }
 
@@ -158,10 +286,10 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-right: 6rem;
 }
 
 .divTextoNossaEquipe>h1 {
+    text-align: center;
     font-size: 1.5rem;
 }
 
@@ -189,7 +317,6 @@
 /* Estilos Parceiros do Projeto */
 .divCardsParceiros {
     display: grid;
-    grid-template-columns: auto auto;
     gap: 2rem;
 }
 
@@ -230,20 +357,11 @@
     border-radius: 1rem;
     background-color: var(--app-background);
 }
-.divFooter>h1{
-    font-size: 1.875rem;
-}
-.divFooter>p{
+
+.divFooter>p {
     font-size: 1rem;
     color: var(--font-meio-apagada);
-    margin: 0 5rem;
     text-align: center;
-}
-
-.containerInformacoesFooter {
-    width: 90%;
-    display: flex;
-    justify-content: space-between;
 }
 
 .divInformacoesFooter {
@@ -251,11 +369,13 @@
     flex-direction: column;
     align-items: center;
 }
-.divInformacoesFooter>h1{
+
+.divInformacoesFooter>h1 {
     color: var(--cor-azul-font-borda);
-    font-size: 2.25rem;
 }
-.divInformacoesFooter>p{
+
+.divInformacoesFooter>p {
     font-size: 0.875rem;
     color: var(--font-meio-apagada);
+    text-align: center;
 }
