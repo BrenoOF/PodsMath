@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const favoritoController = require('../controllers/favoritoController');
+const authMiddleware = require('../middleware/authMiddleware');
 
-router.get('/', favoritoController.getAllFavoritos);
-router.get('/usuario/:usuarioId', favoritoController.getFavoritosByUsuarioId);
-router.post('/', favoritoController.createFavorito);
-router.delete('/:usuarioId/:audioId', favoritoController.deleteFavorito);
+router.get('/', authMiddleware, favoritoController.getAllFavoritos);
+router.get('/usuario/:usuarioId', authMiddleware, favoritoController.getFavoritosByUsuarioId);
+router.post('/', authMiddleware, favoritoController.createFavorito);
+router.delete('/:usuarioId/:audioId', authMiddleware, favoritoController.deleteFavorito);
 
 module.exports = router;
