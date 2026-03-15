@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Style from "./carrosseis.module.css";
 
@@ -6,6 +7,7 @@ import Style from "./carrosseis.module.css";
 import { Carousel } from "primereact/carousel";
 
 export default function CompPodcastNovidades({ podcasts }) {
+    const navigate = useNavigate();
     const [numVisible, setNumVisible] = useState(4);
 
     // Atualiza quantidade de cards conforme tamanho da fonte
@@ -19,27 +21,26 @@ export default function CompPodcastNovidades({ podcasts }) {
         }
     };
 
-    useEffect(() => {
-        // Aplica regra inicial para fonts
-        atualizarNumVisible();
-        // Escutador para mudanças no localStorage
-        window.addEventListener("fontChange", atualizarNumVisible);
-        return () => {
-            window.removeEventListener("fontChange", atualizarNumVisible);
-        };
-    }, []);
-
     const novidadesTemplate = (item) => {
         return (
-            <div className={Style.cardNovidade}>
+            <div className={Style.cardNovidade}
+                onClick={() => {
+                    navigate(`/explorar/${item.idTema}/${item.playlistTema}/${item.idPodcast}`);
+                }}
+            >
                 <div className={Style.divImgCardNovidade}>
                     <img src={item.img} alt={item.titulo}
                         className={Style.imgCard} draggable="false"
                     />
                 </div>
                 <h1>{item.titulo}</h1>
-                <p>{item.descricao}</p>
-                <div className={Style.btnAssunto}>
+                <p>Feito por: {item.autor}</p>
+                <div className={Style.btnAssunto}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/explorar/${item.idTema}`);
+                    }}
+                >
                     <p>{item.assunto}</p>
                 </div>
             </div>
@@ -56,11 +57,26 @@ export default function CompPodcastNovidades({ podcasts }) {
             breakpoint: '1024px',
             numVisible: 2,
             numScroll: 1
+        },
+        {
+            breakpoint: '768px',
+            numVisible: 1,
+            numScroll: 1
         }
     ];
 
+    useEffect(() => {
+        // Aplica regra inicial para fonts
+        atualizarNumVisible();
+        // Escutador para mudanças no localStorage
+        window.addEventListener("fontChange", atualizarNumVisible);
+        return () => {
+            window.removeEventListener("fontChange", atualizarNumVisible);
+        };
+    }, []);
+
     return (
-        <div>
+        <div className={Style.limitarWidthNovidade}>
             <div className={Style.divTitulosDosPodcasts}>
                 <i className="fa-solid fa-music"></i>
                 <p>Novidades</p>

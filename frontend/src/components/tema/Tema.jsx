@@ -31,6 +31,10 @@ export default function TelaTema() {
 
     return (
         <div className={Style.containerTemas}>
+            <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
+                <i className="fa-solid fa-angle-left"></i>
+                <p>Voltar</p>
+            </div>
             <div className={Style.divTitulo}>
                 <h1>{tituloAssunto}</h1>
                 <p>

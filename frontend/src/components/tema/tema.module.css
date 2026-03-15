@@ -7,7 +7,11 @@
         padding: 2rem 0rem;
     }
 
-    .divTitulo{
+    .btnVoltar {
+        display: none;
+    }
+
+    .divTitulo {
         width: 90%;
     }
 }
@@ -18,7 +22,11 @@
         padding: 2rem;
     }
 
-    .divTitulo{
+    .btnVoltar {
+        display: flex;
+    }
+
+    .divTitulo {
         width: 100%;
     }
 }
@@ -26,6 +34,26 @@
 .containerTemas {
     max-width: 1350px;
     margin: 0 auto;
+}
+
+.btnVoltar {
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    width: 5.5rem;
+    height: 2.5rem;
+    margin-bottom: 1rem;
+    margin-top: -1rem;
+    font-size: 0.875rem;
+    border-radius: 0.625rem;
+    background-color: var(--btn-1);
+    color: var(--branco);
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.btnVoltar:hover {
+    background-color: var(--btn-1-hover);
 }
 
 .divTitulo {

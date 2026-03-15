@@ -1,133 +1,110 @@
 {
     "podcastsProprios": [
         {
-                "id": 1,
-                "titulo": "Trigonometria no Cotidiano: Aplicações Práticas",
-                "descricao": "Descubra como a trigonometria está presente em mapas, construções e até em apps de navegação.",
-                "img": "/imgs/cardExemplo.jpg",
-                "assunto": "Trigonometria"
+            "id": 1,
+            "titulo": "Fundamentos da Trigonometria: Seno, Cosseno e Tangente",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Trigonometria",
+            "idTema": 5,
+            "playlistTema": 501,
+            "idPodcast": 5001
         },
         {
-                "id": 2,
-                "titulo": "Álgebra Essencial: Fundamentos e Aplicações",
-                "descricao": "Domine os conceitos básicos de álgebra e aprenda como aplicar expressões e equações no dia a dia.",
-                "img": "/imgs/cardExemplo.jpg",
-                "assunto": "Estatística"
+            "id": 2,
+            "titulo": "Álgebra Essencial: Equações dp 1° Grau",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Álgebra",
+            "idTema": 1,
+            "playlistTema": 101,
+            "idPodcast": 1001
         },
         {
-                "id": 3,
-                "titulo": "Matemática Financeira: Juros Simples e Compostos",
-                "descricao": "Aprenda a calcular juros e entender como eles impactam empréstimos, investimentos e o dia a dia.",
-                "img": "/imgs/cardExemplo.jpg",
-                "assunto": "Matemática Financeira"
+            "id": 3,
+            "titulo": "Juros Compostos: Fórmula dos Juros Compostos",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Matemática Financeira",
+            "idTema": 6,
+            "playlistTema": 602,
+            "idPodcast": 6003
         }
     ],
     "novidades": [
         {
             "id": 1,
-            "titulo": "Funções do 1º Grau",
-            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
+            "titulo": "Equações do 1° Grau",
+            "autor": "Adriana",
             "img": "/imgs/cardExemplo.jpg",
-            "assunto": "algebra"
+            "assunto": "Álgebra",
+            "idTema": 1,
+            "playlistTema": 101,
+            "idPodcast": 1001
         },
         {
             "id": 2,
-            "titulo": "Trigonometria",
-            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
+            "titulo": "Seno, Cosseno e Tangente",
+            "autor": "Adriana",
             "img": "/imgs/cardExemplo.jpg",
-            "assunto": "calculo"
+            "assunto": "Trigonometria",
+            "idTema": 5,
+            "playlistTema": 501,
+            "idPodcast": 5001
         },
         {
             "id": 3,
-            "titulo": "Funções do 1º Grau",
-            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
+            "titulo": "Teorema de Pitágoras",
+            "autor": "Adriana",
             "img": "/imgs/cardExemplo.jpg",
-            "assunto": "estatísticas"
+            "assunto": "Geometria",
+            "idTema": 2,
+            "playlistTema": 201,
+            "idPodcast": 2002
         },
         {
             "id": 4,
-            "titulo": "Trigonometria",
-            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
+            "titulo": "Média, Moda e Mediana",
+            "autor": "Adriana",
             "img": "/imgs/cardExemplo.jpg",
-            "assunto": "geometria"
-        },
-        {
-            "id": 5,
-            "titulo": "Funções do 1º Grau",
-            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
-            "img": "/imgs/cardExemplo.jpg",
-            "assunto": "algebra"
-        },
-        {
-            "id": 6,
-            "titulo": "Trigonometria",
-            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
-            "img": "/imgs/cardExemplo.jpg",
-            "assunto": "algebra"
-        },
-        {
-            "id": 7,
-            "titulo": "Funções do 1º Grau",
-            "descricao": "Aprenda os conceitos fundamentais das funções do primeiro grau.",
-            "img": "/imgs/cardExemplo.jpg",
-            "assunto": "algebra"
-        },
-        {
-            "id": 8,
-            "titulo": "Trigonometria",
-            "descricao": "Seno, cosseno e tangente explicados de forma simples.",
-            "img": "/imgs/cardExemplo.jpg",
-            "assunto": "algebra"
+            "assunto": "Estatística",
+            "idTema": 3,
+            "playlistTema": 301,
+            "idPodcast": 3001
         }
     ],
     "podcastsDestaque": [
         {
             "id": 1,
-            "titulo": "Geometria Básica",
-            "episodios": 1,
-            "img": "/imgs/cardExemplo.jpg"
+            "titulo": "Álgebra Essencial",
+            "episodios": 3,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 1,
+            "playlistTema": 101
         },
         {
             "id": 2,
-            "titulo": "Geometria Básica",
-            "episodios": 1,
-            "img": "/imgs/cardExemplo.jpg"
+            "titulo": "Geometria Plana",
+            "episodios": 2,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 2,
+            "playlistTema": 201
         },
         {
             "id": 3,
-            "titulo": "Geometria Básica",
-            "episodios": 1,
-            "img": "/imgs/cardExemplo.jpg"
+            "titulo": "Estatística Básica",
+            "episodios": 2,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 3,
+            "playlistTema": 301
         },
         {
             "id": 4,
-            "titulo": "Geometria Básica",
-            "episodios": 1,
-            "img": "/imgs/cardExemplo.jpg"
-        },
-        {
-            "id": 5,
-            "titulo": "Geometria Básica",
-            "episodios": 8,
-            "img": "/imgs/cardExemplo.jpg"
-        },
-        {
-            "id": 6,
-            "titulo": "Geometria Básica",
-            "episodios": 8,
-            "img": "/imgs/cardExemplo.jpg"
-        },
-        {
-            "id": 7,
-            "titulo": "Geometria Básica",
-            "episodios": 8,
-            "img": "/imgs/cardExemplo.jpg"
-        },
-        {
-            "id": 8,
-            "titulo": "Geometria Básica",
-            "episodios": 8,
-            "img": "/imgs/cardExemplo.jpg"
+            "titulo": "Fundamentos da Trigonometria",
+            "episodios": 2,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 5,
+            "playlistTema": 501
         }
     ]
 }
