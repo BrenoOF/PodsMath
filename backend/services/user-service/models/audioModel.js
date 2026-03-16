@@ -117,6 +117,65 @@ const Audio = {
         } finally {
             if (connection) connection.release();
         }
+    },
+
+    getHighlights: async (limit = 10) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            const query = `
+                SELECT a.*, img.caminho_imagem AS imagem_caminho 
+                FROM audios a
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                ORDER BY visualizacoes DESC 
+                LIMIT ?
+            `;
+            const [rows] = await connection.query(query, [limit]);
+            return rows;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    getRecent: async (limit = 10) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            const query = `
+                SELECT a.*, img.caminho_imagem AS imagem_caminho 
+                FROM audios a
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                ORDER BY idaudios DESC 
+                LIMIT ?
+            `;
+            const [rows] = await connection.query(query, [limit]);
+            return rows;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    getByUser: async (userId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            const query = `
+                SELECT a.*, img.caminho_imagem AS imagem_caminho 
+                FROM audios a
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                WHERE usuarios_idusuarios = ?
+            `;
+            const [rows] = await connection.query(query, [userId]);
+            return rows;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 
