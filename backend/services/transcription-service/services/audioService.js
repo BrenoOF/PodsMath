@@ -1,6 +1,7 @@
 require('dotenv').config({ path: '../../config/.env' });
 const fs = require('fs');
 const path = require('path');
+const axios = require('axios');
 const AudioMongo = require('../models/AudioMongo');
 const { getGridFSBucket } = require('../db/connection');
 
@@ -33,56 +34,54 @@ async function createAudioRecord({
     if (imagens_idimagens) payload.imagens_idimagens = imagens_idimagens;
     // usuarios_idusuarios removed from payload since it's from token in user-service
 
-    const audioResponse = await fetch(`${USER_SERVICE_URL}/audios`, {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(payload)
-    });
+    try {
+        const audioResponse = await axios.post(`${USER_SERVICE_URL}/audios`, payload, {
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        });
 
-    if (!audioResponse.ok) {
-        const err = await audioResponse.json();
-        throw new Error(`Erro ao criar áudio no user-service: ${err.message || audioResponse.statusText}`);
+        const audioData = audioResponse.data;
+        const audioId = audioData.idaudios;
+
+        // 2. Salva o áudio no MongoDB usando GridFS (suporta arquivos > 16MB)
+        const gridFSBucket = getGridFSBucket();
+        const fileName = path.basename(filePath);
+
+        const uploadStream = gridFSBucket.openUploadStream(fileName, {
+            contentType: mimeType || 'audio/wav',
+            metadata: { mysqlAudioId: audioId }
+        });
+
+        return new Promise((resolve, reject) => {
+            const readStream = fs.createReadStream(filePath);
+
+            readStream.pipe(uploadStream)
+                .on('error', (error) => {
+                    console.error(`Erro no upload para o GridFS: ${error.message}`);
+                    reject(error);
+                })
+                .on('finish', async () => {
+                    // Salva a referência no AudioMongo
+                    try {
+                        await AudioMongo.create({
+                            mysqlAudioId: audioId,
+                            fileId: uploadStream.id,
+                            mimeType: mimeType || 'audio/wav'
+                        });
+                        console.log(`Áudio pré-criado no GridFS. MySQL ID: ${audioId}`);
+                        resolve(audioId);
+                    } catch (dbError) {
+                        console.error(`Erro ao salvar referência no AudioMongo: ${dbError.message}`);
+                        reject(dbError);
+                    }
+                });
+        });
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        throw new Error(`Erro ao criar áudio no user-service: ${message}`);
     }
-
-    const audioData = await audioResponse.json();
-    const audioId = audioData.idaudios;
-
-    // 2. Salva o áudio no MongoDB usando GridFS (suporta arquivos > 16MB)
-    const gridFSBucket = getGridFSBucket();
-    const fileName = path.basename(filePath);
-
-    const uploadStream = gridFSBucket.openUploadStream(fileName, {
-        contentType: mimeType || 'audio/wav',
-        metadata: { mysqlAudioId: audioId }
-    });
-
-    return new Promise((resolve, reject) => {
-        const readStream = fs.createReadStream(filePath);
-
-        readStream.pipe(uploadStream)
-            .on('error', (error) => {
-                console.error(`Erro no upload para o GridFS: ${error.message}`);
-                reject(error);
-            })
-            .on('finish', async () => {
-                // Salva a referência no AudioMongo
-                try {
-                    await AudioMongo.create({
-                        mysqlAudioId: audioId,
-                        fileId: uploadStream.id,
-                        mimeType: mimeType || 'audio/wav'
-                    });
-                    console.log(`Áudio pré-criado no GridFS. MySQL ID: ${audioId}`);
-                    resolve(audioId);
-                } catch (dbError) {
-                    console.error(`Erro ao salvar referência no AudioMongo: ${dbError.message}`);
-                    reject(dbError);
-                }
-            });
-    });
 }
 
 /**
@@ -95,22 +94,18 @@ async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas 
         headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes`, {
-        method: 'POST',
-        headers: headers,
-        body: JSON.stringify({
+    try {
+        await axios.post(`${USER_SERVICE_URL}/transcricoes`, {
             textoTranscricao,
             audios_idaudios: audioId,
             idiomas_ididiomas
-        })
-    });
+        }, { headers });
 
-    if (!transcricaoResponse.ok) {
-        const err = await transcricaoResponse.json();
-        throw new Error(`Erro ao salvar transcrição: ${err.message || transcricaoResponse.statusText}`);
+        console.log(`Transcrição salva para áudio ID: ${audioId}`);
+    } catch (error) {
+        const message = error.response?.data?.message || error.message;
+        throw new Error(`Erro ao salvar transcrição: ${message}`);
     }
-
-    console.log(`Transcrição salva para áudio ID: ${audioId}`);
 }
 
 /**
@@ -119,22 +114,26 @@ async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas 
 async function getAudioWithTranscription(audioId, token) {
         try {
             // 1. Busca dados do MySQL (user-service) COM DETALHES (JOIN)
-            const audioResponse = await fetch(`${USER_SERVICE_URL}/audios/${audioId}/details`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (!audioResponse.ok) {
-                if (audioResponse.status === 404) return null;
-                throw new Error(`Erro ao buscar áudio no user-service: ${audioResponse.statusText}`);
+            let audioData;
+            try {
+                const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                audioData = audioResponse.data;
+            } catch (error) {
+                if (error.response?.status === 404) return null;
+                throw error;
             }
-            const audioData = await audioResponse.json();
 
             // 2. Busca transcrição via user-service
-            const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
             let transcricao = null;
-            if (transcricaoResponse.ok) {
-                transcricao = await transcricaoResponse.json();
+            try {
+                const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                transcricao = transcricaoResponse.data;
+            } catch (error) {
+                // Se não houver transcrição, continua com null
             }
 
             // 3. Busca o áudio original no GridFS (se existir transcrição ou se estivermos buscando para tocar logo)
@@ -175,6 +174,17 @@ async function deleteAudioRecord(audioId, token) {
     try {
         console.log(`Iniciando deleção do áudio ID: ${audioId}`);
         
+        // 0. Buscar detalhes do áudio antes de deletar para saber o ID da imagem
+        let audioDetails = null;
+        try {
+            const detailRes = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            audioDetails = detailRes.data;
+        } catch (e) {
+            console.warn(`Aviso: Não foi possível buscar detalhes do áudio ${audioId} antes de deletar.`);
+        }
+
         // 1. Deletar do MongoDB: GridFS e coleção AudioMongo
         const audioMongo = await AudioMongo.findOne({ mysqlAudioId: audioId });
         if (audioMongo) {
@@ -192,31 +202,40 @@ async function deleteAudioRecord(audioId, token) {
         }
 
         // 2. Deletar transcrições no MySQL via user-service
-        const transcricaoResponse = await fetch(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        });
-        if (!transcricaoResponse.ok) {
-            console.warn(`Aviso: Falha ao deletar transcrições no MySQL. HTTP Status: ${transcricaoResponse.status}`);
-        } else {
+        try {
+            await axios.delete(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
             console.log(`Transcrições deletadas no MySQL para audioId: ${audioId}`);
+        } catch (error) {
+            console.warn(`Aviso: Falha ao deletar transcrições no MySQL. Erro: ${error.message}`);
         }
 
         // 3. Deletar o registro de áudio no MySQL via user-service
-        const audioResponse = await fetch(`${USER_SERVICE_URL}/audios/${audioId}`, {
-            method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
+        try {
+            await axios.delete(`${USER_SERVICE_URL}/audios/${audioId}`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            console.log(`Áudio deletado com sucesso do MySQL. ID: ${audioId}`);
+        } catch (error) {
+            if (error.response?.status !== 404) {
+                const message = error.response?.data?.message || error.message;
+                throw new Error(`Erro ao deletar áudio pai no user-service: ${message}`);
             }
-        });
-        if (!audioResponse.ok && audioResponse.status !== 404) {
-            const err = await audioResponse.json();
-            throw new Error(`Erro ao deletar áudio pai no user-service: ${err.message || audioResponse.statusText}`);
+        }
+
+        // 4. Deletar a imagem associada se não for a padrão (ID 1)
+        if (audioDetails && audioDetails.imagens_idimagens && audioDetails.imagens_idimagens !== 1) {
+            try {
+                await axios.delete(`${USER_SERVICE_URL}/imagens/${audioDetails.imagens_idimagens}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                console.log(`Imagem ID ${audioDetails.imagens_idimagens} deletada com sucesso.`);
+            } catch (imgErr) {
+                console.warn(`Aviso: Falha ao deletar imagem ID ${audioDetails.imagens_idimagens}. Erro: ${imgErr.message}`);
+            }
         }
         
-        console.log(`Áudio deletado com sucesso do MySQL. ID: ${audioId}`);
         return true;
     } catch (error) {
         console.error(`Erro em deleteAudioRecord:`, error);

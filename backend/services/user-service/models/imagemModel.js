@@ -38,10 +38,16 @@ const Imagem = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [result] = await connection.query(
-                'INSERT INTO imagens (idimagens, caminho_imagem) VALUES (?, ?)',
-                [idimagens, caminho_imagem]
-            );
+            
+            let query = 'INSERT INTO imagens (caminho_imagem) VALUES (?)';
+            let params = [caminho_imagem];
+            
+            if (idimagens) {
+                query = 'INSERT INTO imagens (idimagens, caminho_imagem) VALUES (?, ?)';
+                params = [idimagens, caminho_imagem];
+            }
+
+            const [result] = await connection.query(query, params);
             await connection.commit();
             return { idimagens: result.insertId, caminho_imagem };
         } catch (error) {
