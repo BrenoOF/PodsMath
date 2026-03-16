@@ -7,6 +7,23 @@
         padding: 2rem 0.5rem;
     }
 
+    .divBoasVindas {
+        padding: 2rem 1rem;
+    }
+
+    .tituloBoasVindas {
+        line-height: 2rem;
+        font-size: 2rem;
+    }
+
+    .subTitulo {
+        font-size: 1rem;
+    }
+
+    .imgMicrofone {
+        display: none;
+    }
+
     /* Estilos para o "Sobre este Projeto" */
     .sobreOProjeto {
         flex-direction: column-reverse;
@@ -46,6 +63,23 @@
     .containerHome {
         display: block;
         padding: 2rem;
+    }
+
+    .divBoasVindas {
+        padding: 2rem 4.6rem;
+    }
+
+    .tituloBoasVindas {
+        line-height: 4rem;
+        font-size: 3.75rem;
+    }
+
+    .subTitulo {
+        font-size: 1.25rem;
+    }
+
+    .imgMicrofone {
+        display: block;
     }
 
     /* Estilos para o "Sobre este Projeto" */
@@ -91,7 +125,6 @@
     gap: 2rem;
     background: linear-gradient(264.39deg, #4577A1 -92.12%, #021B33 104.6%);
     color: var(--branco);
-    padding: 2rem 4.6rem;
     min-height: 24rem;
     height: auto;
     border-radius: 1.5rem;
@@ -103,25 +136,16 @@
     align-items: center;
     gap: 0.7rem;
     font-size: 0.875rem;
-    background: var(--color-white-10, var(--fundo-apagado));
+    background: var(--fundo-apagado);
     border-radius: 2rem;
     padding: 0.5rem;
     width: 13rem;
-}
-
-.tituloBoasVindas {
-    line-height: 4rem;
-    font-size: 3.75rem;
 }
 
 .tituloBoasVindas>span {
     background: linear-gradient(90deg, #F08E60 0%, #FF851A 100%);
     background-clip: text;
     color: transparent;
-}
-
-.subTitulo {
-    font-size: 1.25rem;
 }
 
 .imgMicrofone {

@@ -87,6 +87,7 @@
               "dt_adicao": "04/03/2025",
               "img": "/imgs/cardExemplo.jpg",
               "audio": "teste5.mp3",
+              "transcricao": "transcricao",
               "duracao": "8:05"
             }
           ]
@@ -219,6 +220,7 @@
               "dt_adicao": "06/03/2025",
               "img": "/imgs/cardExemplo.jpg",
               "audio": "teste5.mp3",
+              "transcricao": "transcricao",
               "duracao": "7:40"
             }
           ]
