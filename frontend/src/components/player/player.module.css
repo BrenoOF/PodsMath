@@ -234,6 +234,20 @@
     overflow: auto;
 }
 
+.transcricao span{
+    color: var(--font-meio-apagada);
+    font-size: 1rem;
+    transition: 0.2s;
+    display: block;
+    margin-bottom: 0.875rem;
+}
+
+.ativa{
+    color: var(--cor-azul-escura-font-bg) !important;
+    font-size: 1.125rem !important;
+    font-weight: bold;
+}
+
 /* Estilo para Modal de troca de Transcrição */
 .menuIdiomas {
     display: flex;

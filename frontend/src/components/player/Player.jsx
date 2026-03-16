@@ -4,12 +4,38 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Style from "./player.module.css";
 
+// Funções Transcrição
+const tempoParaSegundos = (tempo) => {
+    const [hms, ms] = tempo.split(",");
+    const [h, m, s] = hms.split(":").map(Number);
+
+    return h * 3600 + m * 60 + s + Number(ms) / 1000;
+}
+
+const parseTranscricao = (texto) => {
+    const regex = /\[(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})\]\s*([\s\S]*?)(?=\s*\[\d{2}:\d{2}:\d{2},\d{3} -->|$)/g;
+
+    const resultado = [];
+    let match;
+
+    while ((match = regex.exec(texto)) !== null) {
+        resultado.push({
+            start: tempoParaSegundos(match[1]),
+            end: tempoParaSegundos(match[2]),
+            text: match[3].trim()
+        });
+    }
+
+    return resultado;
+};
+
 export default function TelaPlayer() {
     const navigate = useNavigate();
     const { idTema, playlistTema, idPodcast } = useParams();
     const [dadosPlayer, setDadosPlayer] = useState(null);
 
     // Código para Fazer a parte da transcrição
+    const [transcricao, setTranscricao] = useState([]);
     const [menuAberto, setMenuAberto] = useState(false);
     const [linguaSelecionada, setLinguaSelecionada] = useState("pt-br");
 
@@ -132,11 +158,52 @@ export default function TelaPlayer() {
         carregarDados();
     }, [idTema, playlistTema, idPodcast]);
 
+    // Pegar Transcricao
+    useEffect(() => {
+        const carregarTranscricao = async () => {
+            if (!dadosPlayer?.transcricao) return;
+            try {
+                const response = await axios.get(
+                    `/dados/${dadosPlayer.transcricao}.txt`
+                );
+                const transcricaoConvertida = parseTranscricao(response.data);
+                setTranscricao(transcricaoConvertida);
+            } catch (error) {
+                console.log("Transcrição não encontrada");
+                setTranscricao([]);
+            }
+        };
+        carregarTranscricao();
+    }, [dadosPlayer, linguaSelecionada]);
+
+    // Scroll acompanhar a Transcrição
+    const linhaAtivaRef = useRef(null);
+    const indexAtualRef = useRef(-1);
+
+    useEffect(() => {
+        const indexAtual = transcricao.findIndex(
+            (linha) =>
+                tempoAtual >= linha.start &&
+                tempoAtual <= linha.end
+        );
+
+        if (indexAtual !== indexAtualRef.current) {
+            indexAtualRef.current = indexAtual;
+
+            if (linhaAtivaRef.current) {
+                linhaAtivaRef.current.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+            }
+        }
+    }, [tempoAtual, transcricao]);
+
     // Tocar Audio
     useEffect(() => {
         const audio = audioRef.current;
 
-        const atualizarTempo = () => {
+        const atualizarTempoAudio = () => {
             setTempoAtual(audio.currentTime);
         };
 
@@ -148,12 +215,12 @@ export default function TelaPlayer() {
             setTocando(false);
         };
 
-        audio.addEventListener("timeupdate", atualizarTempo);
+        audio.addEventListener("timeupdate", atualizarTempoAudio);
         audio.addEventListener("loadedmetadata", carregarDuracao);
         audio.addEventListener("ended", terminouAudio);
 
         return () => {
-            audio.removeEventListener("timeupdate", atualizarTempo);
+            audio.removeEventListener("timeupdate", atualizarTempoAudio);
             audio.removeEventListener("loadedmetadata", carregarDuracao);
             audio.removeEventListener("ended", terminouAudio);
         };
@@ -166,7 +233,7 @@ export default function TelaPlayer() {
         }
     }, [volume]);
 
-    // Fazer o click arrastar do mouse na barra de progesso funcione
+    // Fazer o click arrastar do mouse na barra de progresso funcione
     useEffect(() => {
         if (!arrastando) return;
 
@@ -187,7 +254,7 @@ export default function TelaPlayer() {
         let frame;
 
         const atualizar = () => {
-            if (audioRef.current) {
+            if (audioRef.current && tocando) {
                 setTempoAtual(audioRef.current.currentTime);
             }
             frame = requestAnimationFrame(atualizar);
@@ -196,7 +263,7 @@ export default function TelaPlayer() {
         frame = requestAnimationFrame(atualizar);
 
         return () => cancelAnimationFrame(frame);
-    }, []);
+    }, [tocando]);
 
     // Controle de Velocidade do Audio
     const [menuAbertoVelocidade, setMenuAbertoVelocidade] = useState(false);
@@ -241,7 +308,7 @@ export default function TelaPlayer() {
         <div className={Style.containerPlayer}>
             {/* Audio do Podcast */}
             <audio ref={audioRef} src={`/audio/${dadosPlayer?.audio}`} loop={loop}></audio>
-            {/* Apresentção do Podcast */}
+            {/* Apresentação do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
                 <p>Voltar</p>
@@ -304,16 +371,27 @@ export default function TelaPlayer() {
                     )}
                 </div>
                 <div className={Style.transcricao}>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean maximus dolor nibh, 
-                        sed dictum ipsum molestie eget. Proin malesuada justo libero, a dictum tortor convallis eget. 
-                        Aenean convallis ex ante, eget consectetur neque venenatis a. Nullam porta velit 
-                        vel mauris viverra, nec fringilla eros posuere. Pellentesque lobortis ipsum libero, 
-                        dapibus tincidunt mauris laoreet sit amet. Morbi euismod rutrum commodo. In mattis 
-                        posuere mi, eu mattis ipsum bibendum nec. Vestibulum interdum elit ut porttitor accumsan. 
-                        Phasellus pellentesque arcu in aliquet tempus. Quisque sit amet eros vitae erat porttitor 
-                        efficitur.
-                    </p>
+                    {transcricao.length === 0 ? (
+                        <p>Esse Podcast não possui uma Transcrição ainda.</p>
+                    ) : (
+                        transcricao.map((linha, index) => {
+                            const ativo =
+                                tempoAtual >= linha.start &&
+                                tempoAtual <= linha.end;
+                            return (
+                                <span
+                                    key={index}
+                                    ref={ativo ? linhaAtivaRef : null}
+                                    className={ativo ? Style.ativa : ""}
+                                    onClick={() => {
+                                        audioRef.current.currentTime = linha.start;
+                                    }}
+                                >
+                                    {linha.text}
+                                </span>
+                            );
+                        })
+                    )}
                 </div>
             </div>
             <div className={Style.containerTocador}>
@@ -333,7 +411,6 @@ export default function TelaPlayer() {
                             }}
                         ></div>
                     </div>
-                    {/*  */}
                     <p>{formatarTempo(duracaoTotal)}</p>
                 </div>
                 {/* Parte de Baixo do Tocador */}
