@@ -91,10 +91,9 @@ export default function TelaLogin() {
 
         if (!nome.trim()) novosErros.nome = "Nome é obrigatório";
 
-        if (!email.trim()) {
-            novosErros.email = "Email é obrigatório";
-        } else if (!validarEmail(email)) {
-            novosErros.email = "Email inválido";
+        const erroEmail = validarEmail(email);
+        if (erroEmail) {
+            novosErros.email = erroEmail;
         }
 
         if (!senha || senha.length < 6)
@@ -118,43 +117,66 @@ export default function TelaLogin() {
         } else {
             if (!validarCadastro()) return;
 
-            console.log("CADASTRO OK", {
-                nome,
-                email,
-                senha,
-                confirmarSenha
-            });
+            await cadastrar();
         }
     };
 
     const logar = async () => {
         try {
-            // Lê o JSON completo
-            const response = await axios.get("/dados/users.json");
-            const usuarios = response.data;
+            const response = await axios.post("http://localhost:3001/auth/login", {
+                email: email,
+                senha: senha,
+                nivel_acesso_idnivel_acesso: 1,
+                paletaCor_idpaletaCor: 1
+            });
 
-            // Procura usuário que bate com email e senha
-            const usuario = usuarios.find(u => u.email === email && u.senha === senha);
+            const { token } = response.data;
 
-            if (usuario) {
-                // Salva dados do usuário no localStorage
-                localStorage.setItem("usuarioId", usuario.id);
+            localStorage.setItem("token", token);
 
-                setErrors({});
-                navigate("/");
-            } else {
+            setErrors({});
+            navigate("/");
+        } catch (error) {
+            if (error.response) {
                 setErrors((prev) => ({
                     ...prev,
                     login: "Email ou senha inválidos"
                 }));
+            } else {
+                setErrors((prev) => ({
+                    ...prev,
+                    login: "Erro interno. Tente novamente."
+                }));
             }
-        } catch (error) {
-            // console.error(error);
+        }
+    };
 
-            setErrors((prev) => ({
-                ...prev,
-                login: "Erro interno. Tente novamente."
-            }));
+    const cadastrar = async () => {
+        try {
+            const response = await axios.post("http://localhost:3001/auth/register", {
+                nome: nome,
+                email: email,
+                senha: senha
+            });
+
+            const { token } = response.data;
+
+            localStorage.setItem("token", token);
+
+            setErrors({});
+            navigate("/");
+        } catch (error) {
+            if (error.response) {
+                setErrors((prev) => ({
+                    ...prev,
+                    cadastro: error.response.data.message || "Erro ao cadastrar"
+                }));
+            } else {
+                setErrors((prev) => ({
+                    ...prev,
+                    cadastro: "Erro ao conectar com o servidor"
+                }));
+            }
         }
     };
 
