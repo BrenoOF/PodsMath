@@ -1,20 +1,29 @@
+const axios = require('axios');
+const FormData = require('form-data');
+const fs = require('fs');
 const queueService = require('../services/queueService');
 const { createAudioRecord, getAudioWithTranscription } = require('../services/audioService');
+
+const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3001';
 
 const transcriptionController = {
     /**
      * POST /transcricao
-     * 1. Cria o áudio no MySQL + MongoDB imediatamente
-     * 2. Coloca na fila do Whisper
-     * 3. Retorna o audioId + status 'queued'
+     * 1. Se houver imagem, faz upload para o user-service para pegar o ID
+     * 2. Cria o áudio no MySQL + MongoDB imediatamente
+     * 3. Coloca na fila do Whisper
+     * 4. Retorna o audioId + status 'queued'
      */
     createTranscription: async (req, res) => {
         try {
-            if (!req.file) {
+            const audioFile = req.files?.audio?.[0];
+            const imagemFile = req.files?.imagem?.[0];
+
+            if (!audioFile) {
                 return res.status(400).json({ message: 'Nenhum arquivo de áudio enviado.' });
             }
 
-            const {
+            let {
                 titulo = 'Sem título',
                 descricao = '',
                 temas_idtemas = 1,
@@ -22,13 +31,40 @@ const transcriptionController = {
                 imagens_idimagens = 1
             } = req.body;
 
-            const usuarios_idusuarios = req.usuario.idusuarios;
             const token = req.headers.authorization?.split(' ')[1] || req.query.token;
 
-            const filePath = req.file.path;
-            const mimeType = req.file.mimetype || 'audio/wav';
+            // 1. Se enviou imagem, faz o "forward" para o user-service
+            if (imagemFile) {
+                try {
+                    const form = new FormData();
+                    form.append('imagem', fs.createReadStream(imagemFile.path));
+                    
+                    const userServRes = await axios.post(`${USER_SERVICE_URL}/imagens`, form, {
+                        headers: {
+                            ...form.getHeaders(),
+                            'Authorization': `Bearer ${token}`
+                        }
+                    });
+                    
+                    if (userServRes.data && userServRes.data.idimagens) {
+                        imagens_idimagens = userServRes.data.idimagens;
+                    }
+                } catch (imgErr) {
+                    console.error('Erro ao enviar imagem para user-service:', imgErr.message);
+                } finally {
+                    // Limpa o arquivo temporário da imagem no transcription-service
+                    if (fs.existsSync(imagemFile.path)) {
+                        try { fs.unlinkSync(imagemFile.path); } catch (e) { console.error('Falha ao deletar imagem temporária:', e); }
+                    }
+                }
+            }
 
-            // 1. Cria o áudio no MySQL e salva buffer no MongoDB AGORA
+            const usuarios_idusuarios = req.usuario.idusuarios;
+
+            const filePath = audioFile.path;
+            const mimeType = audioFile.mimetype || 'audio/wav';
+
+            // 2. Cria o áudio no MySQL e salva buffer no MongoDB AGORA
             const audioId = await createAudioRecord({
                 filePath,
                 mimeType,
@@ -41,13 +77,14 @@ const transcriptionController = {
                 token
             });
 
-            // 2. Adiciona à fila do Whisper (transcrição será salva depois)
+            // 3. Adiciona à fila do Whisper (transcrição será salva depois)
             queueService.addToQueue(filePath, audioId, idiomas_ididiomas, token);
 
             res.status(202).json({
                 message: 'Áudio criado e adicionado à fila de transcrição.',
                 audioId,
-                status: 'queued'
+                status: 'queued',
+                imagens_idimagens
             });
 
         } catch (error) {

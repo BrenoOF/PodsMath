@@ -17,7 +17,7 @@ USE `podsmath` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `podsmath`.`imagens` (
   `idimagens` INT(11) NOT NULL AUTO_INCREMENT,
-  `caminho_imagem` VARCHAR(45) NOT NULL,
+  `caminho_imagem` VARCHAR(200) NOT NULL,
   PRIMARY KEY (`idimagens`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8;
