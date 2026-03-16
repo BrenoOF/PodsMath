@@ -87,6 +87,36 @@ const audioController = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+
+    getHighlights: async (req, res) => {
+        try {
+            const limit = parseInt(req.query.limit) || 10;
+            const audios = await Audio.getHighlights(limit);
+            res.json(audios);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    getRecent: async (req, res) => {
+        try {
+            const limit = parseInt(req.query.limit) || 10;
+            const audios = await Audio.getRecent(limit);
+            res.json(audios);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    getOwnAudios: async (req, res) => {
+        try {
+            const userId = req.usuario.idusuarios;
+            const audios = await Audio.getByUser(userId);
+            res.json(audios);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 };
 
