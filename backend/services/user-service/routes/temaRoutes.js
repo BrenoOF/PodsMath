@@ -4,6 +4,7 @@ const temaController = require('../controllers/temaController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/', authMiddleware, temaController.getAllTemas);
+router.get('/categoria/:idCategoria', authMiddleware, temaController.getTemasByCategoria);
 router.get('/:id', authMiddleware, temaController.getTemaById);
 router.post('/', authMiddleware, temaController.createTema);
 router.put('/:id', authMiddleware, temaController.updateTema);

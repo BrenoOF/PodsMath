@@ -23,6 +23,15 @@ const audioController = {
         }
     },
 
+    getAudiosByTema: async (req, res) => {
+        try {
+            const audios = await Audio.getByTema(req.params.idTema);
+            res.json(audios);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
     getAudioDetailsById: async (req, res) => {
         try {
             const audio = await Audio.getDetailsById(req.params.id);

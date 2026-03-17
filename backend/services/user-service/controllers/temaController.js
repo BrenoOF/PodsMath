@@ -23,6 +23,15 @@ const temaController = {
         }
     },
 
+    getTemasByCategoria: async (req, res) => {
+        try {
+            const temas = await Tema.getByCategoria(req.params.idCategoria);
+            res.json(temas);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
     createTema: async (req, res) => {
         try {
             const newTema = await Tema.create(req.body);
