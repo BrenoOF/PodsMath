@@ -4,6 +4,7 @@ const audioController = require('../controllers/audioController');
 const authMiddleware = require('../middleware/authMiddleware');
 
 router.get('/', authMiddleware, audioController.getAllAudios);
+router.get('/tema/:idTema', authMiddleware, audioController.getAudiosByTema);
 router.get('/destaque', authMiddleware, audioController.getHighlights);
 router.get('/recentes', authMiddleware, audioController.getRecent);
 router.get('/proprios', authMiddleware, audioController.getOwnAudios);

@@ -22,11 +22,24 @@ const Tema = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM temas WHERE idtemas = ?', [id]);
+            const [rows] = await connection.query('SELECT *, i.caminho_imagem FROM temas t LEFT JOIN imagens i ON i.idimagens = t.imagens_idimagens WHERE t.idtemas = ?', [id]);
             await connection.commit();
             return rows[0];
         } catch (error) {
             if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    getByCategoria: async (categoriaId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            const [rows] = await connection.query('SELECT * FROM temas t LEFT JOIN imagens i ON i.idimagens = t.imagens_idimagens WHERE t.categorias_idcategorias = ?;', [categoriaId]);
+            return rows;
+        } catch (error) {
             throw error;
         } finally {
             if (connection) connection.release();

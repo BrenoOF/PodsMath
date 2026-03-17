@@ -176,6 +176,26 @@ const Audio = {
         } finally {
             if (connection) connection.release();
         }
+    },
+
+    getByTema: async (temaId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            const query = `
+                SELECT a.*, u.nome AS autor, img.caminho_imagem AS imagem_caminho 
+                FROM audios a
+                LEFT JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                WHERE temas_idtemas = ?
+            `;
+            const [rows] = await connection.query(query, [temaId]);
+            return rows;
+        } catch (error) {
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
     }
 };
 
