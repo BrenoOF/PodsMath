@@ -1,53 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Swal from 'sweetalert2';
 
 import Style from "./slideBar.module.css";
 
-export default function CompSlideBar({ aberta, setAberta }) {
+export default function CompSlideBar({ aberta, setAberta, alertSair, userLogado }) {
     const navigate = useNavigate();
     const location = useLocation();
 
     // Função para ver a Rota
     const rotaAtiva = (rota) => location.pathname === rota;
-
-    // Verificação se está Logado
-    const [userLogado, setUserLogado] = useState(false);
-    const usuarioId = localStorage.getItem("token");
-
-    useEffect(() => {
-        if (!usuarioId) {
-            setUserLogado(false);
-            return;
-        };
-
-        setUserLogado(true);
-    }, [usuarioId]);
-
-    // Fazer Logout
-    const logout = () => {
-        try {
-            localStorage.removeItem("token");
-            setUserLogado(false);
-            navigate("/");
-        } catch (error) {
-            console.error("Erro ao Realizar logout ", error);
-        }
-    }
-    const alertSair = () => {
-        Swal.fire({
-            title: "Quer Realmente Sair?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Sim, Quero Sair!",
-            cancelButtonColor: "#d33",
-            confirmButtonColor: "#012663"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                logout();
-            }
-        });
-    }
 
     // Troca de Logo caso o usuario esteja no modo dark
     const [temaAtual, setTemaAtual] = useState(localStorage.getItem("theme-mode") || "light");
