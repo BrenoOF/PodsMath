@@ -1,5 +1,8 @@
 const Usuario = require('../models/usuarioModel');
+const Imagem = require('../models/imagemModel');
 const bcrypt = require('bcrypt');
+const path = require('path');
+const fs = require('fs');
 
 const usuarioController = {
     getAllUsuarios: async (req, res) => {
@@ -79,6 +82,54 @@ const usuarioController = {
             } else {
                 res.status(404).json({ message: 'Usuario não encontrado' });
             }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    updateMyImage: async (req, res) => {
+        try {
+            if (!req.processedFile) {
+                return res.status(400).json({ message: 'Nenhuma imagem enviada ou processada' });
+            }
+
+            const usuario = await Usuario.getById(req.usuario.idusuarios);
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuario não encontrado' });
+            }
+
+            const caminho_imagem = req.processedFile.relativeUrl;
+            let idImagem;
+
+            if (usuario.imagens_idimagens) {
+                // Atualiza imagem existente
+                const antigaImagem = await Imagem.getById(usuario.imagens_idimagens);
+                if (antigaImagem && antigaImagem.caminho_imagem) {
+                    // Remove o prefixo se existir para não duplicar no join
+                    const cleanPath = antigaImagem.caminho_imagem.replace(/^\/?uploads\//, '');
+                    const fullPath = path.join(__dirname, '../uploads', cleanPath);
+                    if (fs.existsSync(fullPath)) {
+                        fs.unlinkSync(fullPath);
+                    }
+                }
+                await Imagem.update(usuario.imagens_idimagens, { caminho_imagem });
+                idImagem = usuario.imagens_idimagens;
+            }
+ else {
+                // Cria nova imagem
+                const newImagem = await Imagem.create({ caminho_imagem });
+                idImagem = newImagem.idimagens;
+                
+                // Atualiza usuario com o novo ID de imagem
+                const userData = { ...usuario, imagens_idimagens: idImagem };
+                await Usuario.update(req.usuario.idusuarios, userData);
+            }
+
+            res.json({ 
+                message: 'Imagem de perfil atualizada com sucesso',
+                idImagem: idImagem,
+                caminho_imagem: caminho_imagem
+            });
         } catch (error) {
             res.status(500).json({ message: error.message });
         }

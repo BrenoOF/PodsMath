@@ -27,9 +27,10 @@ const Usuario = {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [rows] = await connection.query(`
-                SELECT u.*, n.nome as nome_nivel_acesso 
+                SELECT u.*, n.nome as nome_nivel_acesso, i.caminho_imagem
                 FROM usuarios u 
                 LEFT JOIN nivel_acesso n ON u.nivel_acesso_idnivel_acesso = n.idnivel_acesso 
+                LEFT JOIN imagens i ON u.imagens_idimagens = i.idimagens
                 WHERE u.idusuarios = ?
             `, [id]);
             await connection.commit();
@@ -68,10 +69,10 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
+            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados} = usuarioData;
             const [result] = await connection.query(
-                'INSERT INTO usuarios (instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados || 0, imagens_idimagens]
+                'INSERT INTO usuarios (instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados]
             );
             await connection.commit();
             return { idusuarios: result.insertId, ...usuarioData };
