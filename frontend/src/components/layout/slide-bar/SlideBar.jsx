@@ -13,7 +13,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
 
     // Verificação se está Logado
     const [userLogado, setUserLogado] = useState(false);
-    const usuarioId = localStorage.getItem("usuarioId");
+    const usuarioId = localStorage.getItem("token");
 
     useEffect(() => {
         if (!usuarioId) {
@@ -27,7 +27,7 @@ export default function CompSlideBar({ aberta, setAberta }) {
     // Fazer Logout
     const logout = () => {
         try {
-            localStorage.removeItem("usuarioId");
+            localStorage.removeItem("token");
             setUserLogado(false);
             navigate("/");
         } catch (error) {

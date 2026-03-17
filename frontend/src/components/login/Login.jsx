@@ -125,9 +125,7 @@ export default function TelaLogin() {
         try {
             const response = await axios.post("http://localhost:3001/auth/login", {
                 email: email,
-                senha: senha,
-                nivel_acesso_idnivel_acesso: 1,
-                paletaCor_idpaletaCor: 1
+                senha: senha
             });
 
             const { token } = response.data;

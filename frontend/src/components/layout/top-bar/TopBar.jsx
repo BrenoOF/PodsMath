@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
 
@@ -9,9 +8,6 @@ import { useMatchMedia } from 'primereact/hooks';
 import Style from "./topBar.module.css";
 
 // Import de Componentes
-import { IconField } from 'primereact/iconfield';
-import { InputIcon } from 'primereact/inputicon';
-import { InputText } from "primereact/inputtext";
 import { Toast } from 'primereact/toast';
 
 export default function CompTopBar({ slidebarAberta }) {
@@ -170,34 +166,36 @@ export default function CompTopBar({ slidebarAberta }) {
     // Verificação se está Logado
     const [userLogado, setUserLogado] = useState(false);
     const [dadosUser, setDadosUser] = useState(null);
-    const usuarioId = localStorage.getItem("usuarioId");
+
+    const pegarDadosToken = (token) => {
+        try {
+            const payload = token.split('.')[1];
+            const decoded = atob(payload);
+            return JSON.parse(decoded);
+        } catch (error) {
+            return null;
+        }
+    };
 
     useEffect(() => {
-        const buscarUsuario = async () => {
-            if (!usuarioId) {
-                setUserLogado(false);
-                return;
-            };
 
-            try {
-                const response = await axios.get("/dados/users.json");
-                const usuarioEncontrado = response.data.find(
-                    (user) => String(user.id) === String(usuarioId)
-                );
+        const token = localStorage.getItem("token");
 
-                if (usuarioEncontrado) {
-                    setDadosUser(usuarioEncontrado);
-                    setUserLogado(true);
-                } else {
-                    setUserLogado(false);
-                    localStorage.removeItem("usuarioId");
-                }
-            } catch (error) {
-                console.error("Erro ao buscar usuário:", error);
-            }
+        if (!token) {
+            setUserLogado(false);
+            return;
         }
-        buscarUsuario();
-    }, [usuarioId]);
+
+        const dados = pegarDadosToken(token);
+
+        if (dados) {
+            setDadosUser(dados);
+            setUserLogado(true);
+        } else {
+            setUserLogado(false);
+        }
+
+    }, []);
 
     // Refs para quando clicar fora do menuConfigs ele fechar
     const toast = useRef(null);
@@ -297,12 +295,6 @@ export default function CompTopBar({ slidebarAberta }) {
         <>
             <Toast ref={toast} position="bottom-right" />
             <div className={`${Style.containerTopBar} ${slidebarAberta ? Style.topBarAberta : Style.topBarFechada}`}>
-                <div className={Style.divEsquerda}>
-                    <IconField iconPosition="left" className={Style.ajusteInput}>
-                        <InputIcon className="pi pi-search" />
-                        <InputText placeholder="Buscar..." className={Style.input} />
-                    </IconField>
-                </div>
                 <div className={Style.divDireita}>
                     {!userLogado ? (
                         <>
@@ -331,7 +323,7 @@ export default function CompTopBar({ slidebarAberta }) {
                                     <h1>{dadosUser.nome}</h1>
                                     <p>{dadosUser.email}</p>
                                 </div>
-                                <img src={dadosUser.img} alt="foto de perfil"
+                                <img src={dadosUser?.img || "/imgs/avatar-default.png"} alt="foto de perfil"
                                     className={Style.imgPerfil} draggable="false"
                                     ref={btnMobileConfigsRef}
                                     onClick={(e) => {
