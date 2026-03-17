@@ -27,7 +27,7 @@ const authController = {
                 email: usuario.email,
                 instituicoes_idinstituicoes: usuario.instituicoes_idinstituicoes,
                 id_usuario_professor: usuario.id_usuario_professor,
-                nivel_acesso_idnivel_acesso: usuario.nivel_acesso_idnivel_acesso,
+                nivel_acesso: usuario.nome_nivel_acesso,
                 paletaCor_idpaletaCor: usuario.paletaCor_idpaletaCor,
                 audiosEscutados: usuario.audiosEscutados
             };
@@ -59,7 +59,7 @@ const authController = {
             const senhaHash = await bcrypt.hash(senha, 10);
 
             // Cria o usuário com defaults para FKs obrigatórias
-            const newUsuario = await Usuario.create({
+            const createdUser = await Usuario.create({
                 nome,
                 email,
                 senha: senhaHash,
@@ -71,16 +71,19 @@ const authController = {
                 imagens_idimagens: req.body.imagens_idimagens || 1
             });
 
+            // Busca o usuário completo para obter o nome do nível de acesso
+            const usuario = await Usuario.getById(createdUser.idusuarios);
+
             // Gera token JWT
             const payload = {
-                idusuarios: newUsuario.idusuarios,
-                nome: newUsuario.nome,
-                email: newUsuario.email,
-                instituicoes_idinstituicoes: newUsuario.instituicoes_idinstituicoes,
-                id_usuario_professor: null,
-                nivel_acesso_idnivel_acesso: newUsuario.nivel_acesso_idnivel_acesso,
-                paletaCor_idpaletaCor: newUsuario.paletaCor_idpaletaCor,
-                audiosEscutados: 0
+                idusuarios: usuario.idusuarios,
+                nome: usuario.nome,
+                email: usuario.email,
+                instituicoes_idinstituicoes: usuario.instituicoes_idinstituicoes,
+                id_usuario_professor: usuario.id_usuario_professor,
+                nivel_acesso: usuario.nome_nivel_acesso,
+                paletaCor_idpaletaCor: usuario.paletaCor_idpaletaCor,
+                audiosEscutados: usuario.audiosEscutados
             };
 
             const token = jwt.sign(payload, process.env.JWT_SECRET || 'chave-secreta-padrao', { expiresIn: '1d' });
