@@ -33,17 +33,17 @@ const Idioma = {
         }
     },
 
-    create: async ({ nomeIdiomas, imagens_idimagens }) => {
+    create: async ({ nomeIdiomas }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'INSERT INTO idiomas (nomeIdiomas, imagens_idimagens) VALUES (?, ?)',
-                [nomeIdiomas, imagens_idimagens]
+                'INSERT INTO idiomas (nomeIdiomas) VALUES (?)',
+                [nomeIdiomas]
             );
             await connection.commit();
-            return { ididiomas: result.insertId, nomeIdiomas, imagens_idimagens };
+            return { ididiomas: result.insertId, nomeIdiomas };
         } catch (error) {
             if (connection) await connection.rollback();
             throw error;
@@ -52,14 +52,14 @@ const Idioma = {
         }
     },
 
-    update: async (id, { nomeIdiomas, imagens_idimagens }) => {
+    update: async (id, { nomeIdiomas }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'UPDATE idiomas SET nomeIdiomas = ?, imagens_idimagens = ? WHERE ididiomas = ?',
-                [nomeIdiomas, imagens_idimagens, id]
+                'UPDATE idiomas SET nomeIdiomas = ? WHERE ididiomas = ?',
+                [nomeIdiomas, id]
             );
             await connection.commit();
             return result.affectedRows > 0;

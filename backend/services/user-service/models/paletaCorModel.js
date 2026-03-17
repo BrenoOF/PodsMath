@@ -33,17 +33,30 @@ const PaletaCor = {
         }
     },
 
-    create: async ({ idpaletaCor, nome, ativado }) => {
+    create: async (paletaData) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
+            const { 
+                nome, 
+                'app-background': appBackground, 
+                'border-color-tema': borderColorTema, 
+                'border-inversa': borderInversa, 
+                'font-paragrafo': fontParagrafo, 
+                'font-meio-apagada': fontMeioApagada, 
+                'sobre-projeto-bg': sobreProjetoBg, 
+                'btn-1': btn1, 
+                'btn-1-hover': btn1Hover, 
+                ativado 
+            } = paletaData;
+            
             const [result] = await connection.query(
-                'INSERT INTO paletacor (idpaletaCor, nome, ativado) VALUES (?, ?, ?)',
-                [idpaletaCor, nome, ativado]
+                'INSERT INTO paletacor (nome, `app-background`, `border-color-tema`, `border-inversa`, `font-paragrafo`, `font-meio-apagada`, `sobre-projeto-bg`, `btn-1`, `btn-1-hover`, ativado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [nome, appBackground, borderColorTema, borderInversa, fontParagrafo, fontMeioApagada, sobreProjetoBg, btn1, btn1Hover, ativado]
             );
             await connection.commit();
-            return { idpaletaCor: result.insertId, nome, ativado };
+            return { idpaletaCor: result.insertId, ...paletaData };
         } catch (error) {
             if (connection) await connection.rollback();
             throw error;
@@ -52,14 +65,27 @@ const PaletaCor = {
         }
     },
 
-    update: async (id, { nome, ativado }) => {
+    update: async (id, paletaData) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
+            const { 
+                nome, 
+                'app-background': appBackground, 
+                'border-color-tema': borderColorTema, 
+                'border-inversa': borderInversa, 
+                'font-paragrafo': fontParagrafo, 
+                'font-meio-apagada': fontMeioApagada, 
+                'sobre-projeto-bg': sobreProjetoBg, 
+                'btn-1': btn1, 
+                'btn-1-hover': btn1Hover, 
+                ativado 
+            } = paletaData;
+
             const [result] = await connection.query(
-                'UPDATE paletacor SET nome = ?, ativado = ? WHERE idpaletaCor = ?',
-                [nome, ativado, id]
+                'UPDATE paletacor SET nome = ?, `app-background` = ?, `border-color-tema` = ?, `border-inversa` = ?, `font-paragrafo` = ?, `font-meio-apagada` = ?, `sobre-projeto-bg` = ?, `btn-1` = ?, `btn-1-hover` = ?, ativado = ? WHERE idpaletaCor = ?',
+                [nome, appBackground, borderColorTema, borderInversa, fontParagrafo, fontMeioApagada, sobreProjetoBg, btn1, btn1Hover, ativado, id]
             );
             await connection.commit();
             return result.affectedRows > 0;

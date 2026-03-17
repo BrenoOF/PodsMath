@@ -68,10 +68,10 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
+            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
             const [result] = await connection.query(
-                'INSERT INTO usuarios (idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-                [idusuarios, instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens]
+                'INSERT INTO usuarios (instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados || 0, imagens_idimagens]
             );
             await connection.commit();
             return { idusuarios: result.insertId, ...usuarioData };
@@ -88,10 +88,10 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados } = usuarioData;
+            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
             const [result] = await connection.query(
-                'UPDATE usuarios SET instituicoes_idinstituicoes = ?, nome = ?, email = ?, senha = ?, id_usuario_professor = ?, nivel_acesso_idnivel_acesso = ?, paletaCor_idpaletaCor = ?, audiosEscutados = ? WHERE idusuarios = ?',
-                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, id]
+                'UPDATE usuarios SET instituicoes_idinstituicoes = ?, nome = ?, email = ?, senha = ?, id_usuario_professor = ?, nivel_acesso_idnivel_acesso = ?, paletaCor_idpaletaCor = ?, audiosEscutados = ?, imagens_idimagens = ? WHERE idusuarios = ?',
+                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens, id]
             );
             await connection.commit();
             return result.affectedRows > 0;

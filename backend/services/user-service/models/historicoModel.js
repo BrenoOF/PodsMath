@@ -49,14 +49,14 @@ const Historico = {
         }
     },
 
-    create: async ({ idhistorico, usuarios_idusuarios, audios_idaudios, tempo_audio }) => {
+    create: async ({ usuarios_idusuarios, audios_idaudios, tempo_audio }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'INSERT INTO historico (idhistorico, usuarios_idusuarios, audios_idaudios, tempo_audio) VALUES (?, ?, ?, ?)',
-                [idhistorico, usuarios_idusuarios, audios_idaudios, tempo_audio]
+                'INSERT INTO historico (usuarios_idusuarios, audios_idaudios, tempo_audio) VALUES (?, ?, ?)',
+                [usuarios_idusuarios, audios_idaudios, tempo_audio]
             );
             await connection.commit();
             return { idhistorico: result.insertId, usuarios_idusuarios, audios_idaudios, tempo_audio };
