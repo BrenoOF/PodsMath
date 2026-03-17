@@ -8,16 +8,9 @@ export default function CompPodcastProprio({ podcasts }) {
 
     return (
         <div>
-            <div className={Style.divTituloProprio}>
-                <div className={Style.divTitulosDosPodcasts}>
-                    <i className="fa-solid fa-music"></i>
-                    <p>Podcasts Próprios</p>
-                </div>
-                {/* Ver se Realmente terá isso */}
-                <div className={Style.divTitulosDosPodcasts + " " + Style.divTituloMostrar}>
-                    <p>Mostrar tudo</p>
-                    <i className="fa-solid fa-arrow-up-right-from-square"></i>
-                </div>
+            <div className={Style.divTitulosDosPodcasts}>
+                <i className="fa-solid fa-music"></i>
+                <p>Podcasts Próprios</p>
             </div>
             <div className={Style.divPodcastsProprio}>
                 {podcasts.map(item => (
