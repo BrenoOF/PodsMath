@@ -5,23 +5,36 @@ import { useNavigate, useParams } from "react-router-dom";
 import Style from "./tema.module.css";
 import StyleExterno from "../home/carrosseis/carrosseis.module.css";
 
+const API_BASE_URL = "http://localhost:3001";
+
 export default function TelaTema() {
     const navigate = useNavigate();
-    const { idTema } = useParams();
+    const { idTema } = useParams(); // idTema aqui representa o id da categoria
     const [tituloAssunto, setTituloAssunto] = useState("");
     const [dadosTemas, setDadosTemas] = useState([]);
 
     useEffect(() => {
         const carregarDados = async () => {
+            const token = localStorage.getItem("token");
             try {
-                const response = await axios.get("/dados/explorar.json");
-                const assuntoSelecionado = response.data.assuntos.find(
-                    assunto => assunto.id === parseInt(idTema)
-                );
-                if (assuntoSelecionado) {
-                    setDadosTemas(assuntoSelecionado.temas);
-                    setTituloAssunto(assuntoSelecionado.titulo);
-                }
+                
+                const resCategoria = await axios.get(`${API_BASE_URL}/categorias/${idTema}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setTituloAssunto(resCategoria.data.nome);
+
+                const resTemas = await axios.get(`${API_BASE_URL}/temas/categoria/${idTema}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                resTemas.data.forEach(tema => {
+                    if (tema.caminho_imagem) {
+                        const nomeArquivo = tema.caminho_imagem.split('/').pop();
+                        tema.caminho_imagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    }
+                });
+
+                setDadosTemas(resTemas.data);
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
             }
@@ -43,19 +56,19 @@ export default function TelaTema() {
             </div>
             <div className={Style.divCardNovidade}>
                 {dadosTemas.map(item => (
-                    <div className={StyleExterno.cardNovidade} key={item.id}
+                    <div className={StyleExterno.cardNovidade} key={item.idtemas}
                         onClick={() => {
-                            navigate(`/explorar/${idTema}/${item.id}`);
+                            navigate(`/explorar/${idTema}/${item.idtemas}`);
                         }}
                     >
                         <div className={StyleExterno.divImgCardNovidade}>
-                            <img src={item.img || "/imgs/podcast-default.jpg"} alt={item.titulo}
+                            <img src={item.caminho_imagem || "/imgs/podcast-default.jpg"} alt={item.titulo}
                                 className={StyleExterno.imgCard} draggable="false"
-                                onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
+                                onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                             />
                         </div>
                         <h1>{item.titulo}</h1>
-                        <p>{item.subTitulo}</p>
+                        <p>Acesse a playlist de: {item.titulo}</p>
                     </div>
                 ))}
             </div>

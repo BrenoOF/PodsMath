@@ -4,6 +4,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Style from "./player.module.css";
 
+const API_TRANSCRIPTION_URL = "http://localhost:3002";
+
 // Funções Transcrição
 const tempoParaSegundos = (tempo) => {
     const [hms, ms] = tempo.split(",");
@@ -72,16 +74,17 @@ export default function TelaPlayer() {
     const [volume, setVolume] = useState(1);
 
     const [tempoAtual, setTempoAtual] = useState(0);
-    const [duracaoTotal, setDuracaoTotal] = useState(477);
+    const [duracaoTotal, setDuracaoTotal] = useState(0);
 
     const [arrastando, setArrastando] = useState(false);
 
     const audioRef = useRef(null);
     const barraRef = useRef(null);
 
-    const progresso = (tempoAtual / duracaoTotal) * 100 || 0;
+    const progresso = (tempoAtual / (duracaoTotal || 1)) * 100 || 0;
 
     const formatarTempo = (s) => {
+        if (!s) return "0:00";
         const m = Math.floor(s / 60);
         const sec = Math.floor(s % 60).toString().padStart(2, "0");
         return `${m}:${sec}`;
@@ -91,7 +94,7 @@ export default function TelaPlayer() {
     const togglePlay = () => {
         const audio = audioRef.current;
         if (audio.paused) {
-            audio.play();
+            audio.play().catch(err => console.error("Erro ao tocar áudio", err));
             setTocando(true);
         } else {
             audio.pause();
@@ -137,19 +140,27 @@ export default function TelaPlayer() {
     // Carregar dados do Podcast
     useEffect(() => {
         const carregarDados = async () => {
+            const token = localStorage.getItem("token");
             try {
-                const response = await axios.get("/dados/explorar.json");
-                const assunto = response.data.assuntos.find(
-                    item => item.id === parseInt(idTema)
-                );
-                const tema = assunto?.temas.find(
-                    item => item.id === parseInt(playlistTema)
-                );
-                const episodio = tema?.playlists.find(
-                    item => item.id === parseInt(idPodcast)
-                );
-                if (episodio) {
-                    setDadosPlayer(episodio);
+                const response = await axios.get(`${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const caminhoOriginal = response.data.imagem_caminho || "";
+                let urlImagem = "";
+
+                if (caminhoOriginal) {
+                    const nomeArquivo = caminhoOriginal.split('/').pop();
+                    urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                }
+
+                response.data.imagem_caminho = urlImagem;
+
+                setDadosPlayer(response.data);
+
+                if (response.data.transcricao && response.data.transcricao.texto) {
+                    const transcricaoConvertida = parseTranscricao(response.data.transcricao.texto);
+                    setTranscricao(transcricaoConvertida);
                 }
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
@@ -157,24 +168,6 @@ export default function TelaPlayer() {
         }
         carregarDados();
     }, [idTema, playlistTema, idPodcast]);
-
-    // Pegar Transcricao
-    useEffect(() => {
-        const carregarTranscricao = async () => {
-            if (!dadosPlayer?.transcricao) return;
-            try {
-                const response = await axios.get(
-                    `/dados/${dadosPlayer.transcricao}.txt`
-                );
-                const transcricaoConvertida = parseTranscricao(response.data);
-                setTranscricao(transcricaoConvertida);
-            } catch (error) {
-                console.log("Transcrição não encontrada");
-                setTranscricao([]);
-            }
-        };
-        carregarTranscricao();
-    }, [dadosPlayer, linguaSelecionada]);
 
     // Scroll acompanhar a Transcrição
     const linhaAtivaRef = useRef(null);
@@ -304,26 +297,30 @@ export default function TelaPlayer() {
         }
     }, [velocidadeSelecionada]);
 
+    const audioUrl = idPodcast ? `${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}/audio?token=${localStorage.getItem("token")}` : "";
+
     return (
         <div className={Style.containerPlayer}>
             {/* Audio do Podcast */}
-            <audio ref={audioRef} src={`/audio/${dadosPlayer?.audio}`} loop={loop}></audio>
+            {audioUrl && (
+                <audio ref={audioRef} src={audioUrl} loop={loop}></audio>
+            )}
             {/* Apresentação do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
                 <p>Voltar</p>
             </div>
             <div className={Style.divApresentacaoPodcast}>
-                <img src={dadosPlayer?.img || "/imgs/podcast-default.jpg"} alt={dadosPlayer?.titulo}
+                <img src={dadosPlayer?.imagem_caminho || "/imgs/podcast-default.jpg"} alt={dadosPlayer?.titulo}
                     className={Style.imgApresentacaoPodcast}
                 />
                 <div className={Style.divTextosApresentacao}>
                     <h1>{dadosPlayer?.titulo}</h1>
-                    <p>Feito por: {dadosPlayer?.autor}</p>
+                    <p>Feito por: {dadosPlayer?.usuario_nome || "PodsMath"}</p>
                     <div className={Style.ultimaDivApresentacao}>
                         <p>
                             <i className="fa-regular fa-clock"></i>
-                            {" " + dadosPlayer?.duracao}
+                            {" " + formatarTempo(duracaoTotal)}
                         </p>
                         <p>{dadosPlayer?.dt_adicao}</p>
                     </div>
