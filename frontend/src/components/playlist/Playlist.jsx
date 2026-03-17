@@ -4,28 +4,61 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Style from "./playlist.module.css";
 
+const API_BASE_URL = "http://localhost:3001";
+
 export default function TelaPlaylist() {
     const navigate = useNavigate();
     const { idTema, playlistTema } = useParams();
     const [tituloTema, setTituloTema] = useState("");
     const [subTitulo, setSubTitulo] = useState("");
+    const [imagemTema, setImagemTema] = useState("");
     const [dadosPlaylist, setDadosPlaylist] = useState([]);
 
     useEffect(() => {
         const carregarDados = async () => {
+            const token = localStorage.getItem("token");
             try {
-                const response = await axios.get("/dados/explorar.json");
-                const assunto = response.data.assuntos.find(
-                    item => item.id === parseInt(idTema)
-                );
-                const tema = assunto?.temas.find(
-                    item => item.id === parseInt(playlistTema)
-                );
-                if (tema) {
-                    setTituloTema(tema.titulo);
-                    setSubTitulo(tema.subTitulo);
-                    setDadosPlaylist(tema.playlists);
-                }
+
+                const resTema = await axios.get(`${API_BASE_URL}/temas/${playlistTema}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                setTituloTema(resTema.data.titulo);
+                setSubTitulo(`Playlist de ${resTema.data.titulo}`);
+
+                const caminhoOriginal = resTema.data.caminho_imagem || "";
+                    let urlImagem = "";
+
+                    if (caminhoOriginal) {
+                        const nomeArquivo = caminhoOriginal.split('/').pop();
+                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    }
+                
+                setImagemTema(urlImagem);
+
+
+                const resAudios = await axios.get(`${API_BASE_URL}/audios/tema/${playlistTema}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const audiosFormatados = resAudios.data.map(audio => {
+                    let caminhoRelativo = audio.imagem_caminho || "";
+
+                    if (caminhoRelativo && !caminhoRelativo.startsWith("uploads/") && !caminhoRelativo.startsWith("/uploads/")) {
+                        caminhoRelativo = "uploads/" + caminhoRelativo.replace(/^\//, "");
+                    }
+
+                    const urlImagem = caminhoRelativo
+                        ? `${API_BASE_URL}/${caminhoRelativo.replace(/^\//, "")}`
+                        : "";
+
+                    return {
+                        ...audio,
+                        imagem_caminho: urlImagem
+                    };
+                });
+
+                setDadosPlaylist(audiosFormatados);
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
             }
@@ -42,9 +75,10 @@ export default function TelaPlaylist() {
                     <p>Voltar</p>
                 </div>
                 <div className={Style.divOrganizarTextos}>
-                    <img src={dadosPlaylist[0]?.img || "/imgs/podcast-default.jpg"} alt="teste"
+                    {/* Aqui mudamos de dadosPlaylist[0]?.imagem_caminho para imagemTema */}
+                    <img src={imagemTema || "/imgs/podcast-default.jpg"} alt="capa do tema"
                         className={Style.imgTitulo} draggable="false"
-                        onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
+                        onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                     />
                     <div className={Style.divTextos}>
                         <div className={Style.semiBtn}>
@@ -66,9 +100,11 @@ export default function TelaPlaylist() {
             </div>
             {/* Menuzinho Básico */}
             <div className={Style.divMenu}>
-                <div className={Style.divIconPlay} 
+                <div className={Style.divIconPlay}
                     onClick={() => {
-                        navigate(`/explorar/${idTema}/${playlistTema}/${dadosPlaylist[0].id}`);
+                        if (dadosPlaylist.length > 0) {
+                            navigate(`/explorar/${idTema}/${playlistTema}/${dadosPlaylist[0].idaudios}`);
+                        }
                     }}
                 >
                     <i className="fa-solid fa-play"></i>
@@ -88,10 +124,10 @@ export default function TelaPlaylist() {
                 <tbody>
                     {dadosPlaylist.map((item, index) => (
                         <tr
-                            key={item.id}
+                            key={item.idaudios}
                             className={Style.linhaTabela}
                             onClick={() => {
-                                navigate(`/explorar/${idTema}/${playlistTema}/${item.id}`);
+                                navigate(`/explorar/${idTema}/${playlistTema}/${item.idaudios}`);
                             }}
                         >
                             <td className={Style.colunaNumero}>
@@ -99,13 +135,13 @@ export default function TelaPlaylist() {
                                 <i className={`fa-solid fa-play ${Style.playIcon}`}></i>
                             </td>
                             <td className={Style.celulaTitulo}>
-                                <img src={item.img || "/imgs/podcast-default.jpg"} alt={item.titulo}
+                                <img src={item.imagem_caminho || "/imgs/podcast-default.jpg"} alt={item.titulo}
                                     className={Style.imgTabela} draggable="false"
                                     onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
                                 />
                                 <div className={Style.divTextoTituloPodcast}>
                                     <h1>{item.titulo}</h1>
-                                    <p>Feito por: {item.autor}</p>
+                                    <p>Feito por: {item.autor || "PodsMath"}</p>
                                 </div>
                             </td>
                             <td className={Style.colunaDataAdicao}>{item.dt_adicao}</td>

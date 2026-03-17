@@ -181,19 +181,15 @@ export default function CompTopBar({ slidebarAberta }) {
 
                 if (data) {
                     setUserLogado(true);
-                    
-                    // CORREÇÃO: Usar 'data.caminho_imagem' em vez de 'dadosUser.caminho_imagem'
-                    let caminhoRelativo = data.caminho_imagem || ""; 
-                    
-                    if (caminhoRelativo && !caminhoRelativo.startsWith("uploads/") && !caminhoRelativo.startsWith("/uploads/")) {
-                        caminhoRelativo = "uploads/" + caminhoRelativo.replace(/^\//, "");
+
+                    const caminhoOriginal = data.caminho_imagem || "";
+                    let urlImagem = "";
+
+                    if (caminhoOriginal) {
+                        const nomeArquivo = caminhoOriginal.split('/').pop();
+                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
                     }
 
-                    const urlImagem = caminhoRelativo
-                        ? `http://localhost:3001/${caminhoRelativo.replace(/^\//, "")}`
-                        : "";
-
-                    // Atualiza o estado de uma só vez com os dados e a imagem formatada
                     setDadosUser({ ...data, img: urlImagem });
                 } else {
                     setUserLogado(false);
