@@ -19,7 +19,7 @@ export default function CompPodcastProprio({ podcasts }) {
                             navigate(`/explorar/${item.idTema}/${item.playlistTema}/${item.idPodcast}`);
                         }}
                     >
-                        <img src={item.img} alt={`Capa do podcast ${item.titulo}`}
+                        <img src={item.img || "/imgs/podcast-default.jpg"} alt={`Capa do podcast ${item.titulo}`}
                             className={Style.imgCard} draggable="false"
                         />
                         <div className={Style.divTextosProprio}>

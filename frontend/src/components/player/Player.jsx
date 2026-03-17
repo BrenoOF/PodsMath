@@ -314,7 +314,7 @@ export default function TelaPlayer() {
                 <p>Voltar</p>
             </div>
             <div className={Style.divApresentacaoPodcast}>
-                <img src={dadosPlayer?.img} alt={dadosPlayer?.titulo}
+                <img src={dadosPlayer?.img || "/imgs/podcast-default.jpg"} alt={dadosPlayer?.titulo}
                     className={Style.imgApresentacaoPodcast}
                 />
                 <div className={Style.divTextosApresentacao}>

@@ -49,7 +49,7 @@ export default function TelaTema() {
                         }}
                     >
                         <div className={StyleExterno.divImgCardNovidade}>
-                            <img src={item.img} alt={item.titulo}
+                            <img src={item.img || "/imgs/podcast-default.jpg"} alt={item.titulo}
                                 className={StyleExterno.imgCard} draggable="false"
                                 onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
                             />

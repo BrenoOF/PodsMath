@@ -196,6 +196,7 @@
 
 .imgPerfil {
     width: 2.75rem;
+    height: 2.75rem;
     border-radius: 100%;
     border: 0.2rem solid var(--cor-azul-font-borda);
     cursor: pointer;

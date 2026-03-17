@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Swal from 'sweetalert2';
 
 import Style from "../configuracoes.module.css";
@@ -11,6 +12,10 @@ import { Message } from 'primereact/message';
 export default function CompPerfil({ dadosUser, errors, setErrors, limparErro }) {
     const [imagem, setImagem] = useState("");
     const [nome, setNome] = useState("");
+    const [arquivoImagem, setArquivoImagem] = useState(null);
+    const [previewImg, setPreviewImg] = useState("");
+
+    const navigate = useNavigate();
 
     // Validações e Envio de Form
     const validarEdicao = () => {
@@ -22,29 +27,66 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
         return Object.keys(novosErros).length === 0;
     };
 
-    const editarDados = () => {
+    const editarDados = async () => {
         if (!validarEdicao()) return;
 
-        console.log("EDIÇÃO OK", {
-            nome,
-            previewImg
-        });
-    }
+        const token = localStorage.getItem("token");
+        if (!token) return;
 
-    // Função para fingir upload de imagem
-    const [previewImg, setPreviewImg] = useState("");
+        try {
+            if (nome !== dadosUser.nome) {
+                await axios.put("http://localhost:3001/usuarios/me", {
+                    ...dadosUser,
+                    nome: nome
+                }, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            }
+
+            if (arquivoImagem) {
+                const formData = new FormData();
+                formData.append("imagem", arquivoImagem);
+
+                await axios.put("http://localhost:3001/usuarios/me/image", formData, {
+                    headers: { 
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "multipart/form-data"
+                    }
+                });
+            }
+
+            Swal.fire({
+                title: "Sucesso!",
+                text: "Perfil atualizado com sucesso.",
+                icon: "success",
+                confirmButtonColor: "#012663"
+            }).then(() => {
+                window.location.reload();
+            });
+
+        } catch (error) {
+            console.error("Erro ao atualizar perfil:", error);
+            const mensagem = error.response?.data?.message || "Erro ao conectar com o servidor";
+            
+            Swal.fire({
+                title: "Erro!",
+                text: mensagem,
+                icon: "error",
+                confirmButtonColor: "#012663"
+            });
+        }
+    }
 
     const trocarImagem = (e) => {
         const file = e.target.files[0];
         if (!file) return;
 
+        setArquivoImagem(file);
         const preview = URL.createObjectURL(file);
         setPreviewImg(preview);
     };
 
-    const navigate = useNavigate();
 
-    // Funções para a Parte de Conta
     const excluirConta = () => {
         try {
             localStorage.removeItem("token");
@@ -70,11 +112,20 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
         });
     }
 
-    // Ajustar dados do usuário
     useEffect(() => {
         if (!dadosUser) return;
 
-        setImagem(dadosUser.img || "");
+        // Garante que o caminho tenha o prefixo uploads/ se for relativo e não o tiver
+        let caminhoRelativo = dadosUser.caminho_imagem || "";
+        if (caminhoRelativo && !caminhoRelativo.startsWith("uploads/") && !caminhoRelativo.startsWith("/uploads/")) {
+            caminhoRelativo = "uploads/" + caminhoRelativo.replace(/^\//, "");
+        }
+
+        const urlImagem = caminhoRelativo 
+            ? `http://localhost:3001/${caminhoRelativo.replace(/^\//, "")}`
+            : "";
+
+        setImagem(urlImagem);
         setNome(dadosUser.nome);
     }, [dadosUser]);
 

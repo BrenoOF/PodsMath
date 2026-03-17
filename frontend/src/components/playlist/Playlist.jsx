@@ -42,7 +42,7 @@ export default function TelaPlaylist() {
                     <p>Voltar</p>
                 </div>
                 <div className={Style.divOrganizarTextos}>
-                    <img src="/imgs/cardExemplo.jpg" alt="teste"
+                    <img src={dadosPlaylist[0]?.img || "/imgs/podcast-default.jpg"} alt="teste"
                         className={Style.imgTitulo} draggable="false"
                         onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
                     />
@@ -99,7 +99,7 @@ export default function TelaPlaylist() {
                                 <i className={`fa-solid fa-play ${Style.playIcon}`}></i>
                             </td>
                             <td className={Style.celulaTitulo}>
-                                <img src={item.img} alt={item.titulo}
+                                <img src={item.img || "/imgs/podcast-default.jpg"} alt={item.titulo}
                                     className={Style.imgTabela} draggable="false"
                                     onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
                                 />
