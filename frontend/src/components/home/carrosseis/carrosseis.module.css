@@ -217,17 +217,6 @@
     position: relative;
 }
 
-/* Estilo para Podcasts Proprios */
-.divTituloProprio {
-    display: flex;
-    justify-content: space-between;
-}
-
-.divTituloMostrar {
-    cursor: pointer;
-    color: var(--font-paragrafo);
-}
-
 /* Apartir daqui (apagar esse comentario dps) */
 .divPodcastsProprio {
     display: flex;
