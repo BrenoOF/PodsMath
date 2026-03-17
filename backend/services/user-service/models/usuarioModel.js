@@ -6,7 +6,11 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM usuarios');
+            const [rows] = await connection.query(`
+                SELECT u.*, n.nome as nome_nivel_acesso 
+                FROM usuarios u 
+                LEFT JOIN nivel_acesso n ON u.nivel_acesso_idnivel_acesso = n.idnivel_acesso
+            `);
             await connection.commit();
             return rows;
         } catch (error) {
@@ -22,7 +26,12 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM usuarios WHERE idusuarios = ?', [id]);
+            const [rows] = await connection.query(`
+                SELECT u.*, n.nome as nome_nivel_acesso 
+                FROM usuarios u 
+                LEFT JOIN nivel_acesso n ON u.nivel_acesso_idnivel_acesso = n.idnivel_acesso 
+                WHERE u.idusuarios = ?
+            `, [id]);
             await connection.commit();
             return rows[0];
         } catch (error) {
@@ -38,7 +47,12 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+            const [rows] = await connection.query(`
+                SELECT u.*, n.nome as nome_nivel_acesso 
+                FROM usuarios u 
+                LEFT JOIN nivel_acesso n ON u.nivel_acesso_idnivel_acesso = n.idnivel_acesso 
+                WHERE u.email = ?
+            `, [email]);
             await connection.commit();
             return rows[0];
         } catch (error) {
