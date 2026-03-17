@@ -163,24 +163,6 @@ export default function TelaSobre() {
                         Nosso impacto reflete o compromisso em tornar a matemática mais acessível, prática e
                         presente no dia a dia de diferentes públicos.
                     </p>
-                    <div className={Style.containerInformacoesFooter}>
-                        <div className={Style.divInformacoesFooter}>
-                            <h1>50K+</h1>
-                            <p>Ouvintes Mensais</p>
-                        </div>
-                        <div className={Style.divInformacoesFooter}>
-                            <h1>200+</h1>
-                            <p>Episódios Publicados</p>
-                        </div>
-                        <div className={Style.divInformacoesFooter}>
-                            <h1>15</h1>
-                            <p>Temas Abordados</p>
-                        </div>
-                        <div className={Style.divInformacoesFooter}>
-                            <h1>4.9</h1>
-                            <p>Avaliação Média</p>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

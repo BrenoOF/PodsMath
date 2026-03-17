@@ -167,33 +167,43 @@ export default function CompTopBar({ slidebarAberta }) {
     const [userLogado, setUserLogado] = useState(false);
     const [dadosUser, setDadosUser] = useState(null);
 
-    const pegarDadosToken = (token) => {
-        try {
-            const payload = token.split('.')[1];
-            const decoded = atob(payload);
-            return JSON.parse(decoded);
-        } catch (error) {
-            return null;
-        }
-    };
-
     useEffect(() => {
+        const buscarDadosUsuario = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
+            try {
+                const response = await fetch("http://localhost:3001/usuarios/me", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
 
-        const token = localStorage.getItem("token");
+                if (data) {
+                    setUserLogado(true);
+                    
+                    // CORREÇÃO: Usar 'data.caminho_imagem' em vez de 'dadosUser.caminho_imagem'
+                    let caminhoRelativo = data.caminho_imagem || ""; 
+                    
+                    if (caminhoRelativo && !caminhoRelativo.startsWith("uploads/") && !caminhoRelativo.startsWith("/uploads/")) {
+                        caminhoRelativo = "uploads/" + caminhoRelativo.replace(/^\//, "");
+                    }
 
-        if (!token) {
-            setUserLogado(false);
-            return;
-        }
+                    const urlImagem = caminhoRelativo
+                        ? `http://localhost:3001/${caminhoRelativo.replace(/^\//, "")}`
+                        : "";
 
-        const dados = pegarDadosToken(token);
+                    // Atualiza o estado de uma só vez com os dados e a imagem formatada
+                    setDadosUser({ ...data, img: urlImagem });
+                } else {
+                    setUserLogado(false);
+                }
+            } catch (error) {
+                console.error("Erro ao buscar dados do usuário:", error);
+            }
+        };
 
-        if (dados) {
-            setDadosUser(dados);
-            setUserLogado(true);
-        } else {
-            setUserLogado(false);
-        }
+        buscarDadosUsuario();
 
     }, []);
 

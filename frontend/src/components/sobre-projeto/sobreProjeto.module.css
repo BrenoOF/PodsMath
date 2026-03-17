@@ -55,17 +55,6 @@
     .divFooter>p {
         margin: 0 0rem;
     }
-
-    .containerInformacoesFooter {
-        display: grid;
-        grid-template-columns: auto auto;
-        width: 100%;
-        gap: 2rem;
-    }
-
-    .divInformacoesFooter>h1 {
-        font-size: 1.875rem;
-    }
 }
 
 @media screen and (min-width: 770px) {
@@ -123,17 +112,6 @@
 
     .divFooter>p {
         margin: 0 5rem;
-    }
-
-    .containerInformacoesFooter {
-        display: flex;
-        justify-content: space-between;
-        width: 90%;
-        gap: 0rem;
-    }
-
-    .divInformacoesFooter>h1 {
-        font-size: 2.25rem;
     }
 }
 
@@ -360,22 +338,6 @@
 
 .divFooter>p {
     font-size: 1rem;
-    color: var(--font-meio-apagada);
-    text-align: center;
-}
-
-.divInformacoesFooter {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.divInformacoesFooter>h1 {
-    color: var(--cor-azul-font-borda);
-}
-
-.divInformacoesFooter>p {
-    font-size: 0.875rem;
     color: var(--font-meio-apagada);
     text-align: center;
 }

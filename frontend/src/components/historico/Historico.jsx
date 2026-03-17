@@ -6,7 +6,6 @@ import StyleExterno from "../home/carrosseis/carrosseis.module.css";
 
 export default function TelaHistorico() {
     const [podcastsHistorico, setPodcastsHistorico] = useState([]);
-    const [controle, setControle] = useState("maisRecente");
 
     useEffect(() => {
         const carregarDados = async () => {
@@ -36,24 +35,6 @@ export default function TelaHistorico() {
                 <p>
                     Acompanhe os episódios que você já ouviu
                 </p>
-            </div>
-            <div className={Style.menuTop}>
-                <div className={`
-                    ${Style.opcoesMenuTop}
-                    ${controle === "maisRecente" ? Style.opcaoSelecionada : ""}
-                `}
-                    onClick={() => { setControle("maisRecente") }}
-                >
-                    <p>Mais Recentes</p>
-                </div>
-                <div className={`
-                    ${Style.opcoesMenuTop}
-                    ${controle === "maisOuvido" ? Style.opcaoSelecionada : ""}
-                `}
-                    onClick={() => { setControle("maisOuvido") }}
-                >
-                    <p>Mais Ouvidos</p>
-                </div>
             </div>
             {podcastsHistorico.length === 0 ? (
                 <div className={Style.divNaoTemPodcast}>

@@ -7,10 +7,6 @@
         padding: 2rem 0rem;
     }
 
-    .menuTop {
-        margin-top: 0rem;
-    }
-
     .divTitulo{
         width: 90%;
     }
@@ -20,10 +16,6 @@
     .containerHistorico {
         display: block;
         padding: 2rem;
-    }
-
-    .menuTop {
-        margin-top: 3rem;
     }
 
     .divTitulo{
@@ -57,37 +49,6 @@
 
 .titulo>i {
     font-size: 1.75rem;
-}
-
-/* Estilo para o menu de troca */
-.menuTop {
-    display: flex;
-    justify-content: space-between;
-    background-color: var(--app-background);
-    padding: 0.5rem;
-    border-radius: 0.625rem;
-    width: 100%;
-    margin-bottom: 1rem;
-}
-
-.opcoesMenuTop {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5rem;
-    flex: 1;
-    padding: 0.5rem;
-    opacity: 0.5;
-    cursor: pointer;
-}
-
-.opcoesMenuTop>p {
-    font-size: 0.875rem;
-}
-
-.opcaoSelecionada {
-    border-bottom: 0.125rem solid var(--border-color-tema);
-    opacity: 1;
 }
 
 /* Estilo para caso o usuario não tenha um histórico */
