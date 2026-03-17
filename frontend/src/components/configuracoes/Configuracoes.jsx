@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 
 import Style from "./configuracoes.module.css";
 
@@ -19,25 +18,22 @@ export default function TelaConfiguracoes() {
 
     // Buscar dados do Usuário
     useEffect(() => {
-        const carregarUsuario = async () => {
+        const buscarDadosUsuario = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) return;
             try {
-                const usuarioId = Number(localStorage.getItem("usuarioId"));
-                if (!usuarioId) return;
-
-                const response = await axios.get("/dados/users.json");
-                const usuarios = response.data;
-
-                const usuarioEncontrado = usuarios.find((u)=>u.id === usuarioId);
-
-                if(usuarioEncontrado){
-                    setDadosUser(usuarioEncontrado);
-                }
+                const response = await fetch("http://localhost:3001/usuarios/me", {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                const data = await response.json();
+                setDadosUser(data);
             } catch (error) {
-                console.error("Erro ao carregar dados do Usuário", error);
+                console.error("Erro ao buscar dados do usuário:", error);
             }
-        }
-
-        carregarUsuario();
+        };
+        buscarDadosUsuario();
     }, []);
 
     return (
@@ -72,15 +68,15 @@ export default function TelaConfiguracoes() {
                 {/* Formulário / Informações */}
                 <div className={Style.divForm}>
                     {controle === "perfil" && (
-                        <FormPerfil 
-                            dadosUser={dadosUser} 
+                        <FormPerfil
+                            dadosUser={dadosUser}
                             errors={errors}
                             setErrors={setErrors}
                             limparErro={limparErro}
                         />
                     )}
                     {controle === "seguranca" && (
-                        <FormSeguranca 
+                        <FormSeguranca
                             dadosUser={dadosUser}
                             errors={errors}
                             setErrors={setErrors}

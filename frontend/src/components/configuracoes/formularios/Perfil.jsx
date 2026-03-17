@@ -11,7 +11,6 @@ import { Message } from 'primereact/message';
 export default function CompPerfil({ dadosUser, errors, setErrors, limparErro }) {
     const [imagem, setImagem] = useState("");
     const [nome, setNome] = useState("");
-    const [email, setEmail] = useState("");
 
     // Validações e Envio de Form
     const validarEdicao = () => {
@@ -28,7 +27,6 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
 
         console.log("EDIÇÃO OK", {
             nome,
-            email,
             previewImg
         });
     }
@@ -49,7 +47,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
     // Funções para a Parte de Conta
     const excluirConta = () => {
         try {
-            localStorage.removeItem("usuarioId");
+            localStorage.removeItem("token");
             navigate("/");
         } catch (error) {
             console.error("Erro ao Excluir conta ", error);
@@ -76,9 +74,8 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
     useEffect(() => {
         if (!dadosUser) return;
 
-        setImagem(dadosUser.img);
+        setImagem(dadosUser.img || "");
         setNome(dadosUser.nome);
-        setEmail(dadosUser.email);
     }, [dadosUser]);
 
     return (
@@ -89,7 +86,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
             </div>
             <div className={Style.divFotoPerfil}>
                 <div className={Style.ajusteImgPerfil}>
-                    <img src={previewImg || imagem || "/imgs/img-perfil/avatar-default.png"}
+                    <img src={previewImg || imagem || "/imgs/avatar-default.png"}
                         alt="Imagem de Perfil" className={Style.imgPerfil}
                         draggable="false"
                     />
@@ -143,7 +140,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                     <hr className={Style.linhaSeparacao} />
                     <div className={Style.divInformacao}>
                         <h1>Nível de Acesso</h1>
-                        <p>{dadosUser?.nivelAcesso}</p>
+                        <p>{dadosUser?.nivel_acesso_idnivel_acesso}</p>
                     </div>
                     <hr className={Style.linhaSeparacao} />
                     <div className={Style.divInformacao}>
