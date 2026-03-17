@@ -33,14 +33,14 @@ const Auditoria = {
         }
     },
 
-    create: async ({ idauditoria, usuarios_idusuarios, mensagem, dataHora }) => {
+    create: async ({ usuarios_idusuarios, mensagem, dataHora }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'INSERT INTO auditoria (idauditoria, usuarios_idusuarios, mensagem, dataHora) VALUES (?, ?, ?, ?)',
-                [idauditoria, usuarios_idusuarios, mensagem, dataHora]
+                'INSERT INTO auditoria (usuarios_idusuarios, mensagem, dataHora) VALUES (?, ?, ?)',
+                [usuarios_idusuarios, mensagem, dataHora || new Date()]
             );
             await connection.commit();
             return { idauditoria: result.insertId, usuarios_idusuarios, mensagem, dataHora };

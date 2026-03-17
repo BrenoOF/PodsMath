@@ -33,14 +33,14 @@ const Instituicao = {
         }
     },
 
-    create: async ({ idinstituicoes, imagens_idimagens, nome }) => {
+    create: async ({ imagens_idimagens, nome }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'INSERT INTO instituicoes (idinstituicoes, imagens_idimagens, nome) VALUES (?, ?, ?)',
-                [idinstituicoes, imagens_idimagens, nome]
+                'INSERT INTO instituicoes (imagens_idimagens, nome) VALUES (?, ?)',
+                [imagens_idimagens, nome]
             );
             await connection.commit();
             return { idinstituicoes: result.insertId, imagens_idimagens, nome };

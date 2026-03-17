@@ -33,17 +33,17 @@ const NivelAcesso = {
         }
     },
 
-    create: async ({ idnivel_acesso, nome }) => {
+    create: async ({ nome, ativado }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'INSERT INTO nivel_acesso (idnivel_acesso, nome) VALUES (?, ?)',
-                [idnivel_acesso, nome]
+                'INSERT INTO nivel_acesso (nome, ativado) VALUES (?, ?)',
+                [nome, ativado || '1']
             );
             await connection.commit();
-            return { idnivel_acesso: result.insertId, nome };
+            return { idnivel_acesso: result.insertId, nome, ativado };
         } catch (error) {
             if (connection) await connection.rollback();
             throw error;
@@ -52,14 +52,14 @@ const NivelAcesso = {
         }
     },
 
-    update: async (id, { nome }) => {
+    update: async (id, { nome, ativado }) => {
         let connection;
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'UPDATE nivel_acesso SET nome = ? WHERE idnivel_acesso = ?',
-                [nome, id]
+                'UPDATE nivel_acesso SET nome = ?, ativado = ? WHERE idnivel_acesso = ?',
+                [nome, ativado, id]
             );
             await connection.commit();
             return result.affectedRows > 0;
