@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
 
 import { PrimeReactContext } from 'primereact/api';
 import { useMatchMedia } from 'primereact/hooks';
@@ -10,7 +9,7 @@ import Style from "./topBar.module.css";
 // Import de Componentes
 import { Toast } from 'primereact/toast';
 
-export default function CompTopBar({ slidebarAberta }) {
+export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setUserLogado }) {
     const navigate = useNavigate();
     const { changeTheme } = useContext(PrimeReactContext);
     const [menuUserAberto, setMenuUserAberto] = useState(false);
@@ -163,12 +162,12 @@ export default function CompTopBar({ slidebarAberta }) {
         }
     }, [changeTheme]);
 
-    // Verificação se está Logado
-    const [userLogado, setUserLogado] = useState(false);
+    // Busca dados do User
     const [dadosUser, setDadosUser] = useState(null);
 
     useEffect(() => {
         const buscarDadosUsuario = async () => {
+            if (!userLogado) return;
             const token = localStorage.getItem("token");
             if (!token) return;
             try {
@@ -177,31 +176,35 @@ export default function CompTopBar({ slidebarAberta }) {
                         Authorization: `Bearer ${token}`
                     }
                 });
-                const data = await response.json();
 
-                if (data) {
-                    setUserLogado(true);
-
-                    const caminhoOriginal = data.caminho_imagem || "";
-                    let urlImagem = "";
-
-                    if (caminhoOriginal) {
-                        const nomeArquivo = caminhoOriginal.split('/').pop();
-                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
-                    }
-
-                    setDadosUser({ ...data, img: urlImagem });
-                } else {
+                if (!response.ok) {
                     setUserLogado(false);
+                    return;
                 }
+
+                const data = await response.json();
+                const caminhoOriginal = data.caminho_imagem || "";
+                let urlImagem = "";
+                if (caminhoOriginal) {
+                    const nomeArquivo = caminhoOriginal.split('/').pop();
+                    urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                }
+
+                setDadosUser({ ...data, img: urlImagem });
             } catch (error) {
                 console.error("Erro ao buscar dados do usuário:", error);
             }
         };
 
         buscarDadosUsuario();
+    }, [userLogado, setUserLogado]);
 
-    }, []);
+    // Verificação se está Logado
+    useEffect(() => {
+        if (!userLogado) {
+            setDadosUser(null);
+        }
+    }, [userLogado]);
 
     // Refs para quando clicar fora do menuConfigs ele fechar
     const toast = useRef(null);
@@ -249,31 +252,6 @@ export default function CompTopBar({ slidebarAberta }) {
 
     // Verificação de mobile
     const mobile = useMatchMedia('(max-width: 769px)');
-
-    // Fazer Logout
-    const logout = () => {
-        try {
-            localStorage.removeItem("usuarioId");
-            setUserLogado(false);
-            navigate("/");
-        } catch (error) {
-            console.error("Erro ao Realizar logout ", error);
-        }
-    }
-    const alertSair = () => {
-        Swal.fire({
-            title: "Quer Realmente Sair?",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Sim, Quero Sair!",
-            cancelButtonColor: "#d33",
-            confirmButtonColor: "#012663"
-        }).then((result) => {
-            if (result.isConfirmed) {
-                logout();
-            }
-        });
-    }
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -326,8 +304,8 @@ export default function CompTopBar({ slidebarAberta }) {
                                 onClick={() => { setMenuUserAberto(!menuUserAberto) }}
                             >
                                 <div className={Style.divInfoTexto}>
-                                    <h1>{dadosUser.nome}</h1>
-                                    <p>{dadosUser.email}</p>
+                                    <h1>{dadosUser?.nome}</h1>
+                                    <p>{dadosUser?.email}</p>
                                 </div>
                                 <img src={dadosUser?.img || "/imgs/avatar-default.png"} alt="foto de perfil"
                                     className={Style.imgPerfil} draggable="false"
@@ -358,8 +336,8 @@ export default function CompTopBar({ slidebarAberta }) {
                             className={`${Style.menuConfigs} ${modalUserMobileAberto ? Style.menuAberto : ""}`}
                         >
                             <div className={Style.modalInfoUser}>
-                                <h1>{dadosUser.nome}</h1>
-                                <p>{dadosUser.email}</p>
+                                <h1>{dadosUser?.nome}</h1>
+                                <p>{dadosUser?.email}</p>
                             </div>
                             <hr className={Style.hrSeparacao} />
                             <div onClick={() => {
