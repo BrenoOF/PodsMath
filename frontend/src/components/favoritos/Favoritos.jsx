@@ -9,25 +9,62 @@ export default function TelaFavoritos() {
     const navigate = useNavigate();
     const [podcastsFavoritos, setPodcastsFavoritos] = useState([]);
 
-    const toggleFavorito = (id) => {
-        setPodcastsFavoritos((prev) =>
-            prev.map((podcast) =>
-                podcast.id === id
-                    ? { ...podcast, favorito: !podcast.favorito }
-                    : podcast
-            )
-        );
+    const toggleFavorito = async (id, statusAtual) => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+            if (statusAtual) {
+                await axios.delete(`http://localhost:3001/favoritos/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+            } else {
+                await axios.post(`http://localhost:3001/favoritos`, 
+                    { audios_idaudios: id },
+                    { headers: { Authorization: `Bearer ${token}` } }
+                );
+            }
+
+            // Atualiza apenas o status visual, mantendo o item na página
+            setPodcastsFavoritos((prev) =>
+                prev.map((podcast) =>
+                    podcast.id === id ? { ...podcast, favorito: !statusAtual } : podcast
+                )
+            );
+        } catch (error) {
+            console.error("Erro ao alternar favorito", error);
+        }
     };
 
     useEffect(() => {
         const carregarDados = async () => {
-            try {
-                const response = await axios.get("/dados/podcasts.json");
+            const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/login");
+                return;
+            }
 
-                const dadosComFavorito = response.data.novidades.map(item => ({
-                    ...item,
-                    favorito: true
-                }));
+            try {
+                const response = await axios.get("http://localhost:3001/favoritos/me", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const dadosComFavorito = response.data.map(item => {
+                    const caminhoOriginal = item.imagem_caminho || "";
+                    let urlImagem = "";
+
+                    if (caminhoOriginal) {
+                        const nomeArquivo = caminhoOriginal.split('/').pop();
+                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    }
+
+                    return {
+                        ...item,
+                        img: urlImagem,
+                        idPodcast: item.id, // Para o navigate
+                        favorito: true
+                    };
+                });
 
                 setPodcastsFavoritos(dadosComFavorito);
             } catch (error) {
@@ -35,7 +72,7 @@ export default function TelaFavoritos() {
             }
         }
         carregarDados();
-    }, []);
+    }, [navigate]);
 
     return (
         <div className={Style.containerFavoritos}>
@@ -79,7 +116,10 @@ export default function TelaFavoritos() {
                                 ${Style.divCoracao}
                                 ${!item.favorito ? Style.apagadaCoracao : ""}
                             `}
-                                onClick={() => { toggleFavorito(item.id) }}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggleFavorito(item.id, item.favorito);
+                                }}
                             >
                                 {item.favorito ? (
                                     <i className="fa-solid fa-heart"></i>
