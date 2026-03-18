@@ -6,13 +6,31 @@ import Style from "./player.module.css";
 
 const API_TRANSCRIPTION_URL = "http://localhost:3002";
 
-// Funções Transcrição
 const tempoParaSegundos = (tempo) => {
     const [hms, ms] = tempo.split(",");
     const [h, m, s] = hms.split(":").map(Number);
 
     return h * 3600 + m * 60 + s + Number(ms) / 1000;
 }
+
+const tempoHistoricoParaSegundos = (tempo) => {
+    if (!tempo) return 0;
+    // Se não tiver ":", tenta converter direto para float (caso venha em segundos)
+    if (!String(tempo).includes(":")) return parseFloat(tempo) || 0;
+    
+    // Se vier no formato "HH:MM:SS"
+    const [h, m, s] = String(tempo).split(":").map(Number);
+    return h * 3600 + m * 60 + s;
+};
+
+// Nova função para converter segundos de volta para o formato do banco (HH:MM:SS)
+const segundosParaTempoHistorico = (segundosTotais) => {
+    const horas = Math.floor(segundosTotais / 3600).toString().padStart(2, "0");
+    const minutos = Math.floor((segundosTotais % 3600) / 60).toString().padStart(2, "0");
+    const segundos = Math.floor(segundosTotais % 60).toString().padStart(2, "0");
+    
+    return `${horas}:${minutos}:${segundos}`;
+};
 
 const parseTranscricao = (texto) => {
     const regex = /\[(\d{2}:\d{2}:\d{2},\d{3}) --> (\d{2}:\d{2}:\d{2},\d{3})\]\s*([\s\S]*?)(?=\s*\[\d{2}:\d{2}:\d{2},\d{3} -->|$)/g;
@@ -74,6 +92,8 @@ export default function TelaPlayer() {
 
     const [tempoAtual, setTempoAtual] = useState(0);
     const [duracaoTotal, setDuracaoTotal] = useState(0);
+    const tempoInicialRef = useRef(0);
+    const tempoSalvoRef = useRef(0); // Referência para saber o último tempo salvo no banco em segundos
 
     const [arrastando, setArrastando] = useState(false);
 
@@ -88,6 +108,27 @@ export default function TelaPlayer() {
         const sec = Math.floor(s % 60).toString().padStart(2, "0");
         return `${m}:${sec}`;
     };
+
+    // Função centralizada para salvar o histórico no banco de dados
+    const salvarHistorico = React.useCallback(async (tempoParaSalvar) => {
+        const token = localStorage.getItem("token");
+        if (!token || !idPodcast) return;
+
+        const tempoInteiro = Math.floor(tempoParaSalvar);
+        const tempoFormatadoBanco = segundosParaTempoHistorico(tempoInteiro);
+
+        try {
+            await axios.post("http://localhost:3001/historicos/save", {
+                audios_idaudios: idPodcast,
+                tempo_audio: tempoFormatadoBanco // Mandando no formato "HH:MM:SS" para o banco aceitar
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            tempoSalvoRef.current = tempoInteiro; // Guardamos em segundos para a nossa lógica interna
+        } catch (error) {
+            console.error("Erro ao salvar histórico", error);
+        }
+    }, [idPodcast]);
 
     // Pause
     const togglePlay = () => {
@@ -110,6 +151,7 @@ export default function TelaPlayer() {
         const novoVolume = Math.min(Math.max(valor, 0), 1);
         setVolume(novoVolume);
     };
+
     // Avançar pela Barra
     const handleClickBarra = (e) => {
         const rect = barraRef.current.getBoundingClientRect();
@@ -119,6 +161,9 @@ export default function TelaPlayer() {
 
         audioRef.current.currentTime = novoTempo;
         setTempoAtual(novoTempo);
+        
+        // Salva imediatamente ao clicar na barra
+        salvarHistorico(novoTempo);
     };
 
     const atualizarTempo = React.useCallback((clientX) => {
@@ -190,12 +235,49 @@ export default function TelaPlayer() {
                 const isFavorito = favResponse.data.some(fav => String(fav.id) === String(idPodcast));
                 setFavoritar(isFavorito);
 
+                // Busca Histórico (Tempo salvo)
+                try {
+                    const histResponse = await axios.get(`http://localhost:3001/historicos/audio/${idPodcast}`, {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    if (histResponse.data && histResponse.data.tempo_audio) {
+                        const tempoSalvo = tempoHistoricoParaSegundos(histResponse.data.tempo_audio);
+                        
+                        if (audioRef.current && audioRef.current.readyState >= 1) {
+                            audioRef.current.currentTime = tempoSalvo;
+                            setTempoAtual(tempoSalvo);
+                        } else {
+                            tempoInicialRef.current = tempoSalvo;
+                        }
+                        tempoSalvoRef.current = tempoSalvo;
+                    }
+                } catch (err) {
+                    console.log("Não possui histórico para este áudio ainda.");
+                }
+
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
             }
         }
         carregarDados();
     }, [idTema, playlistTema, idPodcast]);
+
+    // Salvar Histórico periodicamente
+    useEffect(() => {
+        if (!tocando) return;
+
+        const interval = setInterval(() => {
+            if (!audioRef.current) return;
+            
+            const tempoAgora = Math.floor(audioRef.current.currentTime);
+            // Só salva se mudou o tempo significativamente e se o usuário não está arrastando a barra no momento
+            if (Math.abs(tempoAgora - tempoSalvoRef.current) >= 5 && !arrastando) {
+                salvarHistorico(tempoAgora);
+            }
+        }, 5000); 
+
+        return () => clearInterval(interval);
+    }, [tocando, arrastando, salvarHistorico]);
 
     // Scroll acompanhar a Transcrição
     const linhaAtivaRef = useRef(null);
@@ -223,6 +305,7 @@ export default function TelaPlayer() {
     // Tocar Audio
     useEffect(() => {
         const audio = audioRef.current;
+        if (!audio) return;
 
         const atualizarTempoAudio = () => {
             setTempoAtual(audio.currentTime);
@@ -230,11 +313,21 @@ export default function TelaPlayer() {
 
         const carregarDuracao = () => {
             setDuracaoTotal(Math.floor(audio.duration));
+            
+            if (tempoInicialRef.current > 0) {
+                audio.currentTime = tempoInicialRef.current;
+                setTempoAtual(tempoInicialRef.current);
+                tempoInicialRef.current = 0; 
+            }
         };
 
         const terminouAudio = () => {
             setTocando(false);
         };
+
+        if (audio.readyState >= 1) {
+            carregarDuracao();
+        }
 
         audio.addEventListener("timeupdate", atualizarTempoAudio);
         audio.addEventListener("loadedmetadata", carregarDuracao);
@@ -259,7 +352,12 @@ export default function TelaPlayer() {
         if (!arrastando) return;
 
         const moverMouse = (e) => atualizarTempo(e.clientX);
-        const pararArrastar = () => setArrastando(false);
+        const pararArrastar = () => {
+            setArrastando(false);
+            if (audioRef.current) {
+                salvarHistorico(audioRef.current.currentTime);
+            }
+        };
 
         document.addEventListener("mousemove", moverMouse);
         document.addEventListener("mouseup", pararArrastar);
@@ -268,7 +366,7 @@ export default function TelaPlayer() {
             document.removeEventListener("mousemove", moverMouse);
             document.removeEventListener("mouseup", pararArrastar);
         };
-    }, [arrastando, atualizarTempo]);
+    }, [arrastando, atualizarTempo, salvarHistorico]);
 
     // Deixar a Barra de Progresso em 60fps
     useEffect(() => {
@@ -413,6 +511,7 @@ export default function TelaPlayer() {
                                     className={ativo ? Style.ativa : ""}
                                     onClick={() => {
                                         audioRef.current.currentTime = linha.start;
+                                        salvarHistorico(linha.start);
                                     }}
                                 >
                                     {linha.text}
@@ -447,10 +546,9 @@ export default function TelaPlayer() {
                     <div className={Style.menuManipulacaoAudio}>
                         <i className="fa-solid fa-backward"
                             onClick={() => {
-                                audioRef.current.currentTime = Math.max(
-                                    audioRef.current.currentTime - 10,
-                                    0
-                                );
+                                const novoTempo = Math.max(audioRef.current.currentTime - 10, 0);
+                                audioRef.current.currentTime = novoTempo;
+                                salvarHistorico(novoTempo);
                             }}
                         ></i>
                         <div className={Style.divIconPlay}
@@ -464,10 +562,9 @@ export default function TelaPlayer() {
                         </div>
                         <i className="fa-solid fa-forward"
                             onClick={() => {
-                                audioRef.current.currentTime = Math.min(
-                                    audioRef.current.currentTime + 10,
-                                    duracaoTotal
-                                );
+                                const novoTempo = Math.min(audioRef.current.currentTime + 10, duracaoTotal);
+                                audioRef.current.currentTime = novoTempo;
+                                salvarHistorico(novoTempo);
                             }}
                         ></i>
                     </div>
