@@ -68,7 +68,6 @@ export default function TelaTema() {
                             />
                         </div>
                         <h1>{item.titulo}</h1>
-                        <p>Acesse a playlist de: {item.titulo}</p>
                     </div>
                 ))}
             </div>

@@ -313,6 +313,7 @@ export default function TelaPlayer() {
             <div className={Style.divApresentacaoPodcast}>
                 <img src={dadosPlayer?.imagem_caminho || "/imgs/podcast-default.jpg"} alt={dadosPlayer?.titulo}
                     className={Style.imgApresentacaoPodcast}
+                    onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                 />
                 <div className={Style.divTextosApresentacao}>
                     <h1>{dadosPlayer?.titulo}</h1>
