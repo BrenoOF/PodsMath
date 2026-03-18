@@ -44,13 +44,14 @@ const Historico = {
                     a.titulo, 
                     a.descricao, 
                     a.temas_idtemas AS idTema,
-                    t.titulo AS assunto,
+                    cat.nome AS assunto,
                     t.categorias_idcategorias AS playlistTema,
                     img.caminho_imagem AS imagem_caminho
                 FROM historico h
                 JOIN audios a ON h.audios_idaudios = a.idaudios
                 LEFT JOIN temas t ON a.temas_idtemas = t.idtemas
                 LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                LEFT JOIN categorias cat ON t.categorias_idcategorias = cat.idcategorias
                 WHERE h.usuarios_idusuarios = ?
                 ORDER BY h.idhistorico DESC
             `;
