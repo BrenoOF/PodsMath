@@ -319,6 +319,7 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                                             navigate("/perfil");
                                         }
                                     }}
+                                    onError={(e) => (e.target.src = "/imgs/avatar-default.png")}
                                 />
                             </div>
                         </>

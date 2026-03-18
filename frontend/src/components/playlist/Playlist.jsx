@@ -10,7 +10,6 @@ export default function TelaPlaylist() {
     const navigate = useNavigate();
     const { idTema, playlistTema } = useParams();
     const [tituloTema, setTituloTema] = useState("");
-    const [subTitulo, setSubTitulo] = useState("");
     const [imagemTema, setImagemTema] = useState("");
     const [dadosPlaylist, setDadosPlaylist] = useState([]);
 
@@ -24,7 +23,6 @@ export default function TelaPlaylist() {
                 });
                 
                 setTituloTema(resTema.data.titulo);
-                setSubTitulo(`Playlist de ${resTema.data.titulo}`);
 
                 const caminhoOriginal = resTema.data.caminho_imagem || "";
                     let urlImagem = "";
@@ -85,7 +83,6 @@ export default function TelaPlaylist() {
                             <p>Playlist</p>
                         </div>
                         <h1>{tituloTema}</h1>
-                        <p>{subTitulo}</p>
                         <p>
                             <b>
                                 {`
@@ -137,7 +134,7 @@ export default function TelaPlaylist() {
                             <td className={Style.celulaTitulo}>
                                 <img src={item.imagem_caminho || "/imgs/podcast-default.jpg"} alt={item.titulo}
                                     className={Style.imgTabela} draggable="false"
-                                    onError={(e) => (e.target.src = "/imgs/cardExemplo.jpg")}
+                                    onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                                 />
                                 <div className={Style.divTextoTituloPodcast}>
                                     <h1>{item.titulo}</h1>

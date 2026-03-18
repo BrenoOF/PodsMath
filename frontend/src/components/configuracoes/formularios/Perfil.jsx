@@ -140,6 +140,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                     <img src={previewImg || imagem || "/imgs/avatar-default.png"}
                         alt="Imagem de Perfil" className={Style.imgPerfil}
                         draggable="false"
+                        onError={(e) => (e.target.src = "/imgs/avatar-default.png")}
                     />
                     {/* Input escondido */}
                     <input
