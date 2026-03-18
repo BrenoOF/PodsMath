@@ -49,6 +49,41 @@ const Tema = {
         }
     },
 
+    getDestaque: async (limit = 10) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query(`
+                SELECT 
+                    t.idtemas,
+                    t.titulo,
+                    t.categorias_idcategorias,
+                    i.caminho_imagem as imagem_caminho,
+                    COUNT(a.idaudios) AS quantidade_audios,
+                    COALESCE(AVG(a.visualizacoes), 0) AS media_visualizacoes_por_audio
+                FROM temas t
+                LEFT JOIN imagens i ON i.idimagens = t.imagens_idimagens
+                LEFT JOIN audios a ON a.temas_idtemas = t.idtemas
+                GROUP BY 
+                    t.idtemas,
+                    t.titulo,
+                    t.categorias_idcategorias,
+                    i.caminho_imagem
+                ORDER BY 
+                    media_visualizacoes_por_audio DESC
+                LIMIT ?;
+            `, [limit]);
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
     create: async ({ titulo, categorias_idcategorias, imagens_idimagens }) => {
         let connection;
         try {

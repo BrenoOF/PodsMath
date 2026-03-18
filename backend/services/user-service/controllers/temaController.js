@@ -32,6 +32,16 @@ const temaController = {
         }
     },
 
+    getTemasDestaque: async (req, res) => {
+        try {
+            const limit = parseInt(req.query.limit) || 10;
+            const temas = await Tema.getDestaque(limit);
+            res.json(temas);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
     createTema: async (req, res) => {
         try {
             const newTema = await Tema.create(req.body);
