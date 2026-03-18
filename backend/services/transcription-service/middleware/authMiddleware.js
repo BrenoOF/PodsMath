@@ -11,7 +11,7 @@ const authMiddleware = (req, res, next) => {
         token = req.query.token;
     }
 
-    if (!token) {
+    if (!token || token === 'null' || token === 'undefined') {
         return res.status(401).json({ message: 'Token de autenticação não fornecido ou inválido' });
     }
 
