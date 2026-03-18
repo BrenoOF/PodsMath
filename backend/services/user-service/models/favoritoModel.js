@@ -22,7 +22,23 @@ const Favorito = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM favoritos WHERE usuarios_idusuarios = ?', [usuarios_idusuarios]);
+            const query = `
+                SELECT 
+                    f.*, 
+                    a.idaudios AS id,
+                    a.titulo, 
+                    a.descricao, 
+                    a.temas_idtemas AS idTema,
+                    t.titulo AS assunto,
+                    t.categorias_idcategorias AS playlistTema,
+                    img.caminho_imagem AS imagem_caminho
+                FROM favoritos f
+                JOIN audios a ON f.audios_idaudios = a.idaudios
+                LEFT JOIN temas t ON a.temas_idtemas = t.idtemas
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                WHERE f.usuarios_idusuarios = ?
+            `;
+            const [rows] = await connection.query(query, [usuarios_idusuarios]);
             await connection.commit();
             return rows;
         } catch (error) {

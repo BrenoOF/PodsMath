@@ -123,6 +123,7 @@ const Audio = {
         let connection;
         try {
             connection = await pool.getConnection();
+            await connection.beginTransaction();
             const query = `
                 SELECT a.*, img.caminho_imagem AS imagem_caminho 
                 FROM audios a
@@ -131,8 +132,10 @@ const Audio = {
                 LIMIT ?
             `;
             const [rows] = await connection.query(query, [limit]);
+            await connection.commit();
             return rows;
         } catch (error) {
+            if (connection) await connection.rollback();
             throw error;
         } finally {
             if (connection) connection.release();
@@ -143,6 +146,7 @@ const Audio = {
         let connection;
         try {
             connection = await pool.getConnection();
+            await connection.beginTransaction();
             const query = `
                 SELECT a.*, img.caminho_imagem AS imagem_caminho, t.titulo as assunto, t.categorias_idcategorias
                 FROM audios a
@@ -152,8 +156,10 @@ const Audio = {
                 LIMIT ?
             `;
             const [rows] = await connection.query(query, [limit]);
+            await connection.commit();
             return rows;
         } catch (error) {
+            if (connection) await connection.rollback();
             throw error;
         } finally {
             if (connection) connection.release();
@@ -164,6 +170,7 @@ const Audio = {
         let connection;
         try {
             connection = await pool.getConnection();
+            await connection.beginTransaction();
             const query = `
                 SELECT a.*, img.caminho_imagem AS imagem_caminho, t.titulo as assunto, t.categorias_idcategorias
                 FROM audios a
@@ -172,8 +179,10 @@ const Audio = {
                 WHERE usuarios_idusuarios = ?
             `;
             const [rows] = await connection.query(query, [userId]);
+            await connection.commit();
             return rows;
         } catch (error) {
+            if (connection) await connection.rollback();
             throw error;
         } finally {
             if (connection) connection.release();
@@ -184,6 +193,7 @@ const Audio = {
         let connection;
         try {
             connection = await pool.getConnection();
+            await connection.beginTransaction();
             const query = `
                 SELECT a.*, u.nome AS autor, img.caminho_imagem AS imagem_caminho 
                 FROM audios a
@@ -192,8 +202,10 @@ const Audio = {
                 WHERE temas_idtemas = ?
             `;
             const [rows] = await connection.query(query, [temaId]);
+            await connection.commit();
             return rows;
         } catch (error) {
+            if (connection) await connection.rollback();
             throw error;
         } finally {
             if (connection) connection.release();

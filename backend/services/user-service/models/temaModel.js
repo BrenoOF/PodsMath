@@ -37,9 +37,12 @@ const Tema = {
         let connection;
         try {
             connection = await pool.getConnection();
+            await connection.beginTransaction();
             const [rows] = await connection.query('SELECT * FROM temas t LEFT JOIN imagens i ON i.idimagens = t.imagens_idimagens WHERE t.categorias_idcategorias = ?;', [categoriaId]);
+            await connection.commit();
             return rows;
         } catch (error) {
+            if (connection) await connection.rollback();
             throw error;
         } finally {
             if (connection) connection.release();
