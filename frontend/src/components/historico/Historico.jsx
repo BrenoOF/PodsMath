@@ -11,21 +11,41 @@ export default function TelaHistorico() {
 
     useEffect(() => {
         const carregarDados = async () => {
-            try {
-                const response = await axios.get("/dados/podcasts.json");
+            const token = localStorage.getItem("token");
+            if (!token) {
+                navigate("/login");
+                return;
+            }
 
-                const dadosComHistorico = response.data.podcastsProprios.map(item => ({
-                    ...item,
-                    historico: true
-                }));
+            try {
+                const response = await axios.get("http://localhost:3001/historicos/me", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+
+                const dadosComHistorico = response.data.map(item => {
+                    const caminhoOriginal = item.imagem_caminho || "";
+                    let urlImagem = "";
+
+                    if (caminhoOriginal) {
+                        const nomeArquivo = caminhoOriginal.split('/').pop();
+                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    }
+
+                    return {
+                        ...item,
+                        img: urlImagem,
+                        idPodcast: item.audios_idaudios, // Para o navigate
+                        historico: true
+                    };
+                });
 
                 setPodcastsHistorico(dadosComHistorico);
             } catch (error) {
-                console.error("Erro ao carregar dados", error);
+                console.error("Erro ao carregar histórico", error);
             }
         }
         carregarDados();
-    }, []);
+    }, [navigate]);
 
     return (
         <div className={Style.containerHistorico}>
