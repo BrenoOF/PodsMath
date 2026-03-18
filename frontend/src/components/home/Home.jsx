@@ -27,18 +27,17 @@ export default function TelaHome() {
                     axios.get("http://localhost:3001/audios/proprios?limit=2", { headers })
                 ]);
 
-                const baseURL = "http://localhost:3001";
+                const formatarImagem = (caminhoOriginal) => {
+                    let urlImagem = "";
 
-                const formatarImagem = (caminho) => {
-                    if (!caminho) return "";
-                    let caminhoRelativo = caminho;
-                    if (
-                        !caminhoRelativo.startsWith("uploads/") &&
-                        !caminhoRelativo.startsWith("/uploads/")
-                    ) {
-                        caminhoRelativo = "uploads/" + caminhoRelativo.replace(/^\//, "");
+                    if (caminhoOriginal) {
+                        const nomeArquivo = caminhoOriginal.split('/').pop();
+                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
                     }
-                    return `${baseURL}/${caminhoRelativo.replace(/^\//, "")}`;
+
+                    console.log("URL da imagem formatada:", urlImagem);
+
+                    return urlImagem;
                 };
 
                 const tratarLista = (lista) => {
