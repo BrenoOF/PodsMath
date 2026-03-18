@@ -31,6 +31,7 @@ export default function CompPodcastNovidades({ podcasts }) {
                 <div className={Style.divImgCardNovidade}>
                     <img src={item.img || "/imgs/podcast-default.jpg"} alt={item.titulo}
                         className={Style.imgCard} draggable="false"
+                        onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                     />
                 </div>
                 <h1>{item.titulo}</h1>
