@@ -282,7 +282,7 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                 <div className={Style.divDireita}>
                     {!userLogado ? (
                         <>
-                            <div className={Style.btnPadrao + " " + Style.ajusteMobile}
+                            <div className={Style.btnPadrao}
                                 onClick={() => {
                                     navigate("/login", { state: { mode: "login" } });
                                 }}

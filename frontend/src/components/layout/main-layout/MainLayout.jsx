@@ -50,7 +50,7 @@ export default function TelaLayout() {
         return () => elemento.removeEventListener("scroll", handleScroll);
     });
 
-    // Fazer Logout
+    // Verifica se User está logado
     const [userLogado, setUserLogado] = useState(false);
 
     useEffect(() => {
