@@ -25,11 +25,11 @@ export default function CompPodcastNovidades({ podcasts }) {
         return (
             <div className={Style.cardNovidade}
                 onClick={() => {
-                    navigate(`/explorar/${item.idTema}/${item.playlistTema}/${item.idPodcast}`);
+                    navigate(`/explorar/${item.categorias_idcategorias}/${item.temas_idtemas}/${item.idaudios}`);
                 }}
             >
                 <div className={Style.divImgCardNovidade}>
-                    <img src={item.img || "/imgs/podcast-default.jpg"} alt={item.titulo}
+                    <img src={item.imagem_caminho || "/imgs/podcast-default.jpg"} alt={item.titulo}
                         className={Style.imgCard} draggable="false"
                         onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                     />
@@ -39,7 +39,7 @@ export default function CompPodcastNovidades({ podcasts }) {
                 <div className={Style.btnAssunto}
                     onClick={(e) => {
                         e.stopPropagation();
-                        navigate(`/explorar/${item.idTema}`);
+                        navigate(`/explorar/${item.categorias_idcategorias}`);
                     }}
                 >
                     <p>{item.assunto}</p>

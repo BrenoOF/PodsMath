@@ -19,7 +19,7 @@ export default function CompPodcastDestaque({ podcasts }) {
                             navigate(`/explorar/${item.idTema}/${item.playlistTema}`);
                         }}
                     >
-                        <img src={item.img || "/imgs/podcast-default.jpg"}
+                        <img src={item.imagem_caminho || "/imgs/podcast-default.jpg"}
                             alt={`Capa do podcast ${item.titulo}`}
                             className={Style.imgCardDestaque} draggable="false"
                             onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
