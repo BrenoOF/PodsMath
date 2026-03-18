@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Style from "./historico.module.css";
 import StyleExterno from "../home/carrosseis/carrosseis.module.css";
 
 export default function TelaHistorico() {
+    const navigate = useNavigate();
     const [podcastsHistorico, setPodcastsHistorico] = useState([]);
 
     useEffect(() => {
@@ -45,14 +47,25 @@ export default function TelaHistorico() {
             ) : (
                 <div className={StyleExterno.divPodcastsProprio}>
                     {podcastsHistorico.map(item => (
-                        <div className={StyleExterno.cardProprio} key={item.id}>
-                            <img src={item.img} alt={`Capa do podcast ${item.titulo}`}
+                        <div className={StyleExterno.cardProprio} key={item.id}
+                            onClick={() => {
+                                navigate(`/explorar/${item.idTema}/${item.playlistTema}/${item.idPodcast}`);
+                            }}
+                        >
+                            <img src={item.img || "/imgs/podcast-default.jpg"} 
+                                alt={`Capa do podcast ${item.titulo}`}
                                 className={StyleExterno.imgCard} draggable="false"
+                                onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                             />
                             <div className={StyleExterno.divTextosProprio}>
                                 <h1>{item.titulo}</h1>
                                 <p>{item.descricao}</p>
-                                <div className={StyleExterno.btnAssunto}>
+                                <div className={StyleExterno.btnAssunto}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate(`/explorar/${item.idTema}`);
+                                    }}
+                                >
                                     <p>{item.assunto}</p>
                                 </div>
                             </div>

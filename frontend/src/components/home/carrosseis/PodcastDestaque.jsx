@@ -22,6 +22,7 @@ export default function CompPodcastDestaque({ podcasts }) {
                         <img src={item.img || "/imgs/podcast-default.jpg"}
                             alt={`Capa do podcast ${item.titulo}`}
                             className={Style.imgCardDestaque} draggable="false"
+                            onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                         />
                         <div className={Style.textosCardDestaque}>
                             <h2>{item.titulo}</h2>

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import Style from "./favoritos.module.css";
 import StyleExterno from "../home/carrosseis/carrosseis.module.css";
 
 export default function TelaFavoritos() {
+    const navigate = useNavigate();
     const [podcastsFavoritos, setPodcastsFavoritos] = useState([]);
 
     const toggleFavorito = (id) => {
@@ -51,16 +53,26 @@ export default function TelaFavoritos() {
             </div>
             <div className={Style.divCardNovidade}>
                 {podcastsFavoritos.map(item => (
-                    <div className={StyleExterno.cardNovidade} key={item.id}>
+                    <div className={StyleExterno.cardNovidade} key={item.id}
+                        onClick={() => {
+                            navigate(`/explorar/${item.idTema}/${item.playlistTema}/${item.idPodcast}`);
+                        }}
+                    >
                         <div className={StyleExterno.divImgCardNovidade}>
-                            <img src={item.img} alt={item.titulo}
+                            <img src={item.img  || "/imgs/podcast-default.jpg"} alt={item.titulo}
                                 className={StyleExterno.imgCard} draggable="false"
+                                onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                             />
                         </div>
                         <h1>{item.titulo}</h1>
                         <p>{item.descricao}</p>
                         <div className={Style.divAcoesBottom}>
-                            <div className={StyleExterno.btnAssunto}>
+                            <div className={StyleExterno.btnAssunto}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigate(`/explorar/${item.idTema}`);
+                                }}
+                            >
                                 <p>{item.assunto}</p>
                             </div>
                             <div className={`
