@@ -12,35 +12,40 @@ import Proprio from "./carrosseis/PodcastProprio";
 export default function TelaHome() {
     const navigate = useNavigate();
     const [dadosHome, setDadosHome] = useState(null);
+    const API_URL = "http://localhost:3001";
 
     useEffect(() => {
         const carregarDados = async () => {
+            const token = localStorage.getItem("token");
+            const headers = token ? {
+                Authorization: `Bearer ${token}`
+            } : {};
+
             try {
-                const token = localStorage.getItem("token");
-                const headers = {
-                    Authorization: `Bearer ${token}`
-                };
+               
+                const destaquePromise = axios.get(`${API_URL}/temas/destaque?limit=8`, { headers });
+                const recentesPromise = axios.get(`${API_URL}/audios/recentes`, { headers });
+                
+                const propriosPromise = axios.get(`${API_URL}/audios/proprios?limit=2`, { headers })
+                    .catch(error => {
+                        console.warn("Áudios próprios não puderam ser carregados:", error.response?.data?.message || error.message);
+                        return { data: [] };
+                    });
 
                 const [destaqueRes, recentesRes, propriosRes] = await Promise.all([
-                    axios.get("http://localhost:3001/temas/destaque?limit=8", { headers }),
-                    axios.get("http://localhost:3001/audios/recentes", { headers }),
-                    axios.get("http://localhost:3001/audios/proprios?limit=2", { headers })
+                    destaquePromise,
+                    recentesPromise,
+                    propriosPromise
                 ]);
 
                 const formatarImagem = (caminhoOriginal) => {
-                    let urlImagem = "";
-
-                    if (caminhoOriginal) {
-                        const nomeArquivo = caminhoOriginal.split('/').pop();
-                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
-                    }
-
-                    console.log("URL da imagem formatada:", urlImagem);
-
-                    return urlImagem;
+                    if (!caminhoOriginal) return "";
+                    const nomeArquivo = caminhoOriginal.split('/').pop();
+                    return `${API_URL}/imagens/file/${nomeArquivo}`;
                 };
 
                 const tratarLista = (lista) => {
+                    if (!Array.isArray(lista)) return [];
                     return lista.map(item => ({
                         ...item,
                         imagem_caminho: formatarImagem(item.imagem_caminho)
@@ -53,7 +58,11 @@ export default function TelaHome() {
                     podcastsProprios: tratarLista(propriosRes.data)
                 });
             } catch (error) {
-                console.error("Erro ao carregar dados da home", error);
+                if (error.response) {
+                    console.error("Erro do Servidor ao carregar Home:", error.response.data.message);
+                } else {
+                    console.error("Erro de Conexão ao carregar Home");
+                }
             }
         }
         carregarDados();
@@ -95,9 +104,13 @@ export default function TelaHome() {
             {/* Novidades */}
             <Novidades podcasts={dadosHome.novidades} />
             {/* */}
-            <hr className={Style.hrDeSeparacao} />
-            {/* Podcasts Proprios */}
-            <Proprio podcasts={dadosHome.podcastsProprios} />
+            {dadosHome.podcastsProprios && dadosHome.podcastsProprios.length > 0 && (
+                <>
+                    <hr className={Style.hrDeSeparacao} />
+                    {/* Podcasts Proprios */}
+                    <Proprio podcasts={dadosHome.podcastsProprios} />
+                </>
+            )}
             {/* Bloco de Footer onde terá "Sobre esse Projeto" */}
             <div className={Style.sobreOProjeto}>
                 <div className={Style.divTextosProjeto}>
