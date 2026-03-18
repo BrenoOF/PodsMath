@@ -55,15 +55,30 @@ export default function TelaPlayer() {
     const [dadosPlayer, setDadosPlayer] = useState(null);
 
     // Código para Fazer a parte da transcrição
+    const [transcricoesResponse, setTranscricoesResponse] = useState([]);
     const [transcricao, setTranscricao] = useState([]);
     const [menuAberto, setMenuAberto] = useState(false);
-    const [linguaSelecionada, setLinguaSelecionada] = useState("pt-br");
+    const [linguaSelecionada, setLinguaSelecionada] = useState(null);
 
-    const linguas = [
-        { label: "Português", value: "pt-br", icon: "br" },
-        { label: "Inglês", value: "us", icon: "us" },
-        { label: "Espanhol", value: "es", icon: "es" }
-    ];
+    const linguas = transcricoesResponse.map(t => ({
+        label: t.idioma_nome,
+        value: t.idioma,
+        texto: t.texto,
+        icon: "un"
+    }));
+
+    useEffect(() => {
+        if (linguaSelecionada) {
+            const tr = transcricoesResponse.find(t => t.idioma === linguaSelecionada);
+            if (tr) {
+                setTranscricao(parseTranscricao(tr.texto));
+            }
+        } else if (transcricoesResponse.length > 0) {
+            // Seleciona a primeira por padrão
+            setLinguaSelecionada(transcricoesResponse[0].idioma);
+            setTranscricao(parseTranscricao(transcricoesResponse[0].texto));
+        }
+    }, [linguaSelecionada, transcricoesResponse]);
 
     const menuRef = useRef(null);
     const btnRef = useRef(null);
@@ -226,11 +241,7 @@ export default function TelaPlayer() {
 
                 response.data.imagem_caminho = urlImagem;
                 setDadosPlayer(response.data);
-
-                if (response.data.transcricao && response.data.transcricao.texto) {
-                    const transcricaoConvertida = parseTranscricao(response.data.transcricao.texto);
-                    setTranscricao(transcricaoConvertida);
-                }
+                setTranscricoesResponse(response.data.transcricoes || []);
 
                 // Busca se está favoritado
                 const favResponse = await axios.get("http://localhost:3001/favoritos/me", {
