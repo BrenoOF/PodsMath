@@ -14,7 +14,7 @@ export default function CompPodcastDestaque({ podcasts }) {
             </div>
             <div className={Style.divCardsDestaque}>
                 {podcasts.map(item => (
-                    <div className={Style.cardsDestaque} key={item.id}
+                    <div className={Style.cardsDestaque} key={item.idaudios}
                         onClick={() => {
                             navigate(`/explorar/${item.idTema}/${item.playlistTema}`);
                         }}

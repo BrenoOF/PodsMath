@@ -19,6 +19,14 @@ export default function TelaExplorar() {
                         Authorization: `Bearer ${token}`
                     }
                 });
+
+                response.data.forEach(cat => {
+                    if (cat.caminho_imagem) {
+                        const nomeArquivo = cat.caminho_imagem.split('/').pop();
+                        cat.caminho_imagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    }
+                });
+
                 setDadosExplorar(response.data);
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
@@ -26,19 +34,6 @@ export default function TelaExplorar() {
         }
         carregarDados();
     }, []);
-
-    // Mapeamento de cores e ícones (visto que o banco pode não ter esses dados visuais)
-    const getVisuals = (index) => {
-        const visuals = [
-            { icon: "calculator", bg: "#a855f7, #ec4899" },
-            { icon: "shapes", bg: "#3b82f6, #06b6d4" },
-            { icon: "chart-pie", bg: "#22c55e, #10b981" },
-            { icon: "arrow-trend-up", bg: "#f97316, #ef4444" },
-            { icon: "ruler", bg: "#6366f1, #a855f7" },
-            { icon: "money-bill-wave", bg: "#eab308, #f97316" }
-        ];
-        return visuals[index % visuals.length];
-    };
 
     return (
         <div className={Style.containerExplorar}>
@@ -51,27 +46,23 @@ export default function TelaExplorar() {
                 </p>
             </div>
             <div className={Style.divCards}>
-                {dadosExplorar.map((item, index) => {
-                    const visual = getVisuals(index);
-                    return (
-                        <div key={item.idcategorias} className={Style.card}
-                            onClick={() => {
-                                navigate(`/explorar/${item.idcategorias}`);
-                            }}
-                        >
-                            <div
-                                className={Style.icon}
-                                style={{ background: `linear-gradient(135deg,${visual.bg})` }}
-                            >
-                                <i className={`fa-solid fa-${visual.icon}`}></i>
-                            </div>
-                            <div className={Style.tituloCard}>
-                                <h1>{item.nome}</h1>
-                                <p>Explore podcasts de {item.nome}</p>
-                            </div>
+                {dadosExplorar.map((item) => (
+                    <div key={item.idcategorias} className={Style.card}
+                        onClick={() => {
+                            navigate(`/explorar/${item.idcategorias}`);
+                        }}
+                    >
+                        <div className={Style.divImgCardNovidade}>
+                            <img src={item.caminho_imagem || "/imgs/podcast-default.jpg"} alt={item.nome}
+                                className={Style.imgCard} draggable="false"
+                                onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
+                            />
                         </div>
-                    );
-                })}
+                        <div className={Style.tituloCard}>
+                            <h1>{item.nome}</h1>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )

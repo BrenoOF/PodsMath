@@ -5,6 +5,7 @@
     .divApresentacao {
         padding: 0.5rem 0rem;
         gap: 1rem;
+        align-items: center;
     }
 
     .divOrganizarTextos {
@@ -77,6 +78,7 @@
     .divApresentacao {
         padding: 2rem 2rem;
         gap: 4rem;
+        align-items: flex-start;
     }
 
     .divOrganizarTextos {
@@ -149,7 +151,6 @@
 .divApresentacao {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     color: var(--branco);
     background: linear-gradient(to bottom right, #045d8c, #045d8ce6, #ff4000);
 }
