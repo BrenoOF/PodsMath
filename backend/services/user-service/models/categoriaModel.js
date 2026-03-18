@@ -6,7 +6,7 @@ const Categoria = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM categorias');
+            const [rows] = await connection.query('SELECT c.*, i.caminho_imagem FROM categorias c LEFT JOIN imagens i ON c.imagens_idimagens = i.idimagens');
             await connection.commit();
             return rows;
         } catch (error) {

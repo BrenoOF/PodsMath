@@ -34,12 +34,8 @@ const transcricaoController = {
 
     getTranscricaoByAudioId: async (req, res) => {
         try {
-            const transcricao = await Transcricao.getByAudioId(req.params.audioId);
-            if (transcricao) {
-                res.json(transcricao);
-            } else {
-                res.status(404).json({ message: 'Transcrição não encontrada para este áudio' });
-            }
+            const transcricoes = await Transcricao.getByAudioId(req.params.audioId);
+            res.json(transcricoes);
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
