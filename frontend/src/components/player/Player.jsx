@@ -67,7 +67,6 @@ export default function TelaPlayer() {
         return () => { document.removeEventListener("pointerdown", handleClickOutside) };
     }, [menuAberto]);
 
-    // States para o Player em si
     const [loop, setLoop] = useState(false);
     const [favoritar, setFavoritar] = useState(false);
     const [tocando, setTocando] = useState(false);
@@ -137,11 +136,33 @@ export default function TelaPlayer() {
         setTempoAtual(novoTempo);
     }, [duracaoTotal]);
 
+    const toggleFavorito = async () => {
+        const token = localStorage.getItem("token");
+        if (!token) return;
+
+        try {
+            if (favoritar) {
+                await axios.delete(`http://localhost:3001/favoritos/${idPodcast}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setFavoritar(false);
+            } else {
+                await axios.post(`http://localhost:3001/favoritos`, 
+                { audios_idaudios: idPodcast },
+                { headers: { Authorization: `Bearer ${token}` } });
+                setFavoritar(true);
+            }
+        } catch (error) {
+            console.error("Erro ao alternar favorito", error);
+        }
+    };
+
     // Carregar dados do Podcast
     useEffect(() => {
         const carregarDados = async () => {
             const token = localStorage.getItem("token");
             try {
+                // Busca dados e transcrição
                 const response = await axios.get(`${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -155,7 +176,6 @@ export default function TelaPlayer() {
                 }
 
                 response.data.imagem_caminho = urlImagem;
-
                 setDadosPlayer(response.data);
 
                 if (response.data.transcricao && response.data.transcricao.texto) {
@@ -163,8 +183,13 @@ export default function TelaPlayer() {
                     setTranscricao(transcricaoConvertida);
                 }
 
-                console.log("RESPONSE:", response.data);
-                console.log("IMAGEM:", response.data.imagem_caminho);
+                // Busca se está favoritado
+                const favResponse = await axios.get("http://localhost:3001/favoritos/me", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                const isFavorito = favResponse.data.some(fav => String(fav.id) === String(idPodcast));
+                setFavoritar(isFavorito);
+
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
             }
@@ -495,11 +520,11 @@ export default function TelaPlayer() {
                         <div className={`${favoritar ? Style.selecionado : ""}`}>
                             {!favoritar ? (
                                 <i className="fa-regular fa-heart"
-                                    onClick={() => { setFavoritar(!favoritar) }}
+                                    onClick={toggleFavorito}
                                 ></i>
                             ) : (
                                 <i className="fa-solid fa-heart"
-                                    onClick={() => { setFavoritar(!favoritar) }}
+                                    onClick={toggleFavorito}
                                 ></i>
                             )}
                         </div>
