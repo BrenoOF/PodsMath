@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Swal from 'sweetalert2';
+import axios from "axios";
 
 import Style from "../configuracoes.module.css";
 
@@ -21,8 +22,6 @@ export default function CompSeguranca({ dadosUser, errors, setErrors, limparErro
         // senha atual
         if (!senhaAtual) {
             novosErros.senhaAtual = "Digite sua senha atual";
-        } else if (senhaAtual !== dadosUser?.senha) {
-            novosErros.senhaAtual = "Senha atual incorreta";
         }
 
         // nova senha
@@ -46,18 +45,60 @@ export default function CompSeguranca({ dadosUser, errors, setErrors, limparErro
         return Object.keys(novosErros).length === 0;
     };
 
-    const salvarSenha = () => {
+    const salvarSenha = async () => {
 
         if (!validarSenha()) return;
 
-        Swal.fire({
-            title: "Senha Alterada com Sucesso",
-            icon: "success",
-        });
+        const token = localStorage.getItem("token");
+        if (!token) {
+            Swal.fire({
+                title: "Erro de Autenticação",
+                text: "Você precisa estar logado para alterar a senha",
+                icon: "error",
+            });
+            return;
+        }
 
-        setSenhaAtual("");
-        setSenhaNova("");
-        setConfirmarSenha("");
+        try {
+            const response = await axios.put("http://localhost:3001/usuarios/me/senha", {
+                senhaAtual,
+                senhaNova
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            Swal.fire({
+                title: response.data.message || "Senha Alterada com Sucesso",
+                icon: "success",
+            });
+
+            setSenhaAtual("");
+            setSenhaNova("");
+            setConfirmarSenha("");
+        } catch (error) {
+            if (error.response) {
+                // Erro do servidor (ex: senha atual incorreta)
+                setErrors((prev) => ({ 
+                    ...prev, 
+                    senhaAtual: error.response.data.message.includes("atual") ? error.response.data.message : null 
+                }));
+                
+                Swal.fire({
+                    title: "Erro ao Alterar Senha",
+                    text: error.response.data.message,
+                    icon: "error",
+                });
+            } else {
+                console.error("Erro de Conexão", error);
+                Swal.fire({
+                    title: "Erro de Conexão",
+                    text: "Não foi possível conectar ao servidor",
+                    icon: "error",
+                });
+            }
+        }
     };
 
     return (
