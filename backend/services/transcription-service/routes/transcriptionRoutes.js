@@ -31,10 +31,10 @@ router.post('/', authMiddleware, upload.fields([
 ]), transcriptionController.createTranscription);
 
 // GET /transcricao/:id — Busca áudio + transcrição
-router.get('/:id', authMiddleware, transcriptionController.getTranscription);
+router.get('/:id', transcriptionController.getTranscription);
 
 // GET /transcricao/:id/audio — Stream do áudio
-router.get('/:id/audio', authMiddleware, transcriptionController.streamAudio);
+router.get('/:id/audio', transcriptionController.streamAudio);
 
 // DELETE /transcricao/:id — Deleta áudio + transcrição do MongoDB e MySQL
 router.delete('/:id', authMiddleware, transcriptionController.deleteTranscription);

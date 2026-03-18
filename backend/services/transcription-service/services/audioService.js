@@ -116,9 +116,8 @@ async function getAudioWithTranscription(audioId, token) {
             // 1. Busca dados do MySQL (user-service) COM DETALHES (JOIN)
             let audioData;
             try {
-                const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+                const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers });
                 audioData = audioResponse.data;
             } catch (error) {
                 if (error.response?.status === 404) return null;
@@ -128,9 +127,8 @@ async function getAudioWithTranscription(audioId, token) {
             // 2. Busca transcrição via user-service
             let transcricao = null;
             try {
-                const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+                const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
                 transcricao = transcricaoResponse.data;
             } catch (error) {
                 // Se não houver transcrição, continua com null

@@ -31,7 +31,8 @@ const transcriptionController = {
                 imagens_idimagens = 1
             } = req.body;
 
-            const token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            let token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            if (token === 'null' || token === 'undefined') token = null;
 
             // 1. Se enviou imagem, faz o "forward" para o user-service
             if (imagemFile) {
@@ -107,7 +108,11 @@ const transcriptionController = {
 
             // 1. Verifica status in-memory (fila/processamento)
             const jobInfo = queueService.getStatus(id);
-            const token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            let token = req.headers.authorization?.split(' ')[1] || req.query.token;
+
+            if (token === 'null' || token === 'undefined') {
+                token = null;
+            }
 
             // Tentar sempre buscar o áudio do banco para retornar logo após o upload
             const result = await getAudioWithTranscription(id, token);
@@ -179,7 +184,9 @@ const transcriptionController = {
             }
 
             const { deleteAudioRecord } = require('../services/audioService');
-            const token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            let token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            if (token === 'null' || token === 'undefined') token = null;
+
             await deleteAudioRecord(id, token);
 
             res.status(200).json({ message: `Vínculo de áudio ID ${id} e transcrições removidos com sucesso.` });
