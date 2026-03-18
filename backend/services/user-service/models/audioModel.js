@@ -148,10 +148,11 @@ const Audio = {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const query = `
-                SELECT a.*, img.caminho_imagem AS imagem_caminho, t.titulo as assunto, t.categorias_idcategorias
+                SELECT a.*, img.caminho_imagem AS imagem_caminho, cat.nome as assunto, t.categorias_idcategorias
                 FROM audios a
                 LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
                 LEFT JOIN temas t on a.temas_idtemas = t.idtemas
+                LEFT JOIN categorias cat on t.categorias_idcategorias = cat.idcategorias
                 ORDER BY idaudios DESC 
                 LIMIT ?
             `;
@@ -172,10 +173,11 @@ const Audio = {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const query = `
-                SELECT a.*, img.caminho_imagem AS imagem_caminho, t.titulo as assunto, t.categorias_idcategorias
+                SELECT a.*, img.caminho_imagem AS imagem_caminho, cat.nome as assunto, t.categorias_idcategorias
                 FROM audios a
                 LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
                 LEFT JOIN temas t on a.temas_idtemas = t.idtemas
+                LEFT JOIN categorias cat on t.categorias_idcategorias = cat.idcategorias
                 WHERE usuarios_idusuarios = ?
             `;
             const [rows] = await connection.query(query, [userId]);
