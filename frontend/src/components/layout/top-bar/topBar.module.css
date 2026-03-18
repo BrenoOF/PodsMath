@@ -26,10 +26,6 @@
     .divInfoTexto {
         display: none;
     }
-
-    .ajusteMobile {
-        display: none !important;
-    }
 }
 
 @media screen and (min-width: 770px) {

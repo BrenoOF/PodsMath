@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Style from "./playlist.module.css";
+
+// Import de Componentes
+import { Toast } from 'primereact/toast';
 
 const API_BASE_URL = "http://localhost:3001";
 
@@ -13,6 +16,29 @@ export default function TelaPlaylist() {
     const [imagemTema, setImagemTema] = useState("");
     const [dadosPlaylist, setDadosPlaylist] = useState([]);
 
+    // Função para copiar a URL
+    const toast = useRef(null);
+    const copiarUrl = async () => {
+        try {
+            await navigator.clipboard.writeText(window.location.href);
+            if (toast.current) {
+                toast.current.show({
+                    severity: 'success',
+                    summary: 'URL copiada',
+                    life: 2000
+                });
+            }
+        } catch (err) {
+            if (toast.current) {
+                toast.current.show({
+                    severity: 'error',
+                    summary: 'Algo deu Errado',
+                    life: 2000
+                });
+            }
+        }
+    };
+
     useEffect(() => {
         const carregarDados = async () => {
             const token = localStorage.getItem("token");
@@ -21,17 +47,17 @@ export default function TelaPlaylist() {
                 const resTema = await axios.get(`${API_BASE_URL}/temas/${playlistTema}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
-                
+
                 setTituloTema(resTema.data.titulo);
 
                 const caminhoOriginal = resTema.data.caminho_imagem || "";
-                    let urlImagem = "";
+                let urlImagem = "";
 
-                    if (caminhoOriginal) {
-                        const nomeArquivo = caminhoOriginal.split('/').pop();
-                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
-                    }
-                
+                if (caminhoOriginal) {
+                    const nomeArquivo = caminhoOriginal.split('/').pop();
+                    urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                }
+
                 setImagemTema(urlImagem);
 
 
@@ -66,6 +92,7 @@ export default function TelaPlaylist() {
 
     return (
         <div className={Style.containerPlaylist}>
+            <Toast ref={toast} position="bottom-right" />
             {/* Parte que Aparece no Topo */}
             <div className={Style.divApresentacao}>
                 <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
@@ -106,7 +133,9 @@ export default function TelaPlaylist() {
                 >
                     <i className="fa-solid fa-play"></i>
                 </div>
-                <i className="fa-solid fa-share-nodes"></i>
+                <i className="fa-solid fa-share-nodes"
+                    onClick={copiarUrl}
+                ></i>
             </div>
             {/* Tabela para colocar podcasts */}
             <table className={Style.tabelaPlaylist}>

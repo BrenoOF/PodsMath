@@ -17,7 +17,7 @@ const tempoHistoricoParaSegundos = (tempo) => {
     if (!tempo) return 0;
     // Se não tiver ":", tenta converter direto para float (caso venha em segundos)
     if (!String(tempo).includes(":")) return parseFloat(tempo) || 0;
-    
+
     // Se vier no formato "HH:MM:SS"
     const [h, m, s] = String(tempo).split(":").map(Number);
     return h * 3600 + m * 60 + s;
@@ -28,7 +28,7 @@ const segundosParaTempoHistorico = (segundosTotais) => {
     const horas = Math.floor(segundosTotais / 3600).toString().padStart(2, "0");
     const minutos = Math.floor((segundosTotais % 3600) / 60).toString().padStart(2, "0");
     const segundos = Math.floor(segundosTotais % 60).toString().padStart(2, "0");
-    
+
     return `${horas}:${minutos}:${segundos}`;
 };
 
@@ -176,7 +176,7 @@ export default function TelaPlayer() {
 
         audioRef.current.currentTime = novoTempo;
         setTempoAtual(novoTempo);
-        
+
         // Salva imediatamente ao clicar na barra
         salvarHistorico(novoTempo);
     };
@@ -207,9 +207,9 @@ export default function TelaPlayer() {
                 });
                 setFavoritar(false);
             } else {
-                await axios.post(`http://localhost:3001/favoritos`, 
-                { audios_idaudios: idPodcast },
-                { headers: { Authorization: `Bearer ${token}` } });
+                await axios.post(`http://localhost:3001/favoritos`,
+                    { audios_idaudios: idPodcast },
+                    { headers: { Authorization: `Bearer ${token}` } });
                 setFavoritar(true);
             }
         } catch (error) {
@@ -257,7 +257,7 @@ export default function TelaPlayer() {
                     });
                     if (histResponse.data && histResponse.data.tempo_audio) {
                         const tempoSalvo = tempoHistoricoParaSegundos(histResponse.data.tempo_audio);
-                        
+
                         if (audioRef.current && audioRef.current.readyState >= 1) {
                             audioRef.current.currentTime = tempoSalvo;
                             setTempoAtual(tempoSalvo);
@@ -283,13 +283,13 @@ export default function TelaPlayer() {
 
         const interval = setInterval(() => {
             if (!audioRef.current) return;
-            
+
             const tempoAgora = Math.floor(audioRef.current.currentTime);
             // Só salva se mudou o tempo significativamente e se o usuário não está arrastando a barra no momento
             if (Math.abs(tempoAgora - tempoSalvoRef.current) >= 5 && !arrastando) {
                 salvarHistorico(tempoAgora);
             }
-        }, 5000); 
+        }, 5000);
 
         return () => clearInterval(interval);
     }, [tocando, arrastando, salvarHistorico]);
@@ -328,11 +328,11 @@ export default function TelaPlayer() {
 
         const carregarDuracao = () => {
             setDuracaoTotal(Math.floor(audio.duration));
-            
+
             if (tempoInicialRef.current > 0) {
                 audio.currentTime = tempoInicialRef.current;
                 setTempoAtual(tempoInicialRef.current);
-                tempoInicialRef.current = 0; 
+                tempoInicialRef.current = 0;
             }
         };
 
@@ -441,6 +441,14 @@ export default function TelaPlayer() {
     const audioUrl = idPodcast ?
         `${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}/audio?token=${localStorage.getItem("token")}`
         : "";
+
+    // Verifica se User está logado
+    const [userLogado, setUserLogado] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        setUserLogado(!!token);
+    }, []);
 
     return (
         <div className={Style.containerPlayer}>
@@ -629,17 +637,19 @@ export default function TelaPlayer() {
                                 onClick={() => { setLoop(!loop) }}
                             ></i>
                         </div>
-                        <div className={`${favoritar ? Style.selecionado : ""}`}>
-                            {!favoritar ? (
-                                <i className="fa-regular fa-heart"
-                                    onClick={toggleFavorito}
-                                ></i>
-                            ) : (
-                                <i className="fa-solid fa-heart"
-                                    onClick={toggleFavorito}
-                                ></i>
-                            )}
-                        </div>
+                        {userLogado ? (
+                            <div className={`${favoritar ? Style.selecionado : ""}`}>
+                                {!favoritar ? (
+                                    <i className="fa-regular fa-heart"
+                                        onClick={toggleFavorito}
+                                    ></i>
+                                ) : (
+                                    <i className="fa-solid fa-heart"
+                                        onClick={toggleFavorito}
+                                    ></i>
+                                )}
+                            </div>
+                        ) : null}
                     </div>
                 </div>
             </div>
