@@ -192,7 +192,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                     <hr className={Style.linhaSeparacao} />
                     <div className={Style.divInformacao}>
                         <h1>Nível de Acesso</h1>
-                        <p>{dadosUser?.nivel_acesso_idnivel_acesso}</p>
+                        <p>{dadosUser?.nome_nivel_acesso}</p>
                     </div>
                     <hr className={Style.linhaSeparacao} />
                     <div className={Style.divInformacao}>
