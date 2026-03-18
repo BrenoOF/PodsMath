@@ -208,10 +208,14 @@ export default function TelaPlayer() {
             const token = localStorage.getItem("token");
             try {
                 // Busca dados e transcrição
-                const response = await axios.get(`${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}`, {
-                    headers: { Authorization: `Bearer ${token}` }
-                });
+                const headers = {};
+                if (token && token !== "null" && token !== "undefined") {
+                    headers.Authorization = `Bearer ${token}`;
+                }
 
+                const response = await axios.get(`${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}`, {
+                    headers
+                });
                 const caminhoOriginal = response.data.imagem_caminho || "";
                 let urlImagem = "";
 
