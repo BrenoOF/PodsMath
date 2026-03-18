@@ -16,7 +16,7 @@ export default function CompPodcastDestaque({ podcasts }) {
                 {podcasts.map(item => (
                     <div className={Style.cardsDestaque} key={item.idaudios}
                         onClick={() => {
-                            navigate(`/explorar/${item.idTema}/${item.playlistTema}`);
+                            navigate(`/explorar/${item.categorias_idcategorias}/${item.idtemas}`);
                         }}
                     >
                         <img src={item.imagem_caminho || "/imgs/podcast-default.jpg"}
@@ -26,7 +26,7 @@ export default function CompPodcastDestaque({ podcasts }) {
                         />
                         <div className={Style.textosCardDestaque}>
                             <h2>{item.titulo}</h2>
-                            <p>{item.episodios}{item.episodios > 1 ? " episódios" : " episódio"}</p>
+                            <p>{item.quantidade_audios}{item.quantidade_audios > 1 ? " episódios" : " episódio"}</p>
                         </div>
                     </div>
                 ))}

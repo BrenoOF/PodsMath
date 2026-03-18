@@ -22,7 +22,7 @@ export default function TelaHome() {
                 };
 
                 const [destaqueRes, recentesRes, propriosRes] = await Promise.all([
-                    axios.get("http://localhost:3001/audios/destaque?limit=8", { headers }),
+                    axios.get("http://localhost:3001/temas/destaque?limit=8", { headers }),
                     axios.get("http://localhost:3001/audios/recentes", { headers }),
                     axios.get("http://localhost:3001/audios/proprios?limit=2", { headers })
                 ]);
