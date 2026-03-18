@@ -159,6 +159,38 @@ const usuarioController = {
         } catch (error) {
             res.status(500).json({ message: error.message });
         }
+    },
+
+    updatePassword: async (req, res) => {
+        try {
+            const { senhaAtual, senhaNova } = req.body;
+            const idUsuario = req.usuario.idusuarios;
+
+            if (!senhaAtual || !senhaNova) {
+                return res.status(400).json({ message: 'Senha atual e nova senha são obrigatórias' });
+            }
+
+            const usuario = await Usuario.getById(idUsuario);
+            if (!usuario) {
+                return res.status(404).json({ message: 'Usuario não encontrado' });
+            }
+
+            const isMatch = await bcrypt.compare(senhaAtual, usuario.senha);
+            if (!isMatch) {
+                return res.status(401).json({ message: 'Senha atual incorreta' });
+            }
+
+            const senhaHash = await bcrypt.hash(senhaNova, 10);
+            const updated = await Usuario.update(idUsuario, { ...usuario, senha: senhaHash });
+
+            if (updated) {
+                res.json({ message: 'Senha alterada com sucesso' });
+            } else {
+                res.status(500).json({ message: 'Erro ao atualizar senha' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
     }
 };
 

@@ -9,6 +9,7 @@ router.get('/me', authMiddleware, usuarioController.getMe);
 router.get('/:id', authMiddleware, usuarioController.getUsuarioById);
 router.post('/', usuarioController.createUsuario);
 router.put('/me', authMiddleware, usuarioController.updateMe);
+router.put('/me/senha', authMiddleware, usuarioController.updatePassword);
 router.put('/me/image', authMiddleware, upload.single('imagem'), processImage, usuarioController.updateMyImage);
 router.put('/:id', authMiddleware, usuarioController.updateUsuario);
 router.delete('/me', authMiddleware, usuarioController.deleteMe);
