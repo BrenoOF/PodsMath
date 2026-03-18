@@ -16,8 +16,43 @@ export default function TelaHome() {
     useEffect(() => {
         const carregarDados = async () => {
             try {
-                const response = await axios.get("/dados/podcasts.json");
-                setDadosHome(response.data);
+                const token = localStorage.getItem("token");
+                const headers = {
+                    Authorization: `Bearer ${token}`
+                };
+
+                const [destaqueRes, recentesRes, propriosRes] = await Promise.all([
+                    axios.get("http://localhost:3001/audios/destaque?limit=8", { headers }),
+                    axios.get("http://localhost:3001/audios/recentes", { headers }),
+                    axios.get("http://localhost:3001/audios/proprios?limit=2", { headers })
+                ]);
+
+                const baseURL = "http://localhost:3001";
+
+                const formatarImagem = (caminho) => {
+                    if (!caminho) return "";
+                    let caminhoRelativo = caminho;
+                    if (
+                        !caminhoRelativo.startsWith("uploads/") &&
+                        !caminhoRelativo.startsWith("/uploads/")
+                    ) {
+                        caminhoRelativo = "uploads/" + caminhoRelativo.replace(/^\//, "");
+                    }
+                    return `${baseURL}/${caminhoRelativo.replace(/^\//, "")}`;
+                };
+
+                const tratarLista = (lista) => {
+                    return lista.map(item => ({
+                        ...item,
+                        imagem_caminho: formatarImagem(item.imagem_caminho)
+                    }));
+                };
+
+                setDadosHome({
+                    podcastsDestaque: tratarLista(destaqueRes.data),
+                    novidades: tratarLista(recentesRes.data),
+                    podcastsProprios: tratarLista(propriosRes.data)
+                });
             } catch (error) {
                 console.error("Erro ao carregar dados da home", error);
             }

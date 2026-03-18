@@ -162,6 +162,9 @@ export default function TelaPlayer() {
                     const transcricaoConvertida = parseTranscricao(response.data.transcricao.texto);
                     setTranscricao(transcricaoConvertida);
                 }
+
+                console.log("RESPONSE:", response.data);
+                console.log("IMAGEM:", response.data.imagem_caminho);
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
             }
@@ -297,7 +300,9 @@ export default function TelaPlayer() {
         }
     }, [velocidadeSelecionada]);
 
-    const audioUrl = idPodcast ? `${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}/audio?token=${localStorage.getItem("token")}` : "";
+    const audioUrl = idPodcast ?
+        `${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}/audio?token=${localStorage.getItem("token")}`
+        : "";
 
     return (
         <div className={Style.containerPlayer}>
