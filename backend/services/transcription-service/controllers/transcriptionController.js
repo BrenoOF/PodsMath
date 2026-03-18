@@ -144,8 +144,8 @@ const transcriptionController = {
                 return res.status(404).json({ message: 'Áudio não encontrado.' });
             }
 
-            // Verifica se tem transcrição (registro existe no banco)
-            const hasTranscription = result.transcricao != null && result.transcricao.texto != null;
+            // Verifica se tem transcrições
+            const hasTranscription = Array.isArray(result.transcricoes) && result.transcricoes.length > 0;
 
             const response = {
                 audioId: result.audioId,
@@ -158,9 +158,7 @@ const transcriptionController = {
                 idioma_nome: result.idioma_nome,
                 imagem_caminho: result.imagem_caminho,
                 hasAudio: result.hasAudio,
-                ...(hasTranscription && {
-                    transcricao: result.transcricao
-                })
+                transcricoes: result.transcricoes || []
             };
 
             res.json(response);

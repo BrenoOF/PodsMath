@@ -125,13 +125,13 @@ async function getAudioWithTranscription(audioId, token) {
             }
 
             // 2. Busca transcrição via user-service
-            let transcricao = null;
+            let transcricoes = [];
             try {
                 const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
                 const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
-                transcricao = transcricaoResponse.data;
+                transcricoes = Array.isArray(transcricaoResponse.data) ? transcricaoResponse.data : [];
             } catch (error) {
-                // Se não houver transcrição, continua com null
+                // Se não houver transcrição, continua com array vazio
             }
 
             // 3. Busca o áudio original no GridFS (se existir transcrição ou se estivermos buscando para tocar logo)
@@ -152,10 +152,11 @@ async function getAudioWithTranscription(audioId, token) {
                 tema_nome: audioData.tema_nome,
                 idioma_nome: audioData.idioma_nome,
                 imagem_caminho: audioData.imagem_caminho,
-                transcricao: transcricao ? {
-                    texto: transcricao.textoTranscricao,
-                    idioma: transcricao.idiomas_ididiomas
-                } : null,
+                transcricoes: transcricoes.map(t => ({
+                    texto: t.textoTranscricao,
+                    idioma: t.idiomas_ididiomas,
+                    idioma_nome: t.idioma_nome
+                })),
                 hasAudio: hasAudio,
                 mimeType: mimeType
             };

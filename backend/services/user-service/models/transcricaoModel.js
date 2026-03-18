@@ -38,9 +38,15 @@ const Transcricao = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM transcricao WHERE audios_idaudios = ?', [audioId]);
+            const query = `
+                SELECT t.*, i.nomeIdiomas AS idioma_nome 
+                FROM transcricao t
+                LEFT JOIN idiomas i ON t.idiomas_ididiomas = i.ididiomas
+                WHERE t.audios_idaudios = ?
+            `;
+            const [rows] = await connection.query(query, [audioId]);
             await connection.commit();
-            return rows[0];
+            return rows;
         } catch (error) {
             if (connection) await connection.rollback();
             throw error;
