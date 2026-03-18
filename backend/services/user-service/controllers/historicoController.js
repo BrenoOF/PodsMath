@@ -32,6 +32,31 @@ const historicoController = {
         }
     },
 
+    getHistoricoByAudio: async (req, res) => {
+        try {
+            const historico = await Historico.getByUsuarioAndAudio(req.usuario.idusuarios, req.params.audioId);
+            if (historico) {
+                res.json(historico);
+            } else {
+                res.status(404).json({ message: 'Histórico não encontrado para este áudio' });
+            }
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
+    saveHistorico: async (req, res) => {
+        try {
+            const result = await Historico.upsert({
+                ...req.body,
+                usuarios_idusuarios: req.usuario.idusuarios
+            });
+            res.status(200).json(result);
+        } catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    },
+
     createHistorico: async (req, res) => {
         try {
             const novoHistorico = await Historico.create({
