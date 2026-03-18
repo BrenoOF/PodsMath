@@ -29,13 +29,14 @@ const Favorito = {
                     a.titulo, 
                     a.descricao, 
                     a.temas_idtemas AS idTema,
-                    t.titulo AS assunto,
+                    c.nome AS assunto,
                     t.categorias_idcategorias AS playlistTema,
                     img.caminho_imagem AS imagem_caminho
                 FROM favoritos f
                 JOIN audios a ON f.audios_idaudios = a.idaudios
                 LEFT JOIN temas t ON a.temas_idtemas = t.idtemas
                 LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
+                LEFT JOIN categorias c ON t.categorias_idcategorias = c.idcategorias
                 WHERE f.usuarios_idusuarios = ?
             `;
             const [rows] = await connection.query(query, [usuarios_idusuarios]);
