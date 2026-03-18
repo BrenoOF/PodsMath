@@ -64,7 +64,7 @@
     }
 
     .cardNovidade:hover {
-        transform: scale(1.1);
+        transform: scale(1.07);
     }
 
     /* Podcasts Proprios */
@@ -117,6 +117,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    text-align: center;
     background-color: var(--cor-semibtn-hover);
     border: 0.1rem solid var(--cor-azul-escura-padrao);
     color: var(--branco);

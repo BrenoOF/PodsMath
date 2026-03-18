@@ -14,7 +14,7 @@ export default function CompPodcastProprio({ podcasts }) {
             </div>
             <div className={Style.divPodcastsProprio}>
                 {podcasts.map(item => (
-                    <div className={Style.cardProprio} key={item.id}
+                    <div className={Style.cardProprio} key={item.idaudios}
                         onClick={() => {
                             navigate(`/explorar/${item.categorias_idcategorias}/${item.temas_idtemas}/${item.idaudios}`);
                         }}
@@ -25,7 +25,7 @@ export default function CompPodcastProprio({ podcasts }) {
                         />
                         <div className={Style.divTextosProprio}>
                             <h1>{item.titulo}</h1>
-                            <p>Feito por: {item.autor}</p>
+                            <p>{item.descricao}</p>
                             <div className={Style.btnAssunto}
                                 onClick={(e) => {
                                     e.stopPropagation();

@@ -7,5 +7,6 @@
 }
 
 .divEsqueceuSenha>p {
+    font-size: 1rem;
     color: var(--font-paragrafo);
 }

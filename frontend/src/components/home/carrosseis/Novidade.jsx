@@ -23,7 +23,7 @@ export default function CompPodcastNovidades({ podcasts }) {
 
     const novidadesTemplate = (item) => {
         return (
-            <div className={Style.cardNovidade}
+            <div className={Style.cardNovidade} key={item.idaudios}
                 onClick={() => {
                     navigate(`/explorar/${item.categorias_idcategorias}/${item.temas_idtemas}/${item.idaudios}`);
                 }}
@@ -35,7 +35,7 @@ export default function CompPodcastNovidades({ podcasts }) {
                     />
                 </div>
                 <h1>{item.titulo}</h1>
-                <p>Feito por: {item.autor}</p>
+                <p>{item.descricao}</p>
                 <div className={Style.btnAssunto}
                     onClick={(e) => {
                         e.stopPropagation();

@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
 import Style from "./tema.module.css";
-import StyleExterno from "../home/carrosseis/carrosseis.module.css";
+import StyleExterno from "../explorar/explorar.module.css";
 
 const API_BASE_URL = "http://localhost:3001";
 
@@ -17,7 +17,7 @@ export default function TelaTema() {
         const carregarDados = async () => {
             const token = localStorage.getItem("token");
             try {
-                
+
                 const resCategoria = await axios.get(`${API_BASE_URL}/categorias/${idTema}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
@@ -54,9 +54,9 @@ export default function TelaTema() {
                     Explore todos os podcasts desta categoria
                 </p>
             </div>
-            <div className={Style.divCardNovidade}>
+            <div className={StyleExterno.divCards}>
                 {dadosTemas.map(item => (
-                    <div className={StyleExterno.cardNovidade} key={item.idtemas}
+                    <div key={item.idtemas} className={StyleExterno.card}
                         onClick={() => {
                             navigate(`/explorar/${idTema}/${item.idtemas}`);
                         }}
@@ -67,7 +67,9 @@ export default function TelaTema() {
                                 onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                             />
                         </div>
-                        <h1>{item.titulo}</h1>
+                        <div className={StyleExterno.tituloCard}>
+                            <h1>{item.titulo}</h1>
+                        </div>
                     </div>
                 ))}
             </div>

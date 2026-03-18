@@ -66,23 +66,23 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    max-width: 25rem;
     border-radius: 0.75rem;
     background-color: var(--app-background);
     cursor: pointer;
     transition: transform 0.2s ease;
 }
 
-.icon {
+.divImgCardNovidade {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2.5rem;
-    border-radius: 0.75rem 0.75rem 0rem 0rem;
 }
 
-.icon>i {
-    color: var(--branco);
-    font-size: 4rem;
+.imgCard{
+    height: 9rem;
+    width: 100%;
+    border-radius: 0.75rem 0.75rem 0rem 0rem;
 }
 
 .tituloCard {
@@ -98,9 +98,4 @@
 
 .card:hover .tituloCard>h1 {
     color: var(--font-paragrafo);
-}
-
-.tituloCard>p {
-    font-size: 0.875rem;
-    opacity: 0.6;
 }

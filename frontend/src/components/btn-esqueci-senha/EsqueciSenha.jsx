@@ -32,8 +32,8 @@ export default function CompEsqueciSenha({ tipo, dadosUser, onEsqueciSenha }) {
     }
 
     return (
-        <div className={Style.divEsqueceuSenha} onClick={handleClick}>
+        <button className={Style.divEsqueceuSenha} onClick={handleClick}>
             <p>Esqueceu a Senha? Clique Aqui!</p>
-        </div>
+        </button>
     );
 }
