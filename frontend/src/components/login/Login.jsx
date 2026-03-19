@@ -123,7 +123,7 @@ export default function TelaLogin() {
 
     const logar = async () => {
         try {
-            const response = await axios.post("http://localhost:3001/auth/login", {
+            const response = await axios.post("/api-user/auth/login", {
                 email: email,
                 senha: senha
             });
@@ -151,7 +151,7 @@ export default function TelaLogin() {
 
     const cadastrar = async () => {
         try {
-            const response = await axios.post("http://localhost:3001/auth/register", {
+            const response = await axios.post("/api-user/auth/register", {
                 nome: nome,
                 email: email,
                 senha: senha

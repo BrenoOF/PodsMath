@@ -7,7 +7,7 @@ import Style from "./playlist.module.css";
 // Import de Componentes
 import { Toast } from 'primereact/toast';
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = "/api-user";
 
 export default function TelaPlaylist() {
     const navigate = useNavigate();
@@ -55,7 +55,7 @@ export default function TelaPlaylist() {
 
                 if (caminhoOriginal) {
                     const nomeArquivo = caminhoOriginal.split('/').pop();
-                    urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    urlImagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
 
                 setImagemTema(urlImagem);

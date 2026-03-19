@@ -10,6 +10,7 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
     "flag-icons": "^7.5.0",
+    "http-proxy-middleware": "^3.0.5",
     "primeicons": "^7.0.0",
     "primereact": "^10.9.7",
     "react": "^19.1.1",

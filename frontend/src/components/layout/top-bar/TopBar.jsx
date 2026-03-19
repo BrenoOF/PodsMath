@@ -171,7 +171,7 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
             const token = localStorage.getItem("token");
             if (!token) return;
             try {
-                const response = await fetch("http://localhost:3001/usuarios/me", {
+                const response = await fetch("/api-user/usuarios/me", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
@@ -187,7 +187,7 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                 let urlImagem = "";
                 if (caminhoOriginal) {
                     const nomeArquivo = caminhoOriginal.split('/').pop();
-                    urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    urlImagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
 
                 setDadosUser({ ...data, img: urlImagem });

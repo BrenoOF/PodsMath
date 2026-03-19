@@ -22,7 +22,7 @@ export default function TelaConfiguracoes() {
             const token = localStorage.getItem("token");
             if (!token) return;
             try {
-                const response = await fetch("http://localhost:3001/usuarios/me", {
+                const response = await fetch("/api-user/usuarios/me", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }

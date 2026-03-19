@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Style from "./player.module.css";
 
-const API_TRANSCRIPTION_URL = "http://localhost:3002";
+const API_TRANSCRIPTION_URL = "/api-transcription";
 
 const tempoParaSegundos = (tempo) => {
     const [hms, ms] = tempo.split(",");
@@ -133,7 +133,7 @@ export default function TelaPlayer() {
         const tempoFormatadoBanco = segundosParaTempoHistorico(tempoInteiro);
 
         try {
-            await axios.post("http://localhost:3001/historicos/save", {
+            await axios.post("/api-user/historicos/save", {
                 audios_idaudios: idPodcast,
                 tempo_audio: tempoFormatadoBanco // Mandando no formato "HH:MM:SS" para o banco aceitar
             }, {
@@ -202,12 +202,12 @@ export default function TelaPlayer() {
 
         try {
             if (favoritar) {
-                await axios.delete(`http://localhost:3001/favoritos/${idPodcast}`, {
+                await axios.delete(`/api-user/favoritos/${idPodcast}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 setFavoritar(false);
             } else {
-                await axios.post(`http://localhost:3001/favoritos`,
+                await axios.post(`/api-user/favoritos`,
                     { audios_idaudios: idPodcast },
                     { headers: { Authorization: `Bearer ${token}` } });
                 setFavoritar(true);
@@ -236,7 +236,7 @@ export default function TelaPlayer() {
 
                 if (caminhoOriginal) {
                     const nomeArquivo = caminhoOriginal.split('/').pop();
-                    urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                    urlImagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
 
                 response.data.imagem_caminho = urlImagem;
@@ -244,7 +244,7 @@ export default function TelaPlayer() {
                 setTranscricoesResponse(response.data.transcricoes || []);
 
                 // Busca se está favoritado
-                const favResponse = await axios.get("http://localhost:3001/favoritos/me", {
+                const favResponse = await axios.get("/api-user/favoritos/me", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 const isFavorito = favResponse.data.some(fav => String(fav.id) === String(idPodcast));
@@ -252,7 +252,7 @@ export default function TelaPlayer() {
 
                 // Busca Histórico (Tempo salvo)
                 try {
-                    const histResponse = await axios.get(`http://localhost:3001/historicos/audio/${idPodcast}`, {
+                    const histResponse = await axios.get(`/api-user/historicos/audio/${idPodcast}`, {
                         headers: { Authorization: `Bearer ${token}` }
                     });
                     if (histResponse.data && histResponse.data.tempo_audio) {

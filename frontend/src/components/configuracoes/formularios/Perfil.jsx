@@ -35,7 +35,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
 
         try {
             if (nome !== dadosUser.nome) {
-                await axios.put("http://localhost:3001/usuarios/me", {
+                await axios.put("/api-user/usuarios/me", {
                     ...dadosUser,
                     nome: nome
                 }, {
@@ -47,7 +47,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                 const formData = new FormData();
                 formData.append("imagem", arquivoImagem);
 
-                await axios.put("http://localhost:3001/usuarios/me/image", formData, {
+                await axios.put("/api-user/usuarios/me/image", formData, {
                     headers: { 
                         Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data"
@@ -122,7 +122,7 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
         }
 
         const urlImagem = caminhoRelativo 
-            ? `http://localhost:3001/${caminhoRelativo.replace(/^\//, "")}`
+            ? `/api-user/${caminhoRelativo.replace(/^\//, "")}`
             : "";
 
         setImagem(urlImagem);

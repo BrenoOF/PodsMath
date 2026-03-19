@@ -15,11 +15,11 @@ export default function TelaFavoritos() {
 
         try {
             if (statusAtual) {
-                await axios.delete(`http://localhost:3001/favoritos/${id}`, {
+                await axios.delete(`/api-user/favoritos/${id}`, {
                     headers: { Authorization: `Bearer ${token}` }
                 });
             } else {
-                await axios.post(`http://localhost:3001/favoritos`, 
+                await axios.post(`/api-user/favoritos`, 
                     { audios_idaudios: id },
                     { headers: { Authorization: `Bearer ${token}` } }
                 );
@@ -45,7 +45,7 @@ export default function TelaFavoritos() {
             }
 
             try {
-                const response = await axios.get("http://localhost:3001/favoritos/me", {
+                const response = await axios.get("/api-user/favoritos/me", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -55,7 +55,7 @@ export default function TelaFavoritos() {
 
                     if (caminhoOriginal) {
                         const nomeArquivo = caminhoOriginal.split('/').pop();
-                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                        urlImagem = `/api-user/imagens/file/${nomeArquivo}`;
                     }
 
                     return {

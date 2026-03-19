@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Style from "./tema.module.css";
 import StyleExterno from "../explorar/explorar.module.css";
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = "/api-user";
 
 export default function TelaTema() {
     const navigate = useNavigate();
@@ -30,7 +30,7 @@ export default function TelaTema() {
                 resTemas.data.forEach(tema => {
                     if (tema.caminho_imagem) {
                         const nomeArquivo = tema.caminho_imagem.split('/').pop();
-                        tema.caminho_imagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                        tema.caminho_imagem = `/api-user/imagens/file/${nomeArquivo}`;
                     }
                 });
 
