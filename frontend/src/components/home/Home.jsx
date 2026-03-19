@@ -12,7 +12,7 @@ import Proprio from "./carrosseis/PodcastProprio";
 export default function TelaHome() {
     const navigate = useNavigate();
     const [dadosHome, setDadosHome] = useState(null);
-    const API_URL = "http://localhost:3001";
+    const API_URL = "/api-user";
 
     useEffect(() => {
         const carregarDados = async () => {

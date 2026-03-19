@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import Style from "./explorar.module.css";
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = "/api-user";
 
 export default function TelaExplorar() {
     const navigate = useNavigate();
@@ -23,7 +23,7 @@ export default function TelaExplorar() {
                 response.data.forEach(cat => {
                     if (cat.caminho_imagem) {
                         const nomeArquivo = cat.caminho_imagem.split('/').pop();
-                        cat.caminho_imagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                        cat.caminho_imagem = `/api-user/imagens/file/${nomeArquivo}`;
                     }
                 });
 

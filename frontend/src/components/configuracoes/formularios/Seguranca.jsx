@@ -60,7 +60,7 @@ export default function CompSeguranca({ dadosUser, errors, setErrors, limparErro
         }
 
         try {
-            const response = await axios.put("http://localhost:3001/usuarios/me/senha", {
+            const response = await axios.put("/api-user/usuarios/me/senha", {
                 senhaAtual,
                 senhaNova
             }, {

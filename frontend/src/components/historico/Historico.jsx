@@ -18,7 +18,7 @@ export default function TelaHistorico() {
             }
 
             try {
-                const response = await axios.get("http://localhost:3001/historicos/me", {
+                const response = await axios.get("/api-user/historicos/me", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
 
@@ -28,7 +28,7 @@ export default function TelaHistorico() {
 
                     if (caminhoOriginal) {
                         const nomeArquivo = caminhoOriginal.split('/').pop();
-                        urlImagem = `http://localhost:3001/imagens/file/${nomeArquivo}`;
+                        urlImagem = `/api-user/imagens/file/${nomeArquivo}`;
                     }
 
                     return {
