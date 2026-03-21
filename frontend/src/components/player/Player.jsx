@@ -492,9 +492,8 @@ export default function TelaPlayer() {
         <div className={Style.containerPlayer}>
             {/* Audio do Podcast */}
             {audioUrl && (
-                <audio ref={audioRef} src={"/audio/teste5.mp3"} loop={loop}></audio>
+                <audio ref={audioRef} src={audioUrl} loop={loop}></audio>
             )}
-            {/* src={audioUrl} */}
             {/* Apresentação do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
