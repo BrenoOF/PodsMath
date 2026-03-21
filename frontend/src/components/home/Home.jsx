@@ -26,7 +26,7 @@ export default function TelaHome() {
                 const destaquePromise = axios.get(`${API_URL}/temas/destaque?limit=8`, { headers });
                 const recentesPromise = axios.get(`${API_URL}/audios/recentes`, { headers });
                 
-                const propriosPromise = axios.get(`${API_URL}/audios/proprios?limit=2`, { headers })
+                const propriosPromise = axios.get(`${API_URL}/audios/proprios?limit=3`, { headers })
                     .catch(error => {
                         console.warn("Áudios próprios não puderam ser carregados:", error.response?.data?.message || error.message);
                         return { data: [] };

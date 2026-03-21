@@ -203,7 +203,7 @@ export default function TelaLogin() {
                         Criar Conta
                     </p>
                 </div>
-                <div className={Style.containerForm}>
+                <form className={Style.containerForm} onSubmit={enviarForms}>
                     <div className={Style.divTituloLogin}>
                         <h1>{trocar ? "Faça login" : "Crie sua conta"}</h1>
                         <p>
@@ -312,15 +312,15 @@ export default function TelaLogin() {
                             </div>
                         </>
                     )}
-                    <div className={Style.btns + " " + Style.btnEntrar}
-                        onClick={enviarForms}
+                    <button
+                        type="submit" className={Style.btns + " " + Style.btnEntrar}
                     >
                         <p>{trocar ? "Entrar" : "Criar conta grátis"}</p>
-                    </div>
+                    </button>
                     {trocar && (
                         <BtnEsqueciSenha tipo="visitante" dadosUser={email} onEsqueciSenha={validarEmailEsqueciSenha} />
                     )}
-                </div>
+                </form>
             </div>
             {/* Parte da Direita da Tela */}
             <div className={Style.containerTexto}>
