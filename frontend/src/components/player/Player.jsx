@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -100,6 +100,7 @@ export default function TelaPlayer() {
         return () => { document.removeEventListener("pointerdown", handleClickOutside) };
     }, [menuAberto]);
 
+    // States para controle do podcast
     const [loop, setLoop] = useState(false);
     const [favoritar, setFavoritar] = useState(false);
     const [tocando, setTocando] = useState(false);
@@ -145,8 +146,25 @@ export default function TelaPlayer() {
         }
     }, [idPodcast]);
 
+    // Funções para controle de Tempo
+    const avancar10s = useCallback(() => {
+        if (!audioRef.current) return;
+        const novoTempo = Math.min(audioRef.current.currentTime + 10, duracaoTotal);
+        audioRef.current.currentTime = novoTempo;
+        setTempoAtual(novoTempo);
+        salvarHistorico(novoTempo);
+    }, [duracaoTotal, salvarHistorico]);
+
+    const voltar10s = useCallback(() => {
+        if (!audioRef.current) return;
+        const novoTempo = Math.max(audioRef.current.currentTime - 10, 0);
+        audioRef.current.currentTime = novoTempo;
+        setTempoAtual(novoTempo);
+        salvarHistorico(novoTempo);
+    }, [salvarHistorico]);
+
     // Pause
-    const togglePlay = () => {
+    const togglePlay = useCallback(() => {
         const audio = audioRef.current;
         if (audio.paused) {
             audio.play().catch(err => console.error("Erro ao tocar áudio", err));
@@ -155,17 +173,7 @@ export default function TelaPlayer() {
             audio.pause();
             setTocando(false);
         }
-    };
-    // Volume
-    const iconeVolume = () => {
-        if (volume === 0) return "fa-volume-xmark";
-        if (volume <= 0.5) return "fa-volume-low";
-        return "fa-volume-high";
-    };
-    const alterarVolume = (valor) => {
-        const novoVolume = Math.min(Math.max(valor, 0), 1);
-        setVolume(novoVolume);
-    };
+    }, []);
 
     // Avançar pela Barra
     const handleClickBarra = (e) => {
@@ -196,6 +204,7 @@ export default function TelaPlayer() {
         setTempoAtual(novoTempo);
     }, [duracaoTotal]);
 
+    // Função para favoritar o podcast
     const toggleFavorito = async () => {
         const token = localStorage.getItem("token");
         if (!token) return;
@@ -227,29 +236,24 @@ export default function TelaPlayer() {
                 if (token && token !== "null" && token !== "undefined") {
                     headers.Authorization = `Bearer ${token}`;
                 }
-
                 const response = await axios.get(`${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}`, {
                     headers
                 });
                 const caminhoOriginal = response.data.imagem_caminho || "";
                 let urlImagem = "";
-
                 if (caminhoOriginal) {
                     const nomeArquivo = caminhoOriginal.split('/').pop();
                     urlImagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
-
                 response.data.imagem_caminho = urlImagem;
                 setDadosPlayer(response.data);
                 setTranscricoesResponse(response.data.transcricoes || []);
-
                 // Busca se está favoritado
                 const favResponse = await axios.get("/api-user/favoritos/me", {
                     headers: { Authorization: `Bearer ${token}` }
                 });
                 const isFavorito = favResponse.data.some(fav => String(fav.id) === String(idPodcast));
                 setFavoritar(isFavorito);
-
                 // Busca Histórico (Tempo salvo)
                 try {
                     const histResponse = await axios.get(`/api-user/historicos/audio/${idPodcast}`, {
@@ -269,7 +273,6 @@ export default function TelaPlayer() {
                 } catch (err) {
                     console.log("Não possui histórico para este áudio ainda.");
                 }
-
             } catch (error) {
                 console.error("Erro ao carregar dados", error);
             }
@@ -277,13 +280,15 @@ export default function TelaPlayer() {
         carregarDados();
     }, [idTema, playlistTema, idPodcast]);
 
+    const audioUrl = idPodcast ?
+        `${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}/audio?token=${localStorage.getItem("token")}`
+        : "";
+
     // Salvar Histórico periodicamente
     useEffect(() => {
         if (!tocando) return;
-
         const interval = setInterval(() => {
             if (!audioRef.current) return;
-
             const tempoAgora = Math.floor(audioRef.current.currentTime);
             // Só salva se mudou o tempo significativamente e se o usuário não está arrastando a barra no momento
             if (Math.abs(tempoAgora - tempoSalvoRef.current) >= 5 && !arrastando) {
@@ -304,10 +309,8 @@ export default function TelaPlayer() {
                 tempoAtual >= linha.start &&
                 tempoAtual <= linha.end
         );
-
         if (indexAtual !== indexAtualRef.current) {
             indexAtualRef.current = indexAtual;
-
             if (linhaAtivaRef.current) {
                 linhaAtivaRef.current.scrollIntoView({
                     behavior: "smooth",
@@ -321,33 +324,26 @@ export default function TelaPlayer() {
     useEffect(() => {
         const audio = audioRef.current;
         if (!audio) return;
-
         const atualizarTempoAudio = () => {
             setTempoAtual(audio.currentTime);
         };
-
         const carregarDuracao = () => {
             setDuracaoTotal(Math.floor(audio.duration));
-
             if (tempoInicialRef.current > 0) {
                 audio.currentTime = tempoInicialRef.current;
                 setTempoAtual(tempoInicialRef.current);
                 tempoInicialRef.current = 0;
             }
         };
-
         const terminouAudio = () => {
             setTocando(false);
         };
-
         if (audio.readyState >= 1) {
             carregarDuracao();
         }
-
         audio.addEventListener("timeupdate", atualizarTempoAudio);
         audio.addEventListener("loadedmetadata", carregarDuracao);
         audio.addEventListener("ended", terminouAudio);
-
         return () => {
             audio.removeEventListener("timeupdate", atualizarTempoAudio);
             audio.removeEventListener("loadedmetadata", carregarDuracao);
@@ -355,17 +351,9 @@ export default function TelaPlayer() {
         };
     }, []);
 
-    // Controle de Volume
-    useEffect(() => {
-        if (audioRef.current) {
-            audioRef.current.volume = volume;
-        }
-    }, [volume]);
-
     // Fazer o click arrastar do mouse na barra de progresso funcione
     useEffect(() => {
         if (!arrastando) return;
-
         const moverMouse = (e) => atualizarTempo(e.clientX);
         const pararArrastar = () => {
             setArrastando(false);
@@ -373,29 +361,24 @@ export default function TelaPlayer() {
                 salvarHistorico(audioRef.current.currentTime);
             }
         };
-
         document.addEventListener("mousemove", moverMouse);
         document.addEventListener("mouseup", pararArrastar);
-
         return () => {
             document.removeEventListener("mousemove", moverMouse);
             document.removeEventListener("mouseup", pararArrastar);
         };
     }, [arrastando, atualizarTempo, salvarHistorico]);
 
-    // Deixar a Barra de Progresso em 60fps
+    // Deixar a Barra de Progresso suave
     useEffect(() => {
         let frame;
-
         const atualizar = () => {
             if (audioRef.current && tocando) {
                 setTempoAtual(audioRef.current.currentTime);
             }
             frame = requestAnimationFrame(atualizar);
         };
-
         frame = requestAnimationFrame(atualizar);
-
         return () => cancelAnimationFrame(frame);
     }, [tocando]);
 
@@ -438,9 +421,64 @@ export default function TelaPlayer() {
         }
     }, [velocidadeSelecionada]);
 
-    const audioUrl = idPodcast ?
-        `${API_TRANSCRIPTION_URL}/transcricao/${idPodcast}/audio?token=${localStorage.getItem("token")}`
-        : "";
+    // Controle de Volume
+    const iconeVolume = () => {
+        if (volume === 0) return "fa-volume-xmark";
+        if (volume <= 0.5) return "fa-volume-low";
+        return "fa-volume-high";
+    };
+    const alterarVolume = (valor) => {
+        const novoVolume = Math.min(Math.max(valor, 0), 1);
+        setVolume(novoVolume);
+    };
+
+    useEffect(() => {
+        if (audioRef.current) {
+            audioRef.current.volume = volume;
+        }
+    }, [volume]);
+
+    // Codigo para navegação pelo teclado
+    useEffect(() => {
+        const handleKeyDown = (e) => {
+            const tag = e.target.tagName.toLowerCase();
+            // Verifica se o User está em digitando algo
+            const isTyping =
+                tag === "input" ||
+                tag === "textarea" ||
+                e.target.isContentEditable;
+            if (isTyping) return;
+            // Decisão para ver qual tecla está sendo apertada
+            switch (e.code) {
+                case "Space":
+                    e.preventDefault();
+                    togglePlay();
+                    break;
+                case "ArrowRight":
+                    e.preventDefault();
+                    avancar10s();
+                    break;
+                case "ArrowLeft":
+                    e.preventDefault();
+                    voltar10s();
+                    break;
+                case "ArrowUp":
+                    e.preventDefault();
+                    setVolume((v) => Math.min(v + 0.05, 1));
+                    break;
+                case "ArrowDown":
+                    e.preventDefault();
+                    setVolume((v) => Math.max(v - 0.05, 0));
+                    break;
+                default:
+                    break;
+            }
+        };
+        document.addEventListener("keydown", handleKeyDown);
+        return () => {
+            document.removeEventListener("keydown", handleKeyDown);
+        };
+    }, [togglePlay, avancar10s, voltar10s]);
 
     // Verifica se User está logado
     const [userLogado, setUserLogado] = useState(false);
@@ -454,8 +492,9 @@ export default function TelaPlayer() {
         <div className={Style.containerPlayer}>
             {/* Audio do Podcast */}
             {audioUrl && (
-                <audio ref={audioRef} src={audioUrl} loop={loop}></audio>
+                <audio ref={audioRef} src={"/audio/teste5.mp3"} loop={loop}></audio>
             )}
+            {/* src={audioUrl} */}
             {/* Apresentação do Podcast */}
             <div className={Style.btnVoltar} onClick={() => { navigate(-1) }}>
                 <i className="fa-solid fa-angle-left"></i>
@@ -568,11 +607,7 @@ export default function TelaPlayer() {
                     <div></div>
                     <div className={Style.menuManipulacaoAudio}>
                         <i className="fa-solid fa-backward"
-                            onClick={() => {
-                                const novoTempo = Math.max(audioRef.current.currentTime - 10, 0);
-                                audioRef.current.currentTime = novoTempo;
-                                salvarHistorico(novoTempo);
-                            }}
+                            onClick={voltar10s}
                         ></i>
                         <div className={Style.divIconPlay}
                             onClick={togglePlay}
@@ -584,11 +619,7 @@ export default function TelaPlayer() {
                             )}
                         </div>
                         <i className="fa-solid fa-forward"
-                            onClick={() => {
-                                const novoTempo = Math.min(audioRef.current.currentTime + 10, duracaoTotal);
-                                audioRef.current.currentTime = novoTempo;
-                                salvarHistorico(novoTempo);
-                            }}
+                            onClick={avancar10s}
                         ></i>
                     </div>
                     <div className={Style.divConfigsPlus}>
