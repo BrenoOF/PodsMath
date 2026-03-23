@@ -15,6 +15,8 @@ import Temas from "./components/tema/Tema";
 import Playlist from "./components/playlist/Playlist";
 import Player from "./components/player/Player";
 
+import Admin from "./components/admin/Admin";
+
 export default function App() {
     return (
         <Routers>
@@ -34,6 +36,8 @@ export default function App() {
                     <Route path="/historico" element={<Historico />} />
                     <Route path="/favoritos" element={<Favoritos />} />
                     <Route path="/perfil" element={<Configuracoes />} />
+
+                    <Route path="/admin" element={<Admin />} />
                 </Route>
             </Routes>
         </Routers>
