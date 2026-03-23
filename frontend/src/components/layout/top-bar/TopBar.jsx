@@ -354,6 +354,19 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                                     <p>Configurações</p>
                                 </div>
                             </div>
+                            <div onClick={() => {
+                                navigate("/admin");
+                                setModalUserMobileAberto(false);
+                            }}
+                                className={Style.btnTroca}
+                            >
+                                <div>
+                                    <i className="fa-solid fa-user-shield"
+                                        style={{ fontSize: "1.1rem" }}
+                                    ></i>
+                                    <p>Admin</p>
+                                </div>
+                            </div>
                             <div onClick={() => alertSair()} className={Style.btnTroca + " " + Style.modalBtnSair}>
                                 <div>
                                     <i className="fa-solid fa-arrow-right-from-bracket"

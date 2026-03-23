@@ -1,0 +1,111 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerAdmin {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+
+    .titulo>h1{
+        font-size: 1.5rem;
+    }
+
+    .divCards {
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerAdmin {
+        display: block;
+        padding: 2rem;
+    }
+
+    .titulo>h1{
+        font-size: 2rem;
+    }
+
+    .divCards {
+        flex-direction: row;
+    }
+}
+
+.containerAdmin {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+/* Estilo para o Título */
+.titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+}
+
+.titulo>i {
+    font-size: 1.75rem;
+}
+
+/* Estilos para os cards do topo da tela */
+.divCards {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    border: 0.1rem solid var(--border-color-tema);
+    border-radius: 0.75rem;
+}
+
+.card>h1 {
+    font-size: 1.5rem;
+}
+
+.tituloCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tituloCard>p {
+    font-size: 0.875rem;
+    font-weight: bold;
+}
+
+/* Estilo para o Menu de Troca de Tabela */
+.menuDeOpcoes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    background-color: var(--app-background);
+    padding: 0.5rem;
+    border-radius: 0.625rem;
+    width: 100%;
+}
+
+.opcoesMenu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 0.5rem;
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.opcoesMenu>p {
+    font-size: 0.875rem;
+}
+
+.opcaoSelecionada {
+    border-bottom: 0.125rem solid var(--border-color-tema);
+    opacity: 1;
+}

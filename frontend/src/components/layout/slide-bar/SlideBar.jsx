@@ -107,6 +107,14 @@ export default function CompSlideBar({ aberta, setAberta, alertSair, userLogado 
                                 <i className="fa-regular fa-address-card" style={{ fontSize: "1rem" }}></i>
                                 <p>Perfil</p>
                             </div>
+                            <div className={`${Style.btnPadrao} ${rotaAtiva("/admin") ? Style.btnSelecionado : ""}`}
+                                onClick={() => {
+                                    navigate("/admin");
+                                }}
+                            >
+                                <i className="fa-solid fa-user-shield" style={{ fontSize: "1rem" }}></i>
+                                <p>Admin</p>
+                            </div>
                             <div className={Style.btnPadrao + " " + Style.btnSair}
                                 onClick={() => { alertSair() }}
                             >
