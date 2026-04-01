@@ -1,6 +1,12 @@
 import React, { useState } from "react";
+// import axios from "axios";
 
 import Style from "./admin.module.css";
+
+// Import de Components
+import Podcast from "./tabelas/Podcast";
+import Usuario from "./tabelas/Usuario";
+import Transcricao from "./tabelas/Transcricao";
 
 export default function TelaAdmin() {
     const [controle, setControle] = useState("podcasts");
@@ -35,12 +41,13 @@ export default function TelaAdmin() {
                 </div>
                 <div className={Style.card}>
                     <div className={Style.tituloCard}>
-                        <p>Tempo Médio de Escuta</p>
+                        <p>Qtd. Categorias/Temas</p>
                         <i className="fa-solid fa-arrow-trend-up" style={{ color: "#f97316" }}></i>
                     </div>
-                    <h1>0m 0s</h1>
+                    <h1>20</h1>
                 </div>
             </div>
+            {/* Menu para trocar as tabelas do admin */}
             <div className={Style.menuDeOpcoes}>
                 <div className={`
                         ${Style.opcoesMenu}
@@ -60,6 +67,22 @@ export default function TelaAdmin() {
                 </div>
                 <div className={`
                         ${Style.opcoesMenu}
+                        ${controle === "categorias" ? Style.opcaoSelecionada : ""}
+                    `}
+                    onClick={() => { setControle("categorias") }}
+                >
+                    <p>Categorias</p>
+                </div>
+                <div className={`
+                        ${Style.opcoesMenu}
+                        ${controle === "temas" ? Style.opcaoSelecionada : ""}
+                    `}
+                    onClick={() => { setControle("temas") }}
+                >
+                    <p>Temas</p>
+                </div>
+                <div className={`
+                        ${Style.opcoesMenu}
                         ${controle === "transcricao" ? Style.opcaoSelecionada : ""}
                     `}
                     onClick={() => { setControle("transcricao") }}
@@ -67,8 +90,22 @@ export default function TelaAdmin() {
                     <p>Transcrição</p>
                 </div>
             </div>
-            <div>
-                {/* Tabelas */}
+            <div className={Style.divTabela}>
+                {controle === "podcasts" && (
+                    <Podcast />
+                )}
+                {controle === "usuarios" && (
+                    <Usuario />
+                )}
+                {controle === "categorias" && (
+                    <Transcricao />
+                )}
+                {controle === "temas" && (
+                    <Transcricao />
+                )}
+                {controle === "transcricao" && (
+                    <Transcricao />
+                )}
             </div>
         </div>
     );

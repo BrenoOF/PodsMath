@@ -26,6 +26,14 @@
     .divInfoTexto {
         display: none;
     }
+
+    .ajusteMobile {
+        display: none !important;
+    }
+
+    .btnPadrao {
+        width: 5rem;
+    }
 }
 
 @media screen and (min-width: 770px) {
@@ -38,6 +46,41 @@
         left: 4rem;
         width: calc(100% - 4rem);
     }
+
+    .btnPadrao {
+        width: 7.2rem;
+    }
+}
+
+/* Estilo para o input de pesquisa */
+.divEsquerda {
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    margin-left: -1rem;
+    width: clamp(12rem, 34rem, 34rem);
+}
+
+.ajusteInput {
+    display: flex;
+    flex: 1 1 34rem;
+    max-width: 34rem;
+    min-width: 12rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.8rem 0.75rem 0.8rem 2.5rem;
+    border-radius: 1rem;
+    font-size: 0.875rem;
+}
+
+/* Ícone de search */
+.divEsquerda :global(.pi-search) {
+    position: absolute;
+    top: 50%;
+    left: 0.75rem;
+    transform: translateY(-50%);
 }
 
 /* Estilo para menu de Login/Cadastro */
@@ -56,7 +99,6 @@
     cursor: pointer;
     font-size: 0.875rem;
     font-weight: bold;
-    width: 7.2rem;
     height: 2.5rem;
 }
 
