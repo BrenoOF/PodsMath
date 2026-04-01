@@ -7,6 +7,9 @@ import { useMatchMedia } from 'primereact/hooks';
 import Style from "./topBar.module.css";
 
 // Import de Componentes
+import { IconField } from 'primereact/iconfield';
+import { InputIcon } from 'primereact/inputicon';
+import { InputText } from "primereact/inputtext";
 import { Toast } from 'primereact/toast';
 
 export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setUserLogado }) {
@@ -279,6 +282,12 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
         <>
             <Toast ref={toast} position="bottom-right" />
             <div className={`${Style.containerTopBar} ${slidebarAberta ? Style.topBarAberta : Style.topBarFechada}`}>
+                <div className={Style.divEsquerda}>
+                    <IconField iconPosition="left" className={Style.ajusteInput}>
+                        <InputIcon className="pi pi-search" />
+                        <InputText placeholder="Buscar..." className={Style.input} />
+                    </IconField>
+                </div>
                 <div className={Style.divDireita}>
                     {!userLogado ? (
                         <>
@@ -289,7 +298,7 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                             >
                                 <p>Entrar</p>
                             </div>
-                            <div className={Style.btnPadrao + " " + Style.corParaFundo}
+                            <div className={Style.btnPadrao + " " + Style.corParaFundo + " " + Style.ajusteMobile}
                                 onClick={() => {
                                     navigate("/login", { state: { mode: "cadastro" } });
                                 }}
