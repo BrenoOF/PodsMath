@@ -135,9 +135,9 @@ export default function CompUsuario() {
                     <tr>
                         <th>Nome</th>
                         <th>Email</th>
-                        <th>Nível</th>
-                        <th>Cadastro</th>
-                        <th className={Style.colAcoes}>
+                        <th className={Style.colunaCenter}>Nível</th>
+                        <th className={Style.colunaCenter}>Cadastro</th>
+                        <th className={Style.colunaCenter}>
                             Ações
                         </th>
                     </tr>
@@ -151,18 +151,18 @@ export default function CompUsuario() {
                             <td>
                                 {usuario.nome}
                             </td>
-                            <td className={Style.email}>
+                            <td>
                                 {usuario.email}
                             </td>
-                            <td>
+                            <td className={Style.colunaCenter}>
                                 <span className={Style.badgeNivel}>
-                                    {usuario.nivel || "não definido"}
+                                    {usuario?.nome_nivel_acesso || "não definido"}
                                 </span>
                             </td>
-                            <td>
+                            <td className={Style.colunaCenter}>
                                 {formatarData(usuario.dataCadastro)}
                             </td>
-                            <td className={Style.colAcoes}>
+                            <td className={Style.colunaCenter}>
                                 <div className={Style.divBtns}>
                                     <button>
                                         <i className="fa-solid fa-pen"></i>
