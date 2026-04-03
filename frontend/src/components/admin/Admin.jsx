@@ -7,6 +7,8 @@ import Style from "./admin.module.css";
 import Podcast from "./tabelas/Podcast";
 import Usuario from "./tabelas/Usuario";
 import Transcricao from "./tabelas/Transcricao";
+import Categoria from "./tabelas/Categoria";
+import Tema from "./tabelas/Tema";
 
 export default function TelaAdmin() {
     const [controle, setControle] = useState("podcasts");
@@ -98,10 +100,10 @@ export default function TelaAdmin() {
                     <Usuario />
                 )}
                 {controle === "categorias" && (
-                    <Transcricao />
+                    <Categoria />
                 )}
                 {controle === "temas" && (
-                    <Transcricao />
+                    <Tema />
                 )}
                 {controle === "transcricao" && (
                     <Transcricao />
