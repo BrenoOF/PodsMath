@@ -94,7 +94,7 @@ export default function CompUsuario() {
                 <div className={Style.divInputPesquisa}>
                     <IconField iconPosition="left" className={Style.ajusteInput}>
                         <InputIcon className="pi pi-search" />
-                        <InputText placeholder="Buscar por Nome ou Email..." className={Style.input}
+                        <InputText placeholder="Buscar por Nome ou Email..." className={Style.inputPesquisa}
                             value={busca} onChange={(e) => setBusca(e.target.value)}
                         />
                     </IconField>
