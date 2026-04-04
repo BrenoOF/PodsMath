@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 import Style from "./tabelas.module.css";
 
@@ -16,6 +17,7 @@ export default function CompCategoria() {
     const [isEditar, setIsEditar] = useState(null);
     const [categorias, setCategorias] = useState([]);
     const [busca, setBusca] = useState("");
+    const [previewImg, setPreviewImg] = useState("");
 
     // filtro por texto
     const categoriasFiltradas = categorias.filter(categoria =>
@@ -61,7 +63,35 @@ export default function CompCategoria() {
         }
     }
 
+    // Funções para Imagem
+    const trocarImagem = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setIsEditar({
+            ...isEditar,
+            imagem: file
+        });
+        const preview = URL.createObjectURL(file);
+        setPreviewImg(preview);
+    };
+
     // Efetuar o Cadastro
+    const alertCriarEditarSucesso = () => {
+        Swal.fire({
+            title: `Categoria "${isEditar.nome}" ${isEditar.idcategorias ? "editada" : "criada"}`,
+            icon: "success",
+            confirmButtonColor: "#012663"
+        });
+    }
+
+    const alertCriarEditarErro = () => {
+        Swal.fire({
+            title: `Erro ao  ${isEditar.idcategorias ? "editar" : "criar"} categoria "${isEditar.nome}"`,
+            icon: "error",
+            confirmButtonColor: "#012663"
+        });
+    }
+
     const salvarCategoria = async () => {
         if (!validarCampos()) return;
         const token = localStorage.getItem("token");
@@ -71,12 +101,10 @@ export default function CompCategoria() {
                 "nome",
                 isEditar.nome
             );
-            // imagem (opcional)
-            if (isEditar.imagem)
-                formData.append(
-                    "imagem",
-                    isEditar.imagem
-                );
+            formData.append(
+                "imagem",
+                isEditar?.imagem || "./imgs/podcast-default.jpg"
+            );
             // EDITAR
             if (isEditar.idcategorias) {
                 await axios.put(
@@ -101,12 +129,51 @@ export default function CompCategoria() {
                     }
                 );
             }
+            alertCriarEditarSucesso();
             setModal(false);
             setErrors({});
+            setPreviewImg("");
             carregarDados();
         }
         catch (error) {
             console.error("Erro ao salvar", error);
+            alertCriarEditarErro();
+        }
+    };
+
+    // Excluir Categoria
+    const alertExclusao = (id) => {
+        Swal.fire({
+            title: "Tem certeza que deseja excluir esta categoria?",
+            text: "Essa ação não pode ser desfeita",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Quero Excluir!",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#d33",
+            confirmButtonColor: "#012663"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                excluirCategoria(id);
+            }
+        });
+    }
+
+    const excluirCategoria = async (id) => {
+        const token = localStorage.getItem("token");
+        try {
+            await axios.delete(
+                `${API_BASE_URL}/categorias/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            setCategorias(prev => prev.filter(cat => cat.idcategorias !== id));
+        }
+        catch (error) {
+            console.error("Erro ao excluir categoria", error);
         }
     };
 
@@ -155,7 +222,7 @@ export default function CompCategoria() {
                 <div className={Style.divInputPesquisa}>
                     <IconField iconPosition="left" className={Style.ajusteInput}>
                         <InputIcon className="pi pi-search" />
-                        <InputText placeholder="Buscar categoria..." className={Style.input}
+                        <InputText placeholder="Buscar categoria..." className={Style.inputPesquisa}
                             value={busca} onChange={(e) => setBusca(e.target.value)}
                         />
                     </IconField>
@@ -178,8 +245,10 @@ export default function CompCategoria() {
                             key={categoria.idcategorias}
                         >
                             <td>
-                                <img src="./imgs/podcast-default.jpg" alt={categoria.idcategorias}
-                                    className={Style.tableImg}
+                                <img src={categoria?.imagens_idimagens || "./imgs/podcast-default.jpg"} 
+                                    alt={categoria.idcategorias} className={Style.tableImg}
+                                    draggable="false"
+                                    onError={(e) => (e.target.src = "./imgs/podcast-default.jpg")}
                                 />
                             </td>
                             <td>
@@ -190,11 +259,15 @@ export default function CompCategoria() {
                                     <button ref={btnRef} onClick={() => {
                                         setModal(true);
                                         setIsEditar(categoria);
+                                        setPreviewImg(categoria.caminho_imagem || "");
                                     }}
                                     >
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
-                                    <button>
+                                    <button onClick={() => {
+                                        alertExclusao(categoria.idcategorias);
+                                    }}
+                                    >
                                         <i className="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
@@ -219,6 +292,38 @@ export default function CompCategoria() {
                             e.preventDefault();
                             salvarCategoria();
                         }}>
+                            <div className={Style.divInputImagem}>
+                                <div className={Style.previewImagem}>
+                                    <img
+                                        src={
+                                            previewImg
+                                            ||
+                                            isEditar?.caminho_imagem
+                                            ||
+                                            "/imgs/podcast-default.jpg"
+                                        }
+                                        alt="Imagem categoria"
+                                        draggable="false"
+                                        onError={(e) =>
+                                            (e.target.src = "/imgs/podcast-default.jpg")
+                                        }
+                                    />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="inputImagemCategoria"
+                                        onChange={trocarImagem}
+                                        className={Style.inputFile}
+                                    />
+                                    <label
+                                        htmlFor="inputImagemCategoria"
+                                        className={Style.btnAlterarImagem}
+                                    >
+                                        <i className="fa-solid fa-camera"></i>
+                                    </label>
+                                </div>
+                                <p>Imagem da categoria</p>
+                            </div>
                             <div className={Style.divInput}>
                                 <label>Nome</label>
                                 <InputText value={isEditar.nome}

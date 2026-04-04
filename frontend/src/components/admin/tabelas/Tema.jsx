@@ -86,7 +86,7 @@ export default function CompTema() {
                 <div className={Style.divInputPesquisa}>
                     <IconField iconPosition="left" className={Style.ajusteInput}>
                         <InputIcon className="pi pi-search" />
-                        <InputText placeholder="Buscar tema..." className={Style.input}
+                        <InputText placeholder="Buscar tema..." className={Style.inputPesquisa}
                             value={busca} onChange={(e) => setBusca(e.target.value)}
                         />
                     </IconField>
