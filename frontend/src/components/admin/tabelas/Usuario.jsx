@@ -146,7 +146,6 @@ export default function CompUsuario() {
                     {usuariosFiltrados.map(usuario => (
                         <tr
                             key={usuario.idusuarios}
-                            className={Style.linhaTabela}
                         >
                             <td>
                                 {usuario.nome}
