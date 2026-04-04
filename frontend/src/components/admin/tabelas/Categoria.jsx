@@ -67,12 +67,11 @@ export default function CompCategoria() {
     const trocarImagem = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        setPreviewImg(URL.createObjectURL(file));
         setIsEditar({
             ...isEditar,
-            imagem: file
+            caminho_imagem: file.name
         });
-        const preview = URL.createObjectURL(file);
-        setPreviewImg(preview);
     };
 
     // Efetuar o Cadastro
@@ -96,35 +95,29 @@ export default function CompCategoria() {
         if (!validarCampos()) return;
         const token = localStorage.getItem("token");
         try {
-            const formData = new FormData();
-            formData.append(
-                "nome",
-                isEditar.nome
-            );
-            formData.append(
-                "imagem",
-                isEditar?.imagem || "./imgs/podcast-default.jpg"
-            );
+            const payload = {
+                nome: isEditar.nome,
+                imagens_idimagens:
+                previewImg || isEditar?.caminho_imagem || "/imgs/podcast-default.jpg"
+            };
             // EDITAR
             if (isEditar.idcategorias) {
                 await axios.put(
                     `${API_BASE_URL}/categorias/${isEditar.idcategorias}`,
-                    formData,
+                    payload,
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "multipart/form-data"
+                            Authorization: `Bearer ${token}`
                         }
                     }
                 );
             }/* CRIAR */ else {
                 await axios.post(
                     `${API_BASE_URL}/categorias`,
-                    formData,
+                    payload,
                     {
                         headers: {
-                            Authorization: `Bearer ${token}`,
-                            "Content-Type": "multipart/form-data"
+                            Authorization: `Bearer ${token}`
                         }
                     }
                 );
@@ -208,7 +201,7 @@ export default function CompCategoria() {
                     setModal(true);
                     setIsEditar({
                         nome: "",
-                        imagem: null
+                        caminho_imagem: null
                     });
                 }}>
                     <p>
@@ -245,10 +238,10 @@ export default function CompCategoria() {
                             key={categoria.idcategorias}
                         >
                             <td>
-                                <img src={categoria?.imagens_idimagens || "./imgs/podcast-default.jpg"} 
-                                    alt={categoria.idcategorias} className={Style.tableImg}
+                                <img src={categoria?.imagens_idimagens || "/imgs/podcast-default.jpg"} 
+                                    alt={categoria.nome} className={Style.tableImg}
                                     draggable="false"
-                                    onError={(e) => (e.target.src = "./imgs/podcast-default.jpg")}
+                                    onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                                 />
                             </td>
                             <td>
@@ -266,8 +259,7 @@ export default function CompCategoria() {
                                     </button>
                                     <button onClick={() => {
                                         alertExclusao(categoria.idcategorias);
-                                    }}
-                                    >
+                                    }}>
                                         <i className="fa-solid fa-trash"></i>
                                     </button>
                                 </div>
