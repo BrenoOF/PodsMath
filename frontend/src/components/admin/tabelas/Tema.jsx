@@ -17,11 +17,11 @@ export default function CompTema() {
     const [busca, setBusca] = useState("");
 
     // filtro por texto
-    const temasFiltrados = temas.filter(tema => 
-            tema.titulo?.toLowerCase().includes(busca.toLowerCase())
+    const temasFiltrados = temas.filter(tema =>
+        tema.titulo?.toLowerCase().includes(busca.toLowerCase())
     );
 
-        // busca nome da categoria pelo id
+    // busca nome da categoria pelo id
     const getNomeCategoria = (idCategoria) => {
         const categoria = categorias.find(
 
@@ -39,16 +39,16 @@ export default function CompTema() {
                     axios.get(
                         `${API_BASE_URL}/temas`,
                         {
-                            headers:{
-                                Authorization:`Bearer ${token}`
+                            headers: {
+                                Authorization: `Bearer ${token}`
                             }
                         }
                     ),
                     axios.get(
                         `${API_BASE_URL}/categorias`,
                         {
-                            headers:{
-                                Authorization:`Bearer ${token}`
+                            headers: {
+                                Authorization: `Bearer ${token}`
                             }
                         }
                     )
@@ -96,6 +96,7 @@ export default function CompTema() {
             <table className={Style.tabelaUsuarios}>
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Título</th>
                         <th>
                             Categoria
@@ -109,8 +110,12 @@ export default function CompTema() {
                     {temasFiltrados.map(tema => (
                         <tr
                             key={tema.idtemas}
-                            className={Style.linhaTabela}
                         >
+                            <td>
+                                <img src="./imgs/podcast-default.jpg" alt={tema.idtemas}
+                                    className={Style.tableImg}
+                                />
+                            </td>
                             <td>
                                 {tema.titulo}
                             </td>
