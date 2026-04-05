@@ -82,9 +82,9 @@ export default function CompTema() {
             ]);
 
             response.data.forEach(cat => {
-                if (cat.caminho_imagem) {
-                    const nomeArquivo = cat.caminho_imagem.split('/').pop();
-                    cat.caminho_imagem = `/api-user/imagens/file/${nomeArquivo}`;
+                if (cat.idImagem) {
+                    const nomeArquivo = cat.idImagem.split('/').pop();
+                    cat.idImagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
             });
 
@@ -102,14 +102,14 @@ export default function CompTema() {
         setPreviewImg(URL.createObjectURL(file));
         setIsEditar({
             ...isEditar,
-            caminho_imagem: file.name
+            idImagem: isEditar?.idImagem || 1
         });
     };
 
     // Efetuar o Cadastro
     const alertCriarEditarSucesso = () => {
         Swal.fire({
-            title: `Tema "${isEditar.nome}" ${isEditar.idtemas ? "editado" : "criado"}`,
+            title: `Tema "${isEditar.titulo}" ${isEditar.idtemas ? "editado" : "criado"}`,
             icon: "success",
             confirmButtonColor: "#012663"
         });
@@ -117,7 +117,7 @@ export default function CompTema() {
 
     const alertCriarEditarErro = () => {
         Swal.fire({
-            title: `Erro ao  ${isEditar.idtemas ? "editar" : "criar"} tema "${isEditar.nome}"`,
+            title: `Erro ao  ${isEditar.idtemas ? "editar" : "criar"} tema "${isEditar.titulo}"`,
             icon: "error",
             confirmButtonColor: "#012663"
         });
@@ -130,8 +130,7 @@ export default function CompTema() {
             const payload = {
                 titulo: isEditar.titulo,
                 categorias_idcategorias: isEditar.categorias_idcategorias,
-                imagens_idimagens:
-                    previewImg || isEditar?.caminho_imagem || "/imgs/podcast-default.jpg"
+                imagens_idimagens: isEditar?.idImagem || 1
             };
             // EDITAR
             if (isEditar.idtemas) {
@@ -217,7 +216,8 @@ export default function CompTema() {
             if (
                 menuRef.current &&
                 !menuRef.current.contains(event.target) &&
-                !btnRef.current.contains(event.target) 
+                btnRef.current &&
+                !btnRef.current.contains(event.target)
             ) {
                 setModal(false);
             }
@@ -235,8 +235,9 @@ export default function CompTema() {
                     setIsEditar({
                         titulo: "",
                         categorias_idcategorias: "",
-                        caminho_imagem: ""
+                        idImagem: null
                     });
+                    setPreviewImg("");
                 }}>
                     <p>
                         <i className="fa-solid fa-plus"></i>
@@ -291,10 +292,11 @@ export default function CompTema() {
                                 <div className={Style.divBtns}>
                                     <button ref={btnRef} onClick={() => {
                                         setModal(true);
-                                        setIsEditar({...tema, 
+                                        setIsEditar({
+                                            ...tema,
                                             categorias_idcategorias: tema.categorias_idcategorias
                                         });
-                                        setPreviewImg(tema.caminho_imagem || "");
+                                        setPreviewImg(tema.idImagem || "");
                                     }}>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
@@ -331,15 +333,13 @@ export default function CompTema() {
                                         src={
                                             previewImg
                                             ||
-                                            isEditar?.caminho_imagem
+                                            isEditar?.idImagem
                                             ||
                                             "/imgs/podcast-default.jpg"
                                         }
                                         alt="Imagem Tema"
                                         draggable="false"
-                                        onError={(e) =>
-                                            (e.target.src = "/imgs/podcast-default.jpg")
-                                        }
+                                        onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                                     />
                                     <input
                                         type="file"
@@ -367,27 +367,32 @@ export default function CompTema() {
                                         });
                                         limparErro("titulo");
                                     }}
-                                    className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`}
+                                    className={`${Style.input} ${errors.titulo ? "p-invalid" : ""}`}
                                     placeholder="Título do Tema"
                                 />
-                                {errors.nome && (
-                                    <Message severity="error" text={errors.nome} />
+                                {errors.titulo && (
+                                    <Message severity="error" text={errors.titulo} />
                                 )}
                             </div>
                             <div className={Style.divInput}>
                                 <label>Categoria</label>
-                                <Dropdown appendTo="self" value={isEditar.categorias_idcategorias}
-                                    onChange={(e) => {
-                                        setIsEditar({
-                                            ...isEditar,
-                                            categorias_idcategorias: e.value
-                                        });
-                                        limparErro("categorias_idcategorias");
-                                    }}
-                                    options={categoriasOptions}
-                                    placeholder="Selecione uma categoria"
-                                    className={`${Style.input}${errors.categorias_idcategorias ? "p-invalid" : ""}`}
-                                />
+                                <div className={Style.divDropdown}>
+                                    <Dropdown appendTo="self" value={isEditar.categorias_idcategorias}
+                                        onChange={(e) => {
+                                            setIsEditar({
+                                                ...isEditar,
+                                                categorias_idcategorias: e.value
+                                            });
+                                            limparErro("categorias_idcategorias");
+                                        }}
+                                        options={categoriasOptions}
+                                        placeholder="Selecione uma categoria"
+                                        className={`
+                                            ${Style.input}
+                                            ${errors.categorias_idcategorias ? "p-invalid" : ""}
+                                        `}
+                                    />
+                                </div>
                                 {errors.categorias_idcategorias && (
                                     <Message severity="error" text={errors.categorias_idcategorias} />
                                 )}

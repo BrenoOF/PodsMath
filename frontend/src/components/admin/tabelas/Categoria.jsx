@@ -51,9 +51,9 @@ export default function CompCategoria() {
             });
 
             response.data.forEach(cat => {
-                if (cat.caminho_imagem) {
-                    const nomeArquivo = cat.caminho_imagem.split('/').pop();
-                    cat.caminho_imagem = `/api-user/imagens/file/${nomeArquivo}`;
+                if (cat.idImagem) {
+                    const nomeArquivo = cat.idImagem.split('/').pop();
+                    cat.idImagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
             });
 
@@ -70,7 +70,7 @@ export default function CompCategoria() {
         setPreviewImg(URL.createObjectURL(file));
         setIsEditar({
             ...isEditar,
-            caminho_imagem: file.name
+            idImagem: isEditar?.idImagem || 1
         });
     };
 
@@ -97,8 +97,7 @@ export default function CompCategoria() {
         try {
             const payload = {
                 nome: isEditar.nome,
-                imagens_idimagens:
-                previewImg || isEditar?.caminho_imagem || "/imgs/podcast-default.jpg"
+                imagens_idimagens: isEditar?.idImagem || 1
             };
             // EDITAR
             if (isEditar.idcategorias) {
@@ -184,6 +183,7 @@ export default function CompCategoria() {
             if (
                 menuRef.current &&
                 !menuRef.current.contains(event.target) &&
+                btnRef.current &&
                 !btnRef.current.contains(event.target)
             ) {
                 setModal(false);
@@ -201,8 +201,9 @@ export default function CompCategoria() {
                     setModal(true);
                     setIsEditar({
                         nome: "",
-                        caminho_imagem: null
+                        idImagem: null
                     });
+                    setPreviewImg("");
                 }}>
                     <p>
                         <i className="fa-solid fa-plus"></i>
@@ -252,7 +253,7 @@ export default function CompCategoria() {
                                     <button ref={btnRef} onClick={() => {
                                         setModal(true);
                                         setIsEditar(categoria);
-                                        setPreviewImg(categoria.caminho_imagem || "");
+                                        setPreviewImg(categoria.idImagem || "");
                                     }}
                                     >
                                         <i className="fa-solid fa-pen"></i>
@@ -290,15 +291,13 @@ export default function CompCategoria() {
                                         src={
                                             previewImg
                                             ||
-                                            isEditar?.caminho_imagem
+                                            isEditar?.idImagem
                                             ||
                                             "/imgs/podcast-default.jpg"
                                         }
                                         alt="Imagem categoria"
                                         draggable="false"
-                                        onError={(e) =>
-                                            (e.target.src = "/imgs/podcast-default.jpg")
-                                        }
+                                        onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                                     />
                                     <input
                                         type="file"
