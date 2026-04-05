@@ -235,6 +235,7 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
+    margin-bottom: 0.5rem;
 }
 
 .divInput label {
@@ -257,6 +258,25 @@
 :global(.p-inputtext:focus) {
     border: 0.15rem solid var(--cor-azul-escura-padrao);
     box-shadow: 0 2px 6px var(--sombra);
+}
+
+.divDropdown :global(.p-inputtext){
+    border: none;
+}
+
+.divDropdown :global(.p-inputtext:focus){
+    box-shadow: none;
+}
+
+:global(.p-dropdown-panel){
+    padding: 0.8rem 1rem;
+    border: 0.1rem solid var(--sombra);
+    border-radius: 0;
+}
+:global(.p-dropdown-items){
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
 }
 
 /* Input de Imagem */

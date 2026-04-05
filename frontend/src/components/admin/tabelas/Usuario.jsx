@@ -166,9 +166,6 @@ export default function CompUsuario() {
                                     <button>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
-                                    <button>
-                                        <i className="fa-solid fa-trash"></i>
-                                    </button>
                                 </div>
                             </td>
                         </tr>
