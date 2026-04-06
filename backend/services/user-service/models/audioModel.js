@@ -6,7 +6,12 @@ const Audio = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM audios');
+            const [rows] = await connection.query(`
+                SELECT 
+                    a.*, 
+                    img.caminho_imagem AS imagem_caminho 
+                FROM audios a
+                LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens`);
             await connection.commit();
             return rows;
         } catch (error) {
