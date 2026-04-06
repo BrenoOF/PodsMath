@@ -19,6 +19,7 @@ const categoriaRoutes = require('./routes/categoriaRoutes');
 const favoritoRoutes = require('./routes/favoritoRoutes');
 const categoriaNivelAcessoRoutes = require('./routes/categoriaNivelAcessoRoutes');
 const configNivelAcessoRoutes = require('./routes/configNivelAcessoRoutes');
+const estatisticasRoutes = require('./routes/estatisticasRoutes');
 
 const app = express();
 const PORT = process.env.USER_SERVICE_PORT || 3001;
@@ -45,6 +46,7 @@ app.use('/categorias', categoriaRoutes);
 app.use('/favoritos', favoritoRoutes);
 app.use('/categorias-nivel-acesso', categoriaNivelAcessoRoutes);
 app.use('/config-nivel-acesso', configNivelAcessoRoutes);
+app.use('/estatisticas', estatisticasRoutes);
 
 app.listen(PORT, () => {
     console.log(`User Service rodando na porta ${PORT}`);
