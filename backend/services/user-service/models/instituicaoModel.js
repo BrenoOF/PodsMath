@@ -1,91 +1,111 @@
 const pool = require('../db/connections');
 
 const Instituicao = {
-    getAll: async () => {
-        let connection;
-        try {
-            connection = await pool.getConnection();
-            await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM instituicoes');
-            await connection.commit();
-            return rows;
-        } catch (error) {
-            if (connection) await connection.rollback();
-            throw error;
-        } finally {
-            if (connection) connection.release();
-        }
-    },
-
-    getById: async (id) => {
-        let connection;
-        try {
-            connection = await pool.getConnection();
-            await connection.beginTransaction();
-            const [rows] = await connection.query('SELECT * FROM instituicoes WHERE idinstituicoes = ?', [id]);
-            await connection.commit();
-            return rows[0];
-        } catch (error) {
-            if (connection) await connection.rollback();
-            throw error;
-        } finally {
-            if (connection) connection.release();
-        }
-    },
-
-    create: async ({ imagens_idimagens, nome }) => {
-        let connection;
-        try {
-            connection = await pool.getConnection();
-            await connection.beginTransaction();
-            const [result] = await connection.query(
-                'INSERT INTO instituicoes (imagens_idimagens, nome) VALUES (?, ?)',
-                [imagens_idimagens, nome]
-            );
-            await connection.commit();
-            return { idinstituicoes: result.insertId, imagens_idimagens, nome };
-        } catch (error) {
-            if (connection) await connection.rollback();
-            throw error;
-        } finally {
-            if (connection) connection.release();
-        }
-    },
-
-    update: async (id, { imagens_idimagens, nome }) => {
-        let connection;
-        try {
-            connection = await pool.getConnection();
-            await connection.beginTransaction();
-            const [result] = await connection.query(
-                'UPDATE instituicoes SET imagens_idimagens = ?, nome = ? WHERE idinstituicoes = ?',
-                [imagens_idimagens, nome, id]
-            );
-            await connection.commit();
-            return result.affectedRows > 0;
-        } catch (error) {
-            if (connection) await connection.rollback();
-            throw error;
-        } finally {
-            if (connection) connection.release();
-        }
-    },
-
-    delete: async (id) => {
-        let connection;
-        try {
-            connection = await pool.getConnection();
-            await connection.beginTransaction();
-            const [result] = await connection.query('DELETE FROM instituicoes WHERE idinstituicoes = ?', [id]);
-            await connection.commit();
-            return result.affectedRows > 0;
-        } catch (error) {
-            if (connection) await connection.rollback();
-            throw error;
-        } finally {
-            if (connection) connection.release();
-        }
+  getAll: async () => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [rows] = await connection.query('SELECT * FROM instituicoes');
+      await connection.commit();
+      return rows;
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
     }
+  },
+
+  getById: async (id) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [rows] = await connection.query('SELECT * FROM instituicoes WHERE idinstituicoes = ?', [id]);
+      await connection.commit();
+      return rows[0];
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+
+  create: async ({ imagens_idimagens, nome }) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+
+      if (imagens_idimagens) {
+        const [result] = await connection.query(
+          'INSERT INTO instituicoes (imagens_idimagens, nome) VALUES (?, ?)',
+          [imagens_idimagens, nome]
+        );
+        await connection.commit();
+        return { idinstituicoes: result.insertId, imagens_idimagens, nome };
+      } else {
+        const [result] = await connection.query(
+          'INSERT INTO instituicoes (nome) VALUES (?)',
+          [nome]
+        );
+        await connection.commit();
+        return { idinstituicoes: result.insertId, imagens_idimagens: null, nome };
+      }
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+
+  update: async (id, { imagens_idimagens, nome }) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+
+      if (imagens_idimagens !== undefined) {
+        const [result] = await connection.query(
+          'UPDATE instituicoes SET imagens_idimagens = ?, nome = ? WHERE idinstituicoes = ?',
+          [imagens_idimagens, nome, id]
+        );
+        await connection.commit();
+        return result.affectedRows > 0;
+      } else {
+        const [result] = await connection.query(
+          'UPDATE instituicoes SET nome = ? WHERE idinstituicoes = ?',
+          [nome, id]
+        );
+        await connection.commit();
+        return result.affectedRows > 0;
+      }
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+
+  delete: async (id) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [result] = await connection.query('DELETE FROM instituicoes WHERE idinstituicoes = ?', [id]);
+      await connection.commit();
+      return result.affectedRows > 0;
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
+    }
+  }
 };
 
 module.exports = Instituicao;
