@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Swal from 'sweetalert2';
 
 import Style from "./tabelas.module.css";
 
@@ -7,26 +8,25 @@ import Style from "./tabelas.module.css";
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from "primereact/inputtext";
+import { Dropdown } from 'primereact/dropdown';
 
 const API_BASE_URL = "/api-user";
 
 export default function CompUsuario() {
+    const [modal, setModal] = useState(false);
     const [usuarios, setUsuarios] = useState([]);
+    const [niveis, setNiveis] = useState([]);
+    const [isEditar, setIsEditar] = useState(null);
     const [busca, setBusca] = useState("");
 
     const [menuConfigsAberto, setMenuConfigsAberto] = useState(false);
     const [nivelSelecionado, setNivelSelecionado] = useState("todos");
 
-    const btnConfigsRef = useRef(null);
-    const menuConfigsRef = useRef(null);
-
-    // Fazer o btn para filtrar por nivel de acesso
-    const niveis = [
-        { value: "todos", label: "Todos" },
-        { value: "admin", label: "Admin" },
-        { value: "editor", label: "Editor" },
-        { value: "revisor", label: "Revisor" }
-    ];
+    // Array de Opções do Dropdown
+    const niveisOptions = niveis.map(nv => ({
+        label: nv.nome,
+        value: nv.idnivel_acesso
+    }));
 
     const mudarNivel = (valor) => {
         setNivelSelecionado(valor);
@@ -34,6 +34,14 @@ export default function CompUsuario() {
     };
 
     // filtro por texto + nivel
+    const niveisFiltro = [
+        { value: "todos", label: "Todos" },
+        ...niveis.map(nv => ({
+            value: nv.idnivel_acesso,
+            label: nv.nome
+        }))
+    ];
+
     const usuariosFiltrados = usuarios.filter(usuario => {
         const matchBusca =
             usuario.nome?.toLowerCase().includes(busca.toLowerCase()) ||
@@ -41,30 +49,81 @@ export default function CompUsuario() {
 
         const matchNivel =
             nivelSelecionado === "todos" ||
-            usuario.nivel === nivelSelecionado;
+            usuario.nivel_acesso_idnivel_acesso === nivelSelecionado;
 
         return matchBusca && matchNivel;
     });
 
     // buscar usuarios
-    useEffect(() => {
-        async function carregarUsuarios() {
-            const token = localStorage.getItem("token");
-            try {
-                const res = await axios.get(`${API_BASE_URL}/usuarios`, {
+    const carregarDados = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            const [resUsuarios, resNiveis] = await Promise.all([
+                axios.get(`${API_BASE_URL}/usuarios`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                ),
+                axios.get(`${API_BASE_URL}/niveis-acesso`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                )
+            ]);
+
+            setUsuarios(resUsuarios.data);
+            setNiveis(resNiveis.data);
+        } catch (erro) {
+            console.error("erro ao buscar usuarios", erro);
+        }
+    }
+
+    // Efetuar o Editar
+    const salvarUsuario = async () => {
+        const token = localStorage.getItem("token");
+        try {
+            await axios.put(
+                `${API_BASE_URL}/usuarios/${isEditar.idusuarios}`,
+                isEditar,
+                {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
-                });
-                setUsuarios(res.data);
-            } catch (erro) {
-                console.error("erro ao buscar usuarios", erro);
-            }
+                }
+            );
+
+            Swal.fire({
+                title: `Usuário "${isEditar.nome}" editado`,
+                icon: "success",
+                confirmButtonColor: "#012663"
+            });
+
+            setModal(false);
+            carregarDados();
         }
-        carregarUsuarios();
+        catch (error) {
+            console.error("Erro ao salvar", error);
+            Swal.fire({
+                title: `Erro ao  editar usuário "${isEditar.nome}`,
+                icon: "error",
+                confirmButtonColor: "#012663"
+            });
+        }
+    };
+
+    // Carregar dados quando a pagina carrega
+    useEffect(() => {
+        carregarDados();
     }, []);
 
-    // fechar menu ao clicar fora
+    // fechar menu ao clicar fora no filtro
+    const btnConfigsRef = useRef(null);
+    const menuConfigsRef = useRef(null);
+
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (
@@ -73,6 +132,25 @@ export default function CompUsuario() {
                 !btnConfigsRef.current.contains(event.target)
             ) {
                 setMenuConfigsAberto(false);
+            }
+        };
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => { document.removeEventListener("pointerdown", handleClickOutside) };
+    }, []);
+
+    // Clicar fora do modal fecha-lo
+    const btnRef = useRef(null);
+    const menuRef = useRef(null);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                menuRef.current &&
+                !menuRef.current.contains(event.target) &&
+                btnRef.current &&
+                !btnRef.current.contains(event.target)
+            ) {
+                setModal(false);
             }
         };
         document.addEventListener("pointerdown", handleClickOutside);
@@ -100,7 +178,7 @@ export default function CompUsuario() {
                     className={Style.btnConfigs}
                     onClick={() => setMenuConfigsAberto(!menuConfigsAberto)}
                 >
-                    {niveis.find(n => n.value === nivelSelecionado)?.label}
+                    {niveisFiltro.find(n => n.value === nivelSelecionado)?.label}
                     <i className="fa-solid fa-angle-down"></i>
                 </div>
                 {/* menu */}
@@ -109,7 +187,7 @@ export default function CompUsuario() {
                         ref={menuConfigsRef}
                         className={Style.menuConfigs}
                     >
-                        {niveis.map((item) => (
+                        {niveisFiltro.map((item) => (
                             <div
                                 key={item.value}
                                 className={Style.btnOpcao}
@@ -154,7 +232,13 @@ export default function CompUsuario() {
                             </td>
                             <td className={Style.colunaCenter}>
                                 <div className={Style.divBtns}>
-                                    <button>
+                                    <button ref={btnRef} onClick={() => {
+                                        setModal(true);
+                                        setIsEditar({
+                                            ...usuario,
+                                            nivel_acesso_idnivel_acesso: usuario.nivel_acesso_idnivel_acesso
+                                        });
+                                    }}>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
                                 </div>
@@ -163,6 +247,50 @@ export default function CompUsuario() {
                     ))}
                 </tbody>
             </table>
+            {/* Modal de Editar */}
+            {modal && (
+                <div className={Style.modalOverlay}>
+                    <div className={Style.modal} ref={menuRef}>
+                        <div className={Style.divTituloModal}>
+                            <h1>
+                                Editar Usuário
+                            </h1>
+                            <i className="fa-solid fa-xmark"
+                                onClick={() => { setModal(false) }}
+                            ></i>
+                        </div>
+                        <form className={Style.formModal} onSubmit={(e) => {
+                            e.preventDefault();
+                            salvarUsuario();
+                        }}>
+                            <div className={Style.divInput}>
+                                <label>Nível de acesso</label>
+                                <div className={Style.divDropdown}>
+                                    <Dropdown appendTo="self" value={isEditar?.nivel_acesso_idnivel_acesso}
+                                        onChange={(e) => {
+                                            setIsEditar({
+                                                ...isEditar,
+                                                nivel_acesso_idnivel_acesso: e.value
+                                            });
+                                        }}
+                                        options={niveisOptions}
+                                        placeholder="Selecione um Nível"
+                                        className={Style.input}
+                                    />
+                                </div>
+                            </div>
+                        </form>
+                        <div className={Style.modalFooter}>
+                            <button onClick={() => setModal(false)}>
+                                Cancelar
+                            </button>
+                            <button className={Style.btnCriar} onClick={salvarUsuario}>
+                                Atualizar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
