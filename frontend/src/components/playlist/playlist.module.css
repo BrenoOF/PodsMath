@@ -47,10 +47,6 @@
         width: 70%;
     }
 
-    .colunaDataAdicao {
-        display: none;
-    }
-
     .divTextoTituloPodcast>h1 {
         font-size: 0.875rem;
 
@@ -116,10 +112,6 @@
 
     .colunaTitulo {
         width: 60%;
-    }
-
-    .colunaDataAdicao {
-        display: table-cell;
     }
 
     .divTextoTituloPodcast>h1 {

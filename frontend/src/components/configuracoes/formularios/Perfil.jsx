@@ -195,11 +195,6 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                         <p>{dadosUser?.nome_nivel_acesso}</p>
                     </div>
                     <hr className={Style.linhaSeparacao} />
-                    <div className={Style.divInformacao}>
-                        <h1>Membro desde</h1>
-                        <p>{dadosUser?.membroDesde}</p>
-                    </div>
-                    <hr className={Style.linhaSeparacao} />
                 </div>
                 <div className={Style.textosPerigo}>
                     <h1>Zona de Perigo</h1>

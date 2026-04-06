@@ -84,6 +84,7 @@
 .menuDeOpcoes {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
     margin-top: 2rem;
     background-color: var(--app-background);
     padding: 0.5rem;

@@ -143,7 +143,6 @@ export default function TelaPlaylist() {
                     <tr>
                         <th className={Style.colunaNumero}>#</th>
                         <th className={Style.colunaTitulo}>Título</th>
-                        <th className={Style.colunaDataAdicao}>Data de adição</th>
                         <th className={Style.colunaDuracao}><i className="fa-regular fa-clock"></i></th>
                     </tr>
                 </thead>
@@ -170,7 +169,6 @@ export default function TelaPlaylist() {
                                     <p>Feito por: {item.autor || "PodsMath"}</p>
                                 </div>
                             </td>
-                            <td className={Style.colunaDataAdicao}>{item.dt_adicao}</td>
                             <td className={Style.colunaDuracao}>{item.duracao}</td>
                         </tr>
                     ))}

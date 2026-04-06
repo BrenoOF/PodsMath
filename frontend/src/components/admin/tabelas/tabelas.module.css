@@ -320,3 +320,18 @@
     font-size: 0.8rem;
     cursor: pointer;
 }
+
+/* Input de Audio */
+.divInputAudio {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 0.5rem;
+}
+
+.labelAudio{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}

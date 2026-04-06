@@ -20,11 +20,6 @@ export default function CompUsuario() {
     const btnConfigsRef = useRef(null);
     const menuConfigsRef = useRef(null);
 
-    const formatarData = (data) => {
-        if (!data) return "-";
-        return new Date(data).toLocaleDateString("pt-BR");
-    }
-
     // Fazer o btn para filtrar por nivel de acesso
     const niveis = [
         { value: "todos", label: "Todos" },
@@ -136,7 +131,6 @@ export default function CompUsuario() {
                         <th>Nome</th>
                         <th>Email</th>
                         <th className={Style.colunaCenter}>Nível</th>
-                        <th className={Style.colunaCenter}>Cadastro</th>
                         <th className={Style.colunaCenter}>
                             Ações
                         </th>
@@ -157,9 +151,6 @@ export default function CompUsuario() {
                                 <span className={Style.badgeNivel}>
                                     {usuario?.nome_nivel_acesso || "não definido"}
                                 </span>
-                            </td>
-                            <td className={Style.colunaCenter}>
-                                {formatarData(usuario.dataCadastro)}
                             </td>
                             <td className={Style.colunaCenter}>
                                 <div className={Style.divBtns}>
