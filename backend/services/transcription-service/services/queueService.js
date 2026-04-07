@@ -1,17 +1,17 @@
-const { nodewhisper } = require('nodejs-whisper');
+﻿const { nodewhisper } = require('nodejs-whisper');
 const fs = require('fs');
 const path = require('path');
 const { saveTranscription } = require('./audioService');
 
-// Fila em memória
+// Fila em memÃ³ria
 const queue = [];
 let isProcessing = false;
 
 // Status de cada job por audioId
 const jobStatus = new Map();
 
-// Histórico de velocidade de processamento para estimar tempo
-// Armazena a razão: tempo_processamento_ms / tamanho_arquivo_bytes
+// HistÃ³rico de velocidade de processamento para estimar tempo
+// Armazena a razÃ£o: tempo_processamento_ms / tamanho_arquivo_bytes
 const processingHistory = [];
 const DEFAULT_RATIO = 0.003; // fallback: ~3ms por byte (estimativa conservadora)
 
@@ -23,7 +23,7 @@ function getAvgRatio() {
 
 const queueService = {
     /**
-     * Adiciona à fila de transcrição. O áudio já deve existir no MySQL/MongoDB.
+     * Adiciona Ã  fila de transcriÃ§Ã£o. O Ã¡udio jÃ¡ deve existir no MySQL/MongoDB.
      */
     addToQueue: (filePath, audioId, idiomas_ididiomas, token) => {
         const position = queue.length + 1;
@@ -33,14 +33,14 @@ const queueService = {
         const estimatedMs = Math.round(fileSizeBytes * getAvgRatio());
 
         jobStatus.set(String(audioId), {
-            status: 'queued',
+            status: 'Na fila',
             position,
             fileSizeBytes,
             estimatedMs: estimatedMs > 0 ? estimatedMs : null,
             queuedAt: new Date().toISOString()
         });
         queue.push({ filePath, audioId, idiomas_ididiomas, fileSizeBytes, token });
-        console.log(`Áudio ID ${audioId} adicionado à fila. Posição: ${position}. Tamanho: ${(fileSizeBytes / 1024).toFixed(0)}KB`);
+        console.log(`Ãudio ID ${audioId} adicionado Ã  fila. PosiÃ§Ã£o: ${position}. Tamanho: ${(fileSizeBytes / 1024).toFixed(0)}KB`);
         queueService.processQueue();
     },
 
@@ -52,7 +52,7 @@ const queueService = {
         if (!job) return null;
 
         // Calcula tempo restante estimado quando transcrevendo
-        if (job.status === 'transcribing' && job.startedAt) {
+        if ((job.status === 'transcribing' || job.status === 'Transcrevendo') && job.startedAt) {
             const elapsedMs = Date.now() - new Date(job.startedAt).getTime();
             const estimatedTotalMs = job.estimatedMs || Math.round((job.fileSizeBytes || 0) * getAvgRatio());
 
@@ -85,7 +85,7 @@ const queueService = {
         const task = queue.shift();
         const audioIdStr = String(task.audioId);
 
-        // Atualiza posições dos jobs restantes na fila
+        // Atualiza posiÃ§Ãµes dos jobs restantes na fila
         queue.forEach((item, i) => {
             const s = jobStatus.get(String(item.audioId));
             if (s) s.position = i + 1;
@@ -98,20 +98,20 @@ const queueService = {
         try {
             const estimatedMs = Math.round((task.fileSizeBytes || 0) * getAvgRatio());
             jobStatus.set(audioIdStr, {
-                status: 'transcribing',
+                status: 'Transcrevendo',
                 fileSizeBytes: task.fileSizeBytes,
                 estimatedMs: estimatedMs > 0 ? estimatedMs : null,
                 startedAt: new Date().toISOString()
             });
-            console.log(`Iniciando transcrição para áudio ID: ${task.audioId}`);
+            console.log(`Iniciando transcriÃ§Ã£o para Ã¡udio ID: ${task.audioId}`);
 
             absolutePath = path.resolve(task.filePath);
 
             if (!fs.existsSync(absolutePath)) {
-                throw new Error(`Arquivo não encontrado: ${absolutePath}`);
+                throw new Error(`Arquivo nÃ£o encontrado: ${absolutePath}`);
             }
 
-            // O nodewhisper vai converter o arquivo para .wav se não for
+            // O nodewhisper vai converter o arquivo para .wav se nÃ£o for
             const ext = path.extname(absolutePath);
             wavPath = absolutePath.replace(ext, '.wav');
 
@@ -153,18 +153,18 @@ const queueService = {
                         const to = s.timestamps?.to || '';
                         const timeStr = from && to ? `[${from} --> ${to}] ` : '';
                         return `${timeStr}${s.text.trim()}`;
-                    }).join(' ')  // Retira nova linha, dividindo por espaço
+                    }).join(' ')  // Retira nova linha, dividindo por espaÃ§o
                     : (transcriptData.text || '').replace(/\n/g, ' ');
                 fs.unlinkSync(jsonPath);
             } else {
-                console.warn('JSON da transcrição não encontrado para:', absolutePath);
+                console.warn('JSON da transcriÃ§Ã£o nÃ£o encontrado para:', absolutePath);
             }
 
             jobStatus.set(audioIdStr, {
-                status: 'saving',
+                status: 'Salvando',
                 startedAt: new Date().toISOString()
             });
-            console.log(`Transcrição concluída. Salvando no banco...`);
+            console.log(`TranscriÃ§Ã£o concluÃ­da. Salvando no banco...`);
 
             await saveTranscription({
                 audioId: task.audioId,
@@ -174,20 +174,20 @@ const queueService = {
             });
 
             jobStatus.set(audioIdStr, {
-                status: 'completed',
+                status: 'Transcrito',
                 completedAt: new Date().toISOString()
             });
-            console.log(`Áudio ID ${task.audioId} processado com sucesso.`);
+            console.log(`Ãudio ID ${task.audioId} processado com sucesso.`);
 
         } catch (error) {
-            console.error(`Erro ao processar áudio ID ${task.audioId}:`, error);
+            console.error(`Erro ao processar Ã¡udio ID ${task.audioId}:`, error);
             jobStatus.set(audioIdStr, {
-                status: 'error',
+                status: 'Erro',
                 error: error.message,
                 failedAt: new Date().toISOString()
             });
         } finally {
-            // Remove arquivos temporários sempre (original + WAV convertido) independente de erro
+            // Remove arquivos temporÃ¡rios sempre (original + WAV convertido) independente de erro
             if (absolutePath && fs.existsSync(absolutePath)) {
                 try { fs.unlinkSync(absolutePath); } catch (e) { console.error('Limpeza de absolutePath falhou', e); }
             }

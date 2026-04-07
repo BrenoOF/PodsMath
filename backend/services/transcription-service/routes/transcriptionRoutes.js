@@ -30,6 +30,9 @@ router.post('/', authMiddleware, upload.fields([
     { name: 'imagem', maxCount: 1 }
 ]), transcriptionController.createTranscription);
 
+// GET /transcricao/status — Retorna dados de TODAS as transcrições
+router.get('/status', transcriptionController.getAllTranscriptionsStatusHandler);
+
 // GET /transcricao/:id — Busca áudio + transcrição
 router.get('/:id', transcriptionController.getTranscription);
 
@@ -38,8 +41,5 @@ router.get('/:id/audio', transcriptionController.streamAudio);
 
 // DELETE /transcricao/:id — Deleta áudio + transcrição do MongoDB e MySQL
 router.delete('/:id', authMiddleware, transcriptionController.deleteTranscription);
-
-// GET /transcricao/status — Retorna dados de TODAS as transcrições
-router.get('/status', transcriptionController.getAllTranscriptionsStatus);
 
 module.exports = router;

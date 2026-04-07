@@ -23,7 +23,7 @@ async function createAudioRecord({
     token
 }) {
     // 1. Cria registro na tabela 'audios' via user-service
-    
+
     const payload = {
         visualizacoes: 0,
         titulo: titulo || 'Sem título',
@@ -36,7 +36,7 @@ async function createAudioRecord({
 
     try {
         const audioResponse = await axios.post(`${USER_SERVICE_URL}/audios`, payload, {
-            headers: { 
+            headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
@@ -109,166 +109,159 @@ async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas 
 }
 
 /**
- * Busca informações de TODAS as transcrições: título, idioma, status, progresso, texto e ID
+ * Busca informações de TODAS as transcrições: título, idioma, texto e ID (sem status do processamento)
  */
-async function getAllTranscriptionsStatus(token) {
-  try {
-    // 1. Busca TODAS as transcrições do user-service
-    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-    const response = await axios.get(`${USER_SERVICE_URL}/transcricoes`, { headers });
+async function getAllTranscriptionsWithAudio(token) {
+    try {
+        // 1. Busca TODAS as transcrições do user-service
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const response = await axios.get(`${USER_SERVICE_URL}/transcricoes`, { headers });
 
-    const transcriptions = Array.isArray(response.data) ? response.data : [];
+        const transcriptions = Array.isArray(response.data) ? response.data : [];
 
-    // 2. Para cada transcrição, busca detalhes do áudio e status
-    const results = await Promise.all(transcriptions.map(async (transcription) => {
-      const audioId = transcription.audios_idaudios;
-      const transcricaoId = transcription.idTranscricao;
+        // 2. Para cada transcrição, busca detalhes do áudio
+        const results = await Promise.all(transcriptions.map(async (transcription) => {
+            const audioId = transcription.audios_idaudios;
+            const transcricaoId = transcription.idTranscricao;
 
-      if (!audioId) return null;
+            if (!audioId) return null;
 
-      // Busca dados do áudio
-      let audioData;
-      try {
-        const audioHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
-        const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers: audioHeaders });
-        audioData = audioResponse.data;
-      } catch (error) {
-        console.warn(`Não foi possível buscar detalhes para audioId ${audioId}`);
-        return null;
-      }
+            // Busca dados do áudio
+            let audioData;
+            try {
+                const audioHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+                const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers: audioHeaders });
+                audioData = audioResponse.data;
+            } catch (error) {
+                console.warn(`Não foi possível buscar detalhes para audioId ${audioId}`);
+                return null;
+            }
 
-      // Verifica status do processamento
-      const jobInfo = queueService.getStatus(audioId.toString());
-      const status = jobInfo ? jobInfo.status : 'completed';
-      const progresso = jobInfo?.progressPercent || 0;
+            return {
+                audioId: audioData.idaudios,
+                titulo: audioData.titulo,
+                idioma: transcription.idioma_nome || audioData.idioma_nome,
+                textoTranscricao: transcription.textoTranscricao,
+                idTranscricao: transcricaoId
+            };
+        }));
 
-      return {
-        audioId: audioData.idaudios,
-        titulo: audioData.titulo,
-        idioma: transcription.idioma_nome || audioData.idioma_nome,
-        status: status,
-        progresso: progresso,
-        textoTranscricao: transcription.textoTranscricao,
-        idTranscricao: transcricaoId
-      };
-    }));
-
-    // Filtra nulls e retorna apenas transcrições válidas
-    return results.filter(item => item !== null);
-  } catch (error) {
-    console.error('Erro em getAllTranscriptionsStatus:', error);
-    throw error;
-  }
+        // Filtra nulls e retorna apenas transcrições válidas
+        return results.filter(item => item !== null);
+    } catch (error) {
+        console.error('Erro em getAllTranscriptionsWithAudio:', error);
+        throw error;
+    }
 }
 
 /**
  * Busca informações básicas de transcrição: título, idioma, status, progresso, texto e ID
  */
 async function getTranscriptionStatus(audioId, token) {
-  try {
-    // 1. Busca dados do áudio
-    let audioData;
     try {
-      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-      const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers });
-      audioData = audioResponse.data;
+        // 1. Busca dados do áudio
+        let audioData;
+        try {
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers });
+            audioData = audioResponse.data;
+        } catch (error) {
+            if (error.response?.status === 404) return null;
+            throw error;
+        }
+
+        // 2. Busca transcrição via user-service (última transcrição)
+        let transcricao = null;
+        let transcricaoId = null;
+        try {
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
+            const transcricoes = Array.isArray(transcricaoResponse.data) ? transcricaoResponse.data : [];
+
+            if (transcricoes.length > 0) {
+                // Pega a última transcrição (a mais recente)
+                transcricao = transcricoes[transcricoes.length - 1];
+                transcricaoId = transcricao.idTranscricao;
+            }
+        } catch (error) {
+            // Se não houver transcrição, continua
+        }
+
+        // 3. Busca status do processamento
+        const jobInfo = queueService.getStatus(audioId.toString());
+
+        return {
+            audioId: audioData.idaudios,
+            titulo: audioData.titulo,
+            idioma: transcricao ? transcricao.idioma_nome : audioData.idioma_nome,
+            status: transcricao ? 'Transcrito' : (jobInfo ? jobInfo.status : 'Na fila'),
+            progresso: jobInfo?.progressPercent || 0,
+            textoTranscricao: transcricao ? transcricao.textoTranscricao : null,
+            idTranscricao: transcricaoId
+        };
     } catch (error) {
-      if (error.response?.status === 404) return null;
-      throw error;
+        console.error('Erro em getTranscriptionStatus:', error);
+        throw error;
     }
-
-    // 2. Busca transcrição via user-service (última transcrição)
-    let transcricao = null;
-    let transcricaoId = null;
-    try {
-      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-      const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
-      const transcricoes = Array.isArray(transcricaoResponse.data) ? transcricaoResponse.data : [];
-
-      if (transcricoes.length > 0) {
-        // Pega a última transcrição (a mais recente)
-        transcricao = transcricoes[transcricoes.length - 1];
-        transcricaoId = transcricao.idTranscricao;
-      }
-    } catch (error) {
-      // Se não houver transcrição, continua
-    }
-
-    // 3. Busca status do processamento
-    const jobInfo = queueService.getStatus(audioId.toString());
-
-    return {
-      audioId: audioData.idaudios,
-      titulo: audioData.titulo,
-      idioma: transcricao ? transcricao.idioma_nome : audioData.idioma_nome,
-      status: transcricao ? 'Transcrito' : (jobInfo ? jobInfo.status : 'Na fila'),
-      progresso: jobInfo?.progressPercent || 0,
-      textoTranscricao: transcricao ? transcricao.textoTranscricao : null,
-      idTranscricao: transcricaoId
-    };
-  } catch (error) {
-    console.error('Erro em getTranscriptionStatus:', error);
-    throw error;
-  }
 }
 
 /**
  * Busca o áudio (MongoDB GridFS) e a transcrição (MySQL via user-service) pelo ID do áudio.
  */
 async function getAudioWithTranscription(audioId, token) {
+    try {
+        // 1. Busca dados do MySQL (user-service) COM DETALHES (JOIN)
+        let audioData;
         try {
-            // 1. Busca dados do MySQL (user-service) COM DETALHES (JOIN)
-            let audioData;
-            try {
-                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-                const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers });
-                audioData = audioResponse.data;
-            } catch (error) {
-                if (error.response?.status === 404) return null;
-                throw error;
-            }
-
-            // 2. Busca transcrição via user-service
-            let transcricoes = [];
-            try {
-                const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-                const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
-                transcricoes = Array.isArray(transcricaoResponse.data) ? transcricaoResponse.data : [];
-            } catch (error) {
-                // Se não houver transcrição, continua com array vazio
-            }
-
-            // 3. Busca o áudio original no GridFS (se existir transcrição ou se estivermos buscando para tocar logo)
-            const audioMongo = await AudioMongo.findOne({ mysqlAudioId: audioId }).lean();
-            let hasAudio = false;
-            let mimeType = 'audio/wav';
-
-            if (audioMongo && audioMongo.fileId) {
-                hasAudio = true;
-                mimeType = audioMongo.mimeType || mimeType;
-            }
-
-            return {
-                audioId: audioData.idaudios,
-                titulo: audioData.titulo,
-                descricao: audioData.descricao,
-                usuario_nome: audioData.usuario_nome,
-                tema_nome: audioData.tema_nome,
-                idioma_nome: audioData.idioma_nome,
-                imagem_caminho: audioData.imagem_caminho,
-                transcricoes: transcricoes.map(t => ({
-                    texto: t.textoTranscricao,
-                    idioma: t.idiomas_ididiomas,
-                    idioma_nome: t.idioma_nome
-                })),
-                hasAudio: hasAudio,
-                mimeType: mimeType
-            };
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers });
+            audioData = audioResponse.data;
         } catch (error) {
-            console.error('Erro em getAudioWithTranscription:', error);
+            if (error.response?.status === 404) return null;
             throw error;
         }
+
+        // 2. Busca transcrição via user-service
+        let transcricoes = [];
+        try {
+            const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+            const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
+            transcricoes = Array.isArray(transcricaoResponse.data) ? transcricaoResponse.data : [];
+        } catch (error) {
+            // Se não houver transcrição, continua com array vazio
+        }
+
+        // 3. Busca o áudio original no GridFS (se existir transcrição ou se estivermos buscando para tocar logo)
+        const audioMongo = await AudioMongo.findOne({ mysqlAudioId: audioId }).lean();
+        let hasAudio = false;
+        let mimeType = 'audio/wav';
+
+        if (audioMongo && audioMongo.fileId) {
+            hasAudio = true;
+            mimeType = audioMongo.mimeType || mimeType;
+        }
+
+        return {
+            audioId: audioData.idaudios,
+            titulo: audioData.titulo,
+            descricao: audioData.descricao,
+            usuario_nome: audioData.usuario_nome,
+            tema_nome: audioData.tema_nome,
+            idioma_nome: audioData.idioma_nome,
+            imagem_caminho: audioData.imagem_caminho,
+            transcricoes: transcricoes.map(t => ({
+                texto: t.textoTranscricao,
+                idioma: t.idiomas_ididiomas,
+                idioma_nome: t.idioma_nome
+            })),
+            hasAudio: hasAudio,
+            mimeType: mimeType
+        };
+    } catch (error) {
+        console.error('Erro em getAudioWithTranscription:', error);
+        throw error;
     }
+}
 
 /**
  * Deleta o áudio do MongoDB (GridFS e AudioMongo) e do MySQL (via user-service API).
@@ -276,7 +269,7 @@ async function getAudioWithTranscription(audioId, token) {
 async function deleteAudioRecord(audioId, token) {
     try {
         console.log(`Iniciando deleção do áudio ID: ${audioId}`);
-        
+
         // 0. Buscar detalhes do áudio antes de deletar para saber o ID da imagem
         let audioDetails = null;
         try {
@@ -338,7 +331,7 @@ async function deleteAudioRecord(audioId, token) {
                 console.warn(`Aviso: Falha ao deletar imagem ID ${audioDetails.imagens_idimagens}. Erro: ${imgErr.message}`);
             }
         }
-        
+
         return true;
     } catch (error) {
         console.error(`Erro em deleteAudioRecord:`, error);
@@ -373,4 +366,4 @@ function getAudioStreamById(fileId, options = {}) {
     return gridFSBucket.openDownloadStream(fileId, options);
 }
 
-module.exports = { createAudioRecord, saveTranscription, getAudioWithTranscription, deleteAudioRecord, getAudioFileInfo, getAudioStreamById, getTranscriptionStatus, getAllTranscriptionsStatus };
+module.exports = { createAudioRecord, saveTranscription, getAudioWithTranscription, deleteAudioRecord, getAudioFileInfo, getAudioStreamById, getTranscriptionStatus, getAllTranscriptionsWithAudio };

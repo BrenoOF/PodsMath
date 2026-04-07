@@ -83,7 +83,23 @@ const Favorito = {
         } finally {
             if (connection) connection.release();
         }
+    },
+
+  deleteByAudioId: async (audioId) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [result] = await connection.query('DELETE FROM favoritos WHERE audios_idaudios = ?', [audioId]);
+      await connection.commit();
+      return result.affectedRows > 0;
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
     }
+  }
 };
 
 module.exports = Favorito;
