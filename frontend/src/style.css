@@ -81,6 +81,7 @@ body {
 :root {
     /* Cores Padrões */
     --branco: #fff;
+    --cor-verde-sucesso: #0fb371;
     --texto-laranja: #FF851A;
     --cor-laranja-escuro: #ff5724;
     --cor-laranja-escuro-hover: #ff5724e6;

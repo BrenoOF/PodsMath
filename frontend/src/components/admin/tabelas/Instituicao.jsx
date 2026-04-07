@@ -8,41 +8,76 @@ import Style from "./tabelas.module.css";
 import { IconField } from 'primereact/iconfield';
 import { InputIcon } from 'primereact/inputicon';
 import { InputText } from "primereact/inputtext";
-import { InputTextarea } from "primereact/inputtextarea";
+import { Message } from 'primereact/message';
 
-const API_BASE_URL = "/api-transcription";
+const API_BASE_URL = "/api-user";
 
-export default function CompTranscricao() {
+export default function CompInstituicao() {
     const [modal, setModal] = useState(false);
     const [isEditar, setIsEditar] = useState(null);
-    const [transcricoes, setTranscricoes] = useState([]);
+    const [instituicoes, setInstituicoes] = useState([]);
     const [busca, setBusca] = useState("");
+    const [previewImg, setPreviewImg] = useState("");
 
     // filtro por texto
-    const transcricoesFiltradas = transcricoes.filter(t =>
-        t.titulo?.toLowerCase().includes(busca.toLowerCase())
+    const instituicoesFiltradas = instituicoes.filter(instituicao =>
+        instituicao.nome?.toLowerCase().includes(busca.toLowerCase())
     );
+
+    // tratamento de erros
+    const [errors, setErrors] = useState({});
+
+    const limparErro = (campo) => {
+        setErrors((prev) => ({ ...prev, [campo]: null }));
+    };
+
+    const validarCampos = () => {
+        let novosErros = {};
+
+        if (!isEditar.nome?.trim()) novosErros.nome = "Nome é obrigatório";
+
+        setErrors(novosErros);
+        return Object.keys(novosErros).length === 0;
+    };
 
     // Carregar dados
     const carregarDados = async () => {
         const token = localStorage.getItem("token");
         try {
-            const response = await axios.get(`${API_BASE_URL}/transcricao/status`, {
+            const response = await axios.get(`${API_BASE_URL}/instituicoes`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             });
 
-            setTranscricoes(response.data);
+            response.data.forEach(cat => {
+                if (cat.idImagem) {
+                    const nomeArquivo = cat.idImagem.split('/').pop();
+                    cat.idImagem = `/api-user/imagens/file/${nomeArquivo}`;
+                }
+            });
+
+            setInstituicoes(response.data);
         } catch (error) {
             console.error("Erro ao carregar dados", error);
         }
     }
 
+    // Funções para Imagem
+    const trocarImagem = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        setPreviewImg(URL.createObjectURL(file));
+        setIsEditar({
+            ...isEditar,
+            idImagem: isEditar?.idImagem || 1
+        });
+    };
+
     // Efetuar o Cadastro
     const alertCriarEditarSucesso = () => {
         Swal.fire({
-            title: `Transcrição "${isEditar.titulo}" ${isEditar.idTranscricao ? "editada" : "criada"}`,
+            title: `Instituição "${isEditar.nome}" ${isEditar.idinstituicoes ? "editada" : "criada"}`,
             icon: "success",
             confirmButtonColor: "#012663"
         });
@@ -50,25 +85,24 @@ export default function CompTranscricao() {
 
     const alertCriarEditarErro = () => {
         Swal.fire({
-            title: `Erro ao  ${isEditar.idTranscricao ? "editar" : "criar"} Transcrição "${isEditar.titulo}"`,
+            title: `Erro ao  ${isEditar.idinstituicoes ? "editar" : "criar"} instituição "${isEditar.nome}"`,
             icon: "error",
             confirmButtonColor: "#012663"
         });
     }
 
-    const salvarTranscricao = async () => {
+    const salvarInstituicao = async () => {
+        if (!validarCampos()) return;
         const token = localStorage.getItem("token");
         try {
             const payload = {
-                textoTranscricao: isEditar.textoTranscricao,
-                titulo: isEditar.titulo,
-                idioma: isEditar.idioma,
-                audioId: isEditar.audioId
+                nome: isEditar.nome,
+                imagens_idimagens: isEditar?.idImagem || 1
             };
             // EDITAR
-            if (isEditar.idTranscricao) {
+            if (isEditar.idinstituicoes) {
                 await axios.put(
-                    `${API_BASE_URL}/transcricao/${isEditar.idTranscricao}`,
+                    `${API_BASE_URL}/instituicoes/${isEditar.idinstituicoes}`,
                     payload,
                     {
                         headers: {
@@ -77,11 +111,20 @@ export default function CompTranscricao() {
                     }
                 );
             }/* CRIAR */ else {
-                // Sem Função por enquanto
+                await axios.post(
+                    `${API_BASE_URL}/instituicoes`,
+                    payload,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
             }
-
             alertCriarEditarSucesso();
             setModal(false);
+            setErrors({});
+            setPreviewImg("");
             carregarDados();
         }
         catch (error) {
@@ -91,10 +134,9 @@ export default function CompTranscricao() {
     };
 
     // Excluir Instituição
-    /*
     const alertExclusao = (id) => {
         Swal.fire({
-            title: "Tem certeza que deseja excluir esta transcrição?",
+            title: "Tem certeza que deseja excluir esta instituição?",
             text: "Essa ação não pode ser desfeita",
             icon: "warning",
             showCancelButton: true,
@@ -104,12 +146,12 @@ export default function CompTranscricao() {
             confirmButtonColor: "#012663"
         }).then((result) => {
             if (result.isConfirmed) {
-                excluirTranscricao(id);
+                excluirInstituicao(id);
             }
         });
     }
 
-    const excluirTranscricao = async (id) => {
+    const excluirInstituicao = async (id) => {
         const token = localStorage.getItem("token");
         try {
             await axios.delete(
@@ -126,7 +168,6 @@ export default function CompTranscricao() {
             console.error("Erro ao excluir instituição", error);
         }
     };
-    */
 
     // Carregar dados quando a pagina carrega
     useEffect(() => {
@@ -155,8 +196,8 @@ export default function CompTranscricao() {
     return (
         <div className={Style.containerTabela}>
             <div className={Style.tituloTabela}>
-                <h1>Gerenciar Transcrições</h1>
-                {/* <button ref={btnRef} onClick={() => {
+                <h1>Gerenciar Instituições</h1>
+                <button ref={btnRef} onClick={() => {
                     setModal(true);
                     setIsEditar({
                         nome: "",
@@ -166,16 +207,16 @@ export default function CompTranscricao() {
                 }}>
                     <p>
                         <i className="fa-solid fa-plus"></i>
-                        Nova Transcrição
+                        Nova Instituição
                     </p>
-                </button> */}
+                </button>
             </div>
             {/* Pequenos filtros */}
             <div className={Style.divFiltros}>
                 <div className={Style.divInputPesquisa}>
                     <IconField iconPosition="left" className={Style.ajusteInput}>
                         <InputIcon className="pi pi-search" />
-                        <InputText placeholder="Buscar transcrição..." className={Style.inputPesquisa}
+                        <InputText placeholder="Buscar instituição..." className={Style.inputPesquisa}
                             value={busca} onChange={(e) => setBusca(e.target.value)}
                         />
                     </IconField>
@@ -185,56 +226,43 @@ export default function CompTranscricao() {
             <table className={Style.tabelaUsuarios}>
                 <thead>
                     <tr>
-                        <th>Título</th>
-                        <th>Idioma</th>
-                        <th className={Style.colunaCenter}>Status</th>
-                        <th className={Style.colunaCenter}>Progresso</th>
+                        <th></th>
+                        <th>Nome</th>
                         <th className={Style.colunaCenter}>
                             Ações
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {transcricoesFiltradas.map(transcricao => (
+                    {instituicoesFiltradas.map(instituicao => (
                         <tr
-                            key={transcricao.idTranscricao}
+                            key={instituicao.idinstituicoes}
                         >
                             <td>
-                                {transcricao.titulo}
+                                <img src={instituicao?.imagens_idimagens || "/imgs/podcast-default.jpg"} 
+                                    alt={instituicao.nome} className={Style.tableImg}
+                                    draggable="false"
+                                    onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
+                                />
                             </td>
                             <td>
-                                {transcricao.idioma}
-                            </td>
-                            <td className={Style.colunaCenter}>
-                                <span className={`
-                                    ${Style.badgeStatus}
-                                    ${transcricao.status === "Transcrito" ? Style.transcrito : Style.nafila}
-                                `}>
-                                    {transcricao.status === "Transcrito" ? (
-                                        <i className="fa-regular fa-circle-check"></i>
-                                    ) : (
-                                        <i className="fa-regular fa-clock"></i>
-                                    )}
-                                    {transcricao?.status || "Não-Transcrito"}
-                                </span>
-                            </td>
-                            <td className={Style.colunaCenter}>
-                                {transcricao.progresso}%
+                                {instituicao.nome}
                             </td>
                             <td className={Style.colunaCenter}>
                                 <div className={Style.divBtns}>
                                     <button ref={btnRef} onClick={() => {
                                         setModal(true);
-                                        setIsEditar(transcricao);
+                                        setIsEditar(instituicao);
+                                        setPreviewImg(instituicao.idImagem || "");
                                     }}
                                     >
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
-                                    {/* <button onClick={() => {
+                                    <button onClick={() => {
                                         alertExclusao(instituicao.idinstituicoes);
                                     }}>
                                         <i className="fa-solid fa-trash"></i>
-                                    </button> */}
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -247,7 +275,7 @@ export default function CompTranscricao() {
                     <div className={Style.modal} ref={menuRef}>
                         <div className={Style.divTituloModal}>
                             <h1>
-                                {isEditar?.idTranscricao ? "Editar" : "Nova"} Transcrição
+                                {isEditar?.idinstituicoes ? "Editar" : "Nova"} Instituição
                             </h1>
                             <i className="fa-solid fa-xmark"
                                 onClick={() => { setModal(false) }}
@@ -255,29 +283,62 @@ export default function CompTranscricao() {
                         </div>
                         <form className={Style.formModal} onSubmit={(e) => {
                             e.preventDefault();
-                            salvarTranscricao();
+                            salvarInstituicao();
                         }}>
+                            <div className={Style.divInputImagem}>
+                                <div className={Style.previewImagem}>
+                                    <img
+                                        src={
+                                            previewImg
+                                            ||
+                                            isEditar?.idImagem
+                                            ||
+                                            "/imgs/podcast-default.jpg"
+                                        }
+                                        alt="Imagem institução"
+                                        draggable="false"
+                                        onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
+                                    />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        id="inputImagemInstituicao"
+                                        onChange={trocarImagem}
+                                        className={Style.inputFile}
+                                    />
+                                    <label
+                                        htmlFor="inputImagemInstituicao"
+                                        className={Style.btnAlterarImagem}
+                                    >
+                                        <i className="fa-solid fa-camera"></i>
+                                    </label>
+                                </div>
+                                <p>Imagem da Instituição</p>
+                            </div>
                             <div className={Style.divInput}>
-                                <label>Texto da Transcrição</label>
-                                <InputTextarea value={isEditar.textoTranscricao || ""}
+                                <label>Nome</label>
+                                <InputText value={isEditar.nome}
                                     onChange={(e) => {
                                         setIsEditar({
                                             ...isEditar,
-                                            textoTranscricao: e.target.value
+                                            nome: e.target.value
                                         });
+                                        limparErro("nome");
                                     }}
-                                    rows={12}
-                                    className={Style.input}
-                                    placeholder="Transcrição do Podcast"
+                                    className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`}
+                                    placeholder="Nome da instituição"
                                 />
+                                {errors.nome && (
+                                    <Message severity="error" text={errors.nome} />
+                                )}
                             </div>
                         </form>
                         <div className={Style.modalFooter}>
                             <button onClick={() => setModal(false)}>
                                 Cancelar
                             </button>
-                            <button className={Style.btnCriar} onClick={salvarTranscricao}>
-                                {isEditar?.idTranscricao ? "Atualizar" : "Criar"}
+                            <button className={Style.btnCriar} onClick={salvarInstituicao}>
+                                {isEditar?.idinstituicoes ? "Atualizar" : "Criar"}
                             </button>
                         </div>
                     </div>

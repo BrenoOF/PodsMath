@@ -33,10 +33,13 @@ export default function CompPodcast() {
     value: t.idtemas
   }));
 
-  const instituicaoOptions = instituicoes.map(inst => ({
-    label: inst.nome,
-    value: inst.idinstituicoes
-  }));
+  const instituicaoOptions = [
+    { label: "Nenhuma", value: null },
+    ...instituicoes.map(inst => ({
+      label: inst.nome,
+      value: inst.idinstituicoes
+    }))
+  ];
 
   const idiomaOptions = idiomas.map(idioma => ({
     label: idioma.nomeIdiomas,
@@ -161,7 +164,7 @@ export default function CompPodcast() {
     });
   };
 
-    const salvarAudio = async () => {
+  const salvarAudio = async () => {
     if (!validarCampos()) return;
     const token = localStorage.getItem("token");
     try {
@@ -539,9 +542,7 @@ export default function CompPodcast() {
                     }}
                     options={instituicaoOptions}
                     placeholder="Selecione uma Instituição"
-                    className={`
-                      ${Style.input}
-                    `}
+                    className={Style.input}
                   />
                 </div>
               </div>

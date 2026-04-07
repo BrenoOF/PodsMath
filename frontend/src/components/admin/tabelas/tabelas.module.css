@@ -1,3 +1,16 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .modal {
+        margin-bottom: 4.5rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .modal {
+        margin-bottom: 0rem;
+    }
+}
+
 .tituloTabela {
     display: flex;
     justify-content: space-between;
@@ -146,7 +159,26 @@
     border-radius: 0.5rem;
     font-size: 0.75rem;
     background-color: var(--btn-1);
-    color: white;
+    color: var(--branco);
+}
+
+.badgeStatus {
+    padding: 0.15rem 0.5rem;
+    border-radius: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--branco);
+}
+
+.badgeStatus>i{
+    margin-right: 0.2rem;
+}
+
+.transcrito {
+    background-color: var(--cor-verde-sucesso);
+}
+
+.nafila {
+    background-color: var(--cor-azul-escura-font-bg);
 }
 
 .divBtns {
@@ -182,6 +214,9 @@
     display: flex;
     flex-direction: column;
     width: 32rem;
+    height: auto;
+    max-height: 35rem;
+    overflow: auto;
     background-color: var(--app-background);
     border-radius: 1rem;
     padding: 1.5rem;
@@ -215,18 +250,19 @@
     gap: 1rem;
 }
 
-.modalFooter>button{
+.modalFooter>button {
     padding: 0.5rem 1.5rem;
     border-radius: 0.75rem;
     font-size: 0.875rem;
     cursor: pointer;
 }
 
-.btnCriar{
+.btnCriar {
     background-color: var(--btn-1);
     color: var(--branco);
 }
-.btnCriar:hover{
+
+.btnCriar:hover {
     background-color: var(--btn-1-hover);
 }
 
@@ -260,20 +296,21 @@
     box-shadow: 0 2px 6px var(--sombra);
 }
 
-.divDropdown :global(.p-inputtext){
+.divDropdown :global(.p-inputtext) {
     border: none;
 }
 
-.divDropdown :global(.p-inputtext:focus){
+.divDropdown :global(.p-inputtext:focus) {
     box-shadow: none;
 }
 
-:global(.p-dropdown-panel){
+:global(.p-dropdown-panel) {
     padding: 0.8rem 1rem;
     border: 0.1rem solid var(--sombra);
     border-radius: 0;
 }
-:global(.p-dropdown-items){
+
+:global(.p-dropdown-items) {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
@@ -329,7 +366,7 @@
     margin-bottom: 0.5rem;
 }
 
-.labelAudio{
+.labelAudio {
     display: flex;
     align-items: center;
     gap: 0.5rem;
