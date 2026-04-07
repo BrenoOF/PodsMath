@@ -1,39 +1,50 @@
 import React from "react";
+import axios from "axios";
 import Swal from "sweetalert2";
 
 import Style from "./esqueciSenha.module.css";
 
 export default function CompEsqueciSenha({ tipo, dadosUser, onEsqueciSenha }) {
-    const esqueceuSenha = async () => {
-        Swal.fire({
-            title: "Enviando email...",
-            text: `Enviando para ${dadosUser}`,
-            allowOutsideClick: false,
-            didOpen: () => Swal.showLoading()
-        });
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        Swal.fire({
-            title: "Email enviado!",
-            text: `Email enviado para ${dadosUser}`,
-            icon: "success"
-        });
-    };
+  const esqueceuSenha = async () => {
+    Swal.fire({
+      title: "Enviando email...",
+      text: `Enviando para ${dadosUser}`,
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading()
+    });
 
-    const handleClick  = async () => {
-        if (tipo === "visitante") {
-            const valido = onEsqueciSenha?.();
+    try {
+      await axios.post("/api-user/auth/forgot-password", { email: dadosUser });
 
-            if (valido !== true) return;
-
-            await esqueceuSenha();
-        } else {
-            await esqueceuSenha();
-        }
+      Swal.fire({
+        title: "Email enviado!",
+        text: `Email enviado para ${dadosUser}`,
+        icon: "success"
+      });
+    } catch (error) {
+      Swal.fire({
+        title: "Erro ao enviar email",
+        text: error.response?.data?.message || "Erro de conexão",
+        icon: "error"
+      });
     }
+  };
 
-    return (
-        <button className={Style.divEsqueceuSenha} onClick={handleClick}>
-            <p>Esqueceu a Senha? Clique Aqui!</p>
-        </button>
-    );
+  const handleClick = async () => {
+    if (tipo === "visitante") {
+      const valido = await onEsqueciSenha?.();
+
+      if (valido !== true) return;
+
+      await esqueceuSenha();
+    } else {
+      await esqueceuSenha();
+    }
+  }
+
+  return (
+    <button type="button" className={Style.divEsqueceuSenha} onClick={handleClick}>
+      <p>Esqueceu a Senha? Clique Aqui!</p>
+    </button>
+  );
 }
