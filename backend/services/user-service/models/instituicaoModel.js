@@ -6,7 +6,9 @@ const Instituicao = {
     try {
       connection = await pool.getConnection();
       await connection.beginTransaction();
-      const [rows] = await connection.query('SELECT * FROM instituicoes');
+      const [rows] = await connection.query(`
+        SELECT i.*, im.caminho_imagem  FROM instituicoes i
+        LEFT JOIN imagens im ON i.imagens_idimagens = im.idimagens`);
       await connection.commit();
       return rows;
     } catch (error) {

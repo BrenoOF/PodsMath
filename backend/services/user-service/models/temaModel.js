@@ -6,7 +6,9 @@ const Tema = {
     try {
       connection = await pool.getConnection();
       await connection.beginTransaction();
-      const [rows] = await connection.query('SELECT * FROM temas');
+      const [rows] = await connection.query(`
+        SELECT t.*, i.caminho_imagem FROM temas t
+        LEFT JOIN imagens i ON i.idimagens = t.imagens_idimagens`);
       await connection.commit();
       return rows;
     } catch (error) {
