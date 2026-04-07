@@ -116,6 +116,11 @@ export default function TelaPlayer() {
     const audioRef = useRef(null);
     const barraRef = useRef(null);
 
+    // Refs para controle de visualização (10% de audição)
+    const tempoEscutadoRef = useRef(0);
+    const viewContadaRef = useRef(false);
+    const ultimoTempoRef = useRef(0);
+
     const progresso = (tempoAtual / (duracaoTotal || 1)) * 100 || 0;
 
     const formatarTempo = (s) => {
@@ -225,6 +230,56 @@ export default function TelaPlayer() {
             console.error("Erro ao alternar favorito", error);
         }
     };
+
+    // Função para contar visualização no banco
+    const contarVisualizacao = useCallback(async () => {
+        if (viewContadaRef.current || !idPodcast) return;
+        viewContadaRef.current = true;
+
+        try {
+            await axios.post(`/api-user/audios/${idPodcast}/visualizacao`);
+        } catch (error) {
+            console.error("Erro ao contar visualização", error);
+        }
+    }, [idPodcast]);
+
+    // Efeito para monitorar tempo escutado e contar visualização (10% do total)
+    useEffect(() => {
+        const audio = audioRef.current;
+        if (!audio) return;
+
+        const handleTimeUpdate = () => {
+            if (!tocando || viewContadaRef.current || !duracaoTotal) {
+                ultimoTempoRef.current = audio.currentTime;
+                return;
+            }
+
+            const tempoAgora = audio.currentTime;
+            const delta = tempoAgora - ultimoTempoRef.current;
+
+            // Só acumula se for progresso positivo e não for um salto (seek)
+            if (delta > 0 && delta < 2) {
+                tempoEscutadoRef.current += delta;
+            }
+
+            ultimoTempoRef.current = tempoAgora;
+
+            // Se escutou mais de 10%, conta visualização
+            if (tempoEscutadoRef.current >= duracaoTotal * 0.3) {
+                contarVisualizacao();
+            }
+        };
+
+        audio.addEventListener("timeupdate", handleTimeUpdate);
+        return () => audio.removeEventListener("timeupdate", handleTimeUpdate);
+    }, [tocando, duracaoTotal, contarVisualizacao]);
+
+    // Resetar controle de visualização quando o podcast mudar
+    useEffect(() => {
+        tempoEscutadoRef.current = 0;
+        viewContadaRef.current = false;
+        ultimoTempoRef.current = 0;
+    }, [idPodcast]);
 
     // Carregar dados do Podcast
     useEffect(() => {
