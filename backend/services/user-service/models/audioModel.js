@@ -228,6 +228,25 @@ const Audio = {
     } finally {
       if (connection) connection.release();
     }
+  },
+
+  incrementViews: async (id) => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [result] = await connection.query(
+        'UPDATE audios SET visualizacoes = COALESCE(visualizacoes, 0) + 1 WHERE idaudios = ?',
+        [id]
+      );
+      await connection.commit();
+      return result.affectedRows > 0;
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
+    }
   }
 };
 

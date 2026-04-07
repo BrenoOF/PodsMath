@@ -11,6 +11,7 @@ router.get('/recentes', audioController.getRecent);
 router.get('/proprios', authMiddleware, audioController.getOwnAudios);
 router.get('/:id', audioController.getAudioById);
 router.get('/:id/details', audioController.getAudioDetailsById);
+router.post('/:id/visualizacao', audioController.incrementViews);
 router.post('/', authMiddleware, upload.single('imagem'), processImage, audioController.createAudio);
 router.put('/:id', authMiddleware, upload.single('imagem'), processImage, audioController.updateAudio);
 router.delete('/:id', authMiddleware, audioController.deleteAudio);

@@ -167,6 +167,19 @@ const audioController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
+  },
+
+  incrementViews: async (req, res) => {
+    try {
+      const updated = await Audio.incrementViews(req.params.id);
+      if (updated) {
+        res.json({ message: 'Visualização computada' });
+      } else {
+        res.status(404).json({ message: 'Audio não encontrado' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 
