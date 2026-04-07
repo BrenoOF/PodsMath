@@ -39,14 +39,14 @@ const transcriptionController = {
                 try {
                     const form = new FormData();
                     form.append('imagem', fs.createReadStream(imagemFile.path));
-                    
+
                     const userServRes = await axios.post(`${USER_SERVICE_URL}/imagens`, form, {
                         headers: {
                             ...form.getHeaders(),
                             'Authorization': `Bearer ${token}`
                         }
                     });
-                    
+
                     if (userServRes.data && userServRes.data.idimagens) {
                         imagens_idimagens = userServRes.data.idimagens;
                     }
@@ -243,30 +243,29 @@ const transcriptionController = {
             console.error(error);
             res.status(500).json({ message: 'Erro interno ao realizar stream do áudio.' });
         }
+    },
+
+    /**
+     * GET /status
+     * Retorna dados de TODAS as transcrições: titulo, idioma, status, progresso, texto e ID
+     */
+    getAllTranscriptionsStatus: async (req, res) => {
+        try {
+            let token = req.headers.authorization?.split(' ')[1] || req.query.token;
+            if (token === 'null' || token === 'undefined') token = null;
+
+            const result = await getAllTranscriptionsStatus(token);
+
+            if (!result || !Array.isArray(result)) {
+                return res.status(500).json({ message: 'Erro ao buscar transcrições.' });
+            }
+
+            res.json(result);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Erro interno ao buscar todas as transcrições.' });
+        }
     }
-  },
-
-  /**
-   * GET /status
-   * Retorna dados de TODAS as transcrições: titulo, idioma, status, progresso, texto e ID
-   */
-  getAllTranscriptionsStatus: async (req, res) => {
-    try {
-      let token = req.headers.authorization?.split(' ')[1] || req.query.token;
-      if (token === 'null' || token === 'undefined') token = null;
-
-      const result = await getAllTranscriptionsStatus(token);
-
-      if (!result || !Array.isArray(result)) {
-        return res.status(500).json({ message: 'Erro ao buscar transcrições.' });
-      }
-
-      res.json(result);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: 'Erro interno ao buscar todas as transcrições.' });
-    }
-  }
 };
 
 module.exports = transcriptionController;
