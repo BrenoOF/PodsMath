@@ -2,7 +2,7 @@ const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
 const queueService = require('../services/queueService');
-const { createAudioRecord, getAudioWithTranscription } = require('../services/audioService');
+const { createAudioRecord, getAudioWithTranscription, getTranscriptionStatus, getAllTranscriptionsStatus } = require('../services/audioService');
 
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3001';
 
@@ -244,6 +244,29 @@ const transcriptionController = {
             res.status(500).json({ message: 'Erro interno ao realizar stream do áudio.' });
         }
     }
+  },
+
+  /**
+   * GET /status
+   * Retorna dados de TODAS as transcrições: titulo, idioma, status, progresso, texto e ID
+   */
+  getAllTranscriptionsStatus: async (req, res) => {
+    try {
+      let token = req.headers.authorization?.split(' ')[1] || req.query.token;
+      if (token === 'null' || token === 'undefined') token = null;
+
+      const result = await getAllTranscriptionsStatus(token);
+
+      if (!result || !Array.isArray(result)) {
+        return res.status(500).json({ message: 'Erro ao buscar transcrições.' });
+      }
+
+      res.json(result);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Erro interno ao buscar todas as transcrições.' });
+    }
+  }
 };
 
 module.exports = transcriptionController;

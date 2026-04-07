@@ -39,4 +39,7 @@ router.get('/:id/audio', transcriptionController.streamAudio);
 // DELETE /transcricao/:id — Deleta áudio + transcrição do MongoDB e MySQL
 router.delete('/:id', authMiddleware, transcriptionController.deleteTranscription);
 
+// GET /transcricao/status — Retorna dados de TODAS as transcrições
+router.get('/status', transcriptionController.getAllTranscriptionsStatus);
+
 module.exports = router;

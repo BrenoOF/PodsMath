@@ -109,6 +109,110 @@ async function saveTranscription({ audioId, textoTranscricao, idiomas_ididiomas 
 }
 
 /**
+ * Busca informações de TODAS as transcrições: título, idioma, status, progresso, texto e ID
+ */
+async function getAllTranscriptionsStatus(token) {
+  try {
+    // 1. Busca TODAS as transcrições do user-service
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    const response = await axios.get(`${USER_SERVICE_URL}/transcricoes`, { headers });
+
+    const transcriptions = Array.isArray(response.data) ? response.data : [];
+
+    // 2. Para cada transcrição, busca detalhes do áudio e status
+    const results = await Promise.all(transcriptions.map(async (transcription) => {
+      const audioId = transcription.audios_idaudios;
+      const transcricaoId = transcription.idTranscricao;
+
+      if (!audioId) return null;
+
+      // Busca dados do áudio
+      let audioData;
+      try {
+        const audioHeaders = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers: audioHeaders });
+        audioData = audioResponse.data;
+      } catch (error) {
+        console.warn(`Não foi possível buscar detalhes para audioId ${audioId}`);
+        return null;
+      }
+
+      // Verifica status do processamento
+      const jobInfo = queueService.getStatus(audioId.toString());
+      const status = jobInfo ? jobInfo.status : 'completed';
+      const progresso = jobInfo?.progressPercent || 0;
+
+      return {
+        audioId: audioData.idaudios,
+        titulo: audioData.titulo,
+        idioma: transcription.idioma_nome || audioData.idioma_nome,
+        status: status,
+        progresso: progresso,
+        textoTranscricao: transcription.textoTranscricao,
+        idTranscricao: transcricaoId
+      };
+    }));
+
+    // Filtra nulls e retorna apenas transcrições válidas
+    return results.filter(item => item !== null);
+  } catch (error) {
+    console.error('Erro em getAllTranscriptionsStatus:', error);
+    throw error;
+  }
+}
+
+/**
+ * Busca informações básicas de transcrição: título, idioma, status, progresso, texto e ID
+ */
+async function getTranscriptionStatus(audioId, token) {
+  try {
+    // 1. Busca dados do áudio
+    let audioData;
+    try {
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      const audioResponse = await axios.get(`${USER_SERVICE_URL}/audios/${audioId}/details`, { headers });
+      audioData = audioResponse.data;
+    } catch (error) {
+      if (error.response?.status === 404) return null;
+      throw error;
+    }
+
+    // 2. Busca transcrição via user-service (última transcrição)
+    let transcricao = null;
+    let transcricaoId = null;
+    try {
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      const transcricaoResponse = await axios.get(`${USER_SERVICE_URL}/transcricoes/audio/${audioId}`, { headers });
+      const transcricoes = Array.isArray(transcricaoResponse.data) ? transcricaoResponse.data : [];
+
+      if (transcricoes.length > 0) {
+        // Pega a última transcrição (a mais recente)
+        transcricao = transcricoes[transcricoes.length - 1];
+        transcricaoId = transcricao.idTranscricao;
+      }
+    } catch (error) {
+      // Se não houver transcrição, continua
+    }
+
+    // 3. Busca status do processamento
+    const jobInfo = queueService.getStatus(audioId.toString());
+
+    return {
+      audioId: audioData.idaudios,
+      titulo: audioData.titulo,
+      idioma: transcricao ? transcricao.idioma_nome : audioData.idioma_nome,
+      status: transcricao ? 'completed' : (jobInfo ? jobInfo.status : 'queued'),
+      progresso: jobInfo?.progressPercent || 0,
+      textoTranscricao: transcricao ? transcricao.textoTranscricao : null,
+      idTranscricao: transcricaoId
+    };
+  } catch (error) {
+    console.error('Erro em getTranscriptionStatus:', error);
+    throw error;
+  }
+}
+
+/**
  * Busca o áudio (MongoDB GridFS) e a transcrição (MySQL via user-service) pelo ID do áudio.
  */
 async function getAudioWithTranscription(audioId, token) {
@@ -269,4 +373,4 @@ function getAudioStreamById(fileId, options = {}) {
     return gridFSBucket.openDownloadStream(fileId, options);
 }
 
-module.exports = { createAudioRecord, saveTranscription, getAudioWithTranscription, deleteAudioRecord, getAudioFileInfo, getAudioStreamById };
+module.exports = { createAudioRecord, saveTranscription, getAudioWithTranscription, deleteAudioRecord, getAudioFileInfo, getAudioStreamById, getTranscriptionStatus, getAllTranscriptionsStatus };
