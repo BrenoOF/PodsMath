@@ -129,7 +129,7 @@ const authController = {
       const ipOrigem = req.ip || req.connection.remoteAddress;
 
       // Cria link de reset com o token
-      const linkResetSenha = `${process.env.USER_SERVICE_URL || 'http://localhost:3001'}/auth/reset-password/${resetToken}`;
+      const linkResetSenha = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/novaSenha?token=${resetToken}`;
 
       // Envia email de redefinição
       await emailService.sendPasswordResetEmail(
@@ -148,8 +148,7 @@ const authController = {
 
   resetPassword: async (req, res) => {
     try {
-      const { token } = req.params;
-      const { senha } = req.body;
+      const { token, senha } = req.body;
 
       if (!token || !senha) {
         return res.status(400).json({ message: 'Token e senha são obrigatórios' });
