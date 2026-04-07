@@ -208,14 +208,16 @@ export default function CompTranscricao() {
                             <td className={Style.colunaCenter}>
                                 <span className={`
                                     ${Style.badgeStatus}
-                                    ${transcricao.status === "Transcrito" ? Style.transcrito : Style.nafila}
+                                    ${transcricao.status === "Transcrito" ? Style.transcrito : transcricao.status === "Na fila" ? Style.nafila : Style.transcrevendo}
                                 `}>
                                     {transcricao.status === "Transcrito" ? (
                                         <i className="fa-regular fa-circle-check"></i>
-                                    ) : (
+                                    ):transcricao.status === "Na fila" ? (
                                         <i className="fa-regular fa-clock"></i>
+                                    ):(
+                                        <i className="fa-regular fa-pen-to-square"></i>
                                     )}
-                                    {transcricao?.status || "Não-Transcrito"}
+                                    {transcricao?.status || "Não Transcrito"}
                                 </span>
                             </td>
                             <td className={Style.colunaCenter}>

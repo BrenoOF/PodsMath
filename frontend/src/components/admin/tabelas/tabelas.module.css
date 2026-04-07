@@ -181,6 +181,10 @@
     background-color: var(--cor-azul-escura-font-bg);
 }
 
+.transcrevendo {
+    background-color: var(--texto-laranja);
+}
+
 .divBtns {
     display: flex;
     justify-content: center;
