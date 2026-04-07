@@ -18,6 +18,7 @@ export default function CompInstituicao() {
     const [instituicoes, setInstituicoes] = useState([]);
     const [busca, setBusca] = useState("");
     const [previewImg, setPreviewImg] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
 
     // filtro por texto
     const instituicoesFiltradas = instituicoes.filter(instituicao =>
@@ -51,9 +52,9 @@ export default function CompInstituicao() {
             });
 
             response.data.forEach(cat => {
-                if (cat.idImagem) {
-                    const nomeArquivo = cat.idImagem.split('/').pop();
-                    cat.idImagem = `/api-user/imagens/file/${nomeArquivo}`;
+                if (cat.caminho_imagem) {
+                    const nomeArquivo = cat.caminho_imagem.split('/').pop();
+                    cat.caminho_imagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
             });
 
@@ -67,10 +68,11 @@ export default function CompInstituicao() {
     const trocarImagem = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        setSelectedFile(file);
         setPreviewImg(URL.createObjectURL(file));
         setIsEditar({
             ...isEditar,
-            idImagem: isEditar?.idImagem || 1
+            caminho_imagem: isEditar?.caminho_imagem || 1
         });
     };
 
@@ -95,36 +97,39 @@ export default function CompInstituicao() {
         if (!validarCampos()) return;
         const token = localStorage.getItem("token");
         try {
-            const payload = {
-                nome: isEditar.nome,
-                imagens_idimagens: isEditar?.idImagem || 1
-            };
+            let payload;
+            let headers = { Authorization: `Bearer ${token}` };
+
+            if (selectedFile) {
+                payload = new FormData();
+                payload.append("nome", isEditar.nome);
+                payload.append("imagem", selectedFile);
+            } else {
+                payload = {
+                    nome: isEditar.nome,
+                    caminho_imagem: isEditar?.caminho_imagem || 1
+                };
+            }
+
             // EDITAR
             if (isEditar.idinstituicoes) {
                 await axios.put(
                     `${API_BASE_URL}/instituicoes/${isEditar.idinstituicoes}`,
                     payload,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                    { headers }
                 );
             }/* CRIAR */ else {
                 await axios.post(
                     `${API_BASE_URL}/instituicoes`,
                     payload,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                    { headers }
                 );
             }
             alertCriarEditarSucesso();
             setModal(false);
             setErrors({});
             setPreviewImg("");
+            setSelectedFile(null);
             carregarDados();
         }
         catch (error) {
@@ -201,9 +206,10 @@ export default function CompInstituicao() {
                     setModal(true);
                     setIsEditar({
                         nome: "",
-                        idImagem: null
+                        caminho_imagem: null
                     });
                     setPreviewImg("");
+                    setSelectedFile(null);
                 }}>
                     <p>
                         <i className="fa-solid fa-plus"></i>
@@ -239,7 +245,7 @@ export default function CompInstituicao() {
                             key={instituicao.idinstituicoes}
                         >
                             <td>
-                                <img src={instituicao?.imagens_idimagens || "/imgs/podcast-default.jpg"} 
+                                <img src={instituicao?.caminho_imagem || "/imgs/podcast-default.jpg"} 
                                     alt={instituicao.nome} className={Style.tableImg}
                                     draggable="false"
                                     onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
@@ -253,7 +259,8 @@ export default function CompInstituicao() {
                                     <button ref={btnRef} onClick={() => {
                                         setModal(true);
                                         setIsEditar(instituicao);
-                                        setPreviewImg(instituicao.idImagem || "");
+                                        setPreviewImg(instituicao.caminho_imagem || "");
+                                        setSelectedFile(null);
                                     }}
                                     >
                                         <i className="fa-solid fa-pen"></i>
@@ -291,7 +298,7 @@ export default function CompInstituicao() {
                                         src={
                                             previewImg
                                             ||
-                                            isEditar?.idImagem
+                                            isEditar?.caminho_imagem
                                             ||
                                             "/imgs/podcast-default.jpg"
                                         }
@@ -326,7 +333,7 @@ export default function CompInstituicao() {
                                         limparErro("nome");
                                     }}
                                     className={`${Style.input} ${errors.nome ? "p-invalid" : ""}`}
-                                    placeholder="Nome da instituição"
+                                    placeholder="Nome da institution"
                                 />
                                 {errors.nome && (
                                     <Message severity="error" text={errors.nome} />

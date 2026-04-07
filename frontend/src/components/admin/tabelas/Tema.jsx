@@ -20,6 +20,7 @@ export default function CompTema() {
     const [categorias, setCategorias] = useState([]);
     const [busca, setBusca] = useState("");
     const [previewImg, setPreviewImg] = useState("");
+    const [selectedFile, setSelectedFile] = useState(null);
 
     // Array de Opções do Dropdown
     const categoriasOptions = categorias.map(cat => ({
@@ -82,9 +83,9 @@ export default function CompTema() {
             ]);
 
             response.data.forEach(cat => {
-                if (cat.idImagem) {
-                    const nomeArquivo = cat.idImagem.split('/').pop();
-                    cat.idImagem = `/api-user/imagens/file/${nomeArquivo}`;
+                if (cat.caminho_imagem) {
+                    const nomeArquivo = cat.caminho_imagem.split('/').pop();
+                    cat.caminho_imagem = `/api-user/imagens/file/${nomeArquivo}`;
                 }
             });
 
@@ -99,10 +100,11 @@ export default function CompTema() {
     const trocarImagem = (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        setSelectedFile(file);
         setPreviewImg(URL.createObjectURL(file));
         setIsEditar({
             ...isEditar,
-            idImagem: isEditar?.idImagem || 1
+            caminho_imagem: isEditar?.caminho_imagem || 1
         });
     };
 
@@ -127,37 +129,41 @@ export default function CompTema() {
         if (!validarCampos()) return;
         const token = localStorage.getItem("token");
         try {
-            const payload = {
-                titulo: isEditar.titulo,
-                categorias_idcategorias: isEditar.categorias_idcategorias,
-                imagens_idimagens: isEditar?.idImagem || 1
-            };
+            let payload;
+            let headers = { Authorization: `Bearer ${token}` };
+
+            if (selectedFile) {
+                payload = new FormData();
+                payload.append("titulo", isEditar.titulo);
+                payload.append("categorias_idcategorias", isEditar.categorias_idcategorias);
+                payload.append("imagem", selectedFile);
+            } else {
+                payload = {
+                    titulo: isEditar.titulo,
+                    categorias_idcategorias: isEditar.categorias_idcategorias,
+                    caminho_imagem: isEditar?.caminho_imagem || 1
+                };
+            }
+
             // EDITAR
             if (isEditar.idtemas) {
                 await axios.put(
                     `${API_BASE_URL}/temas/${isEditar.idtemas}`,
                     payload,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                    { headers }
                 );
             }/* CRIAR */ else {
                 await axios.post(
                     `${API_BASE_URL}/temas`,
                     payload,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
+                    { headers }
                 );
             }
             alertCriarEditarSucesso();
             setModal(false);
             setErrors({});
             setPreviewImg("");
+            setSelectedFile(null);
             carregarDados();
         }
         catch (error) {
@@ -235,9 +241,10 @@ export default function CompTema() {
                     setIsEditar({
                         titulo: "",
                         categorias_idcategorias: "",
-                        idImagem: null
+                        caminho_imagem: null
                     });
                     setPreviewImg("");
+                    setSelectedFile(null);
                 }}>
                     <p>
                         <i className="fa-solid fa-plus"></i>
@@ -276,7 +283,7 @@ export default function CompTema() {
                             key={tema.idtemas}
                         >
                             <td>
-                                <img src={tema?.imagens_idimagens || "/imgs/podcast-default.jpg"}
+                                <img src={tema?.caminho_imagem || "/imgs/podcast-default.jpg"}
                                     alt={tema.titulo} className={Style.tableImg}
                                     draggable="false"
                                     onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
@@ -296,7 +303,8 @@ export default function CompTema() {
                                             ...tema,
                                             categorias_idcategorias: tema.categorias_idcategorias
                                         });
-                                        setPreviewImg(tema.idImagem || "");
+                                        setPreviewImg(tema.caminho_imagem || "");
+                                        setSelectedFile(null);
                                     }}>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
@@ -333,7 +341,7 @@ export default function CompTema() {
                                         src={
                                             previewImg
                                             ||
-                                            isEditar?.idImagem
+                                            isEditar?.caminho_imagem
                                             ||
                                             "/imgs/podcast-default.jpg"
                                         }
