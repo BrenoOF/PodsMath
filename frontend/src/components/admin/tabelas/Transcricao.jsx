@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "axios";
 import Swal from 'sweetalert2';
 
@@ -24,7 +24,7 @@ export default function CompTranscricao() {
     );
 
     // Carregar dados
-    const carregarDados = async () => {
+    const carregarDados = useCallback(async () => {
         const token = localStorage.getItem("token");
         try {
             const response = await axios.get(`${API_BASE_URL}/transcricao/status`, {
@@ -37,7 +37,7 @@ export default function CompTranscricao() {
         } catch (error) {
             console.error("Erro ao carregar dados", error);
         }
-    }
+    }, []);
 
     // Efetuar o Cadastro
     const alertCriarEditarSucesso = () => {
@@ -131,7 +131,7 @@ export default function CompTranscricao() {
     // Carregar dados quando a pagina carrega
     useEffect(() => {
         carregarDados();
-    }, []);
+    }, [carregarDados]);
 
     // Clicar fora do modal fecha-lo
     const btnRef = useRef(null);
@@ -151,6 +151,15 @@ export default function CompTranscricao() {
         document.addEventListener("pointerdown", handleClickOutside);
         return () => { document.removeEventListener("pointerdown", handleClickOutside) };
     }, []);
+
+    // Deixar o Progresso suave
+    useEffect(() => {
+        const interval = setInterval(() => {
+            carregarDados();
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [carregarDados]);
 
     return (
         <div className={Style.containerTabela}>
@@ -212,9 +221,9 @@ export default function CompTranscricao() {
                                 `}>
                                     {transcricao.status === "Transcrito" ? (
                                         <i className="fa-regular fa-circle-check"></i>
-                                    ):transcricao.status === "Na fila" ? (
+                                    ) : transcricao.status === "Na fila" ? (
                                         <i className="fa-regular fa-clock"></i>
-                                    ):(
+                                    ) : (
                                         <i className="fa-regular fa-pen-to-square"></i>
                                     )}
                                     {transcricao?.status || "Não Transcrito"}
