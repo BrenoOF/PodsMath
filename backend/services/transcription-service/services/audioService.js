@@ -201,7 +201,7 @@ async function getTranscriptionStatus(audioId, token) {
       audioId: audioData.idaudios,
       titulo: audioData.titulo,
       idioma: transcricao ? transcricao.idioma_nome : audioData.idioma_nome,
-      status: transcricao ? 'completed' : (jobInfo ? jobInfo.status : 'queued'),
+      status: transcricao ? 'Transcrito' : (jobInfo ? jobInfo.status : 'Na fila'),
       progresso: jobInfo?.progressPercent || 0,
       textoTranscricao: transcricao ? transcricao.textoTranscricao : null,
       idTranscricao: transcricaoId
