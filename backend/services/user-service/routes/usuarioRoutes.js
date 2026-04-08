@@ -11,6 +11,7 @@ router.post('/', upload.single('imagem'), processImage, usuarioController.create
 router.put('/me', authMiddleware, usuarioController.updateMe);
 router.put('/me/senha', authMiddleware, usuarioController.updatePassword);
 router.put('/me/image', authMiddleware, upload.single('imagem'), processImage, usuarioController.updateMyImage);
+router.put('/:id/nivel-acesso', authMiddleware, usuarioController.updateUsuarioNivelAcesso);
 router.put('/:id', authMiddleware, upload.single('imagem'), processImage, usuarioController.updateUsuario);
 router.delete('/me', authMiddleware, usuarioController.deleteMe);
 router.delete('/:id', authMiddleware, usuarioController.deleteUsuario);

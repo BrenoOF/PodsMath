@@ -215,6 +215,27 @@ const usuarioController = {
     } catch (error) {
       res.status(500).json({ message: error.message });
     }
+  },
+
+  updateUsuarioNivelAcesso: async (req, res) => {
+    try {
+      const { nivel_acesso_idnivel_acesso } = req.body;
+      const idUsuario = req.params.id;
+
+      if (!nivel_acesso_idnivel_acesso) {
+        return res.status(400).json({ message: 'ID do nível de acesso é obrigatório' });
+      }
+
+      const updated = await Usuario.updateNivelAcesso(idUsuario, { nivel_acesso_idnivel_acesso });
+
+      if (updated) {
+        res.json({ message: 'Nível de acesso atualizado com sucesso' });
+      } else {
+        res.status(404).json({ message: 'Usuário não encontrado' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
   }
 };
 

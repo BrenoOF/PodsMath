@@ -89,10 +89,30 @@ const Usuario = {
         try {
             connection = await pool.getConnection();
             await connection.beginTransaction();
-            const { instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
+            const { instituicoes_idinstituicoes, nome, email, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens } = usuarioData;
             const [result] = await connection.query(
-                'UPDATE usuarios SET instituicoes_idinstituicoes = ?, nome = ?, email = ?, senha = ?, id_usuario_professor = ?, nivel_acesso_idnivel_acesso = ?, paletaCor_idpaletaCor = ?, audiosEscutados = ?, imagens_idimagens = ? WHERE idusuarios = ?',
-                [instituicoes_idinstituicoes, nome, email, senha, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens, id]
+                'UPDATE usuarios SET instituicoes_idinstituicoes = ?, nome = ?, email = ?, id_usuario_professor = ?, nivel_acesso_idnivel_acesso = ?, paletaCor_idpaletaCor = ?, audiosEscutados = ?, imagens_idimagens = ? WHERE idusuarios = ?',
+                [instituicoes_idinstituicoes, nome, email, id_usuario_professor, nivel_acesso_idnivel_acesso, paletaCor_idpaletaCor, audiosEscutados, imagens_idimagens, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    updateNivelAcesso: async (id, usuarioData) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const { nivel_acesso_idnivel_acesso } = usuarioData;
+            const [result] = await connection.query(
+                'UPDATE usuarios SET nivel_acesso_idnivel_acesso = ? WHERE idusuarios = ?',
+                [nivel_acesso_idnivel_acesso, id]
             );
             await connection.commit();
             return result.affectedRows > 0;
