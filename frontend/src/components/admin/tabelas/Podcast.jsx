@@ -445,52 +445,58 @@ export default function CompPodcast() {
               e.preventDefault();
               salvarAudio();
             }}>
-              <div className={Style.divInputImagem}>
-                <div className={Style.previewImagem}>
-                  <img
-                    src={
-                      previewImg
-                      || isEditar?.imagem_caminho
-                      || "/imgs/podcast-default.jpg"
-                    }
-                    alt="Imagem Podcast"
-                    draggable="false"
-                    onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
-                  />
+              <div className={Style.divImgAudio}>
+                <div className={Style.divInputImagem}>
+                  <div className={Style.previewImagem}>
+                    <img
+                      src={
+                        previewImg
+                        || isEditar?.imagem_caminho
+                        || "/imgs/podcast-default.jpg"
+                      }
+                      alt="Imagem Podcast"
+                      draggable="false"
+                      onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
+                    />
+                    <input
+                      type="file"
+                      accept="image/*"
+                      id="inputImagemPodcast"
+                      onChange={trocarImagem}
+                      className={Style.inputFile}
+                    />
+                    <label
+                      htmlFor="inputImagemPodcast"
+                      className={Style.btnAlterarImagem}
+                    >
+                      <i className="fa-solid fa-camera"></i>
+                    </label>
+                  </div>
+                  <p>Imagem do Podcast</p>
+                </div>
+                {/* Adicionar Audio no Cadastro */}
+                <div className={Style.divInputAudio}>
+                  <label htmlFor="inputAudioPodcast"
+                    className={`
+                      ${Style.divCardAudio}
+                      ${audioFile ? Style.audioSelected : ""}
+                    `}
+                  >
+                    <i className={`fa-solid ${audioFile ? "fa-circle-check" : "fa-music"}`}></i>
+                    <p>{audioFile ? "Áudio selecionado" : "Selecionar áudio"}</p>
+                  </label>
                   <input
                     type="file"
-                    accept="image/*"
-                    id="inputImagemPodcast"
-                    onChange={trocarImagem}
+                    accept="audio/*"
+                    id="inputAudioPodcast"
+                    onChange={trocarAudio}
                     className={Style.inputFile}
                   />
-                  <label
-                    htmlFor="inputImagemPodcast"
-                    className={Style.btnAlterarImagem}
-                  >
-                    <i className="fa-solid fa-camera"></i>
-                  </label>
+                  <p>Áudio do Podcast</p>
+                  {errors.audioFile && (
+                    <Message severity="error" text={errors.audioFile} />
+                  )}
                 </div>
-                <p>Imagem do Podcast</p>
-              </div>
-              <div className={Style.divInputAudio}>
-                <label htmlFor="inputAudioPodcast" className={Style.labelAudio}>
-                  <i className="fa-solid fa-music"></i>
-                  Selecionar áudio
-                </label>
-                <input
-                  type="file"
-                  accept="audio/*"
-                  id="inputAudioPodcast"
-                  onChange={trocarAudio}
-                  className={Style.inputFile}
-                />
-                {audioFile && (
-                  <small>{audioFile.name}</small>
-                )}
-                {errors.audioFile && (
-                  <Message severity="error" text={errors.audioFile} />
-                )}
               </div>
               <div className={Style.divInput}>
                 <label>Título</label>
@@ -525,6 +531,7 @@ export default function CompPodcast() {
                     ${errors.descricao ? "p-invalid" : ""}
                   `}
                   placeholder="Descrição do Podcast"
+                  style={{ resize: "none" }}
                 />
                 {errors.descricao && (
                   <Message severity="error" text={errors.descricao} />

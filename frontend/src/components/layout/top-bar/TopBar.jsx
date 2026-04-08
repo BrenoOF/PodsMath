@@ -12,7 +12,7 @@ import { InputIcon } from 'primereact/inputicon';
 import { InputText } from "primereact/inputtext";
 import { Toast } from 'primereact/toast';
 
-export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setUserLogado }) {
+export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setUserLogado, nvAcesso }) {
     const navigate = useNavigate();
     const { changeTheme } = useContext(PrimeReactContext);
     const [menuUserAberto, setMenuUserAberto] = useState(false);
@@ -278,15 +278,94 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
             document.removeEventListener("pointerdown", handleClickOutside);
     }, []);
 
+    // Funções para Pesquisa de Podcast
+    const [textoBusca, setTextoBusca] = useState("");
+    const [resultadosBusca, setResultadosBusca] = useState([]);
+    const [modalBuscaAberto, setModalBuscaAberto] = useState(false);
+
+    const podcastsMock = [
+        { id: 1, titulo: "React para iniciantes" },
+        { id: 2, titulo: "Aprendendo JavaScript moderno" },
+        { id: 3, titulo: "CSS do zero ao avançado" },
+        { id: 4, titulo: "Node.js na prática" },
+        { id: 5, titulo: "Banco de dados explicado" },
+    ];
+
+    const inputBuscaRef = useRef(null);
+    const modalBuscaRef = useRef(null);
+
+    useEffect(() => {
+        if (!textoBusca.trim()) {
+            setResultadosBusca([]);
+            setModalBuscaAberto(false);
+            return;
+        }
+        
+        const filtrados = podcastsMock.filter(p =>
+                p.titulo.toLowerCase().includes(textoBusca.toLowerCase())
+        ).slice(0, 3);
+
+        setResultadosBusca(filtrados);
+        setModalBuscaAberto(true);
+    }, [textoBusca]);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                modalBuscaRef.current &&
+                !modalBuscaRef.current.contains(event.target) &&
+                !inputBuscaRef.current.contains(event.target)
+            ) {
+                setModalBuscaAberto(false);
+            }
+        };
+        document.addEventListener("pointerdown", handleClickOutside);
+        return () => document.removeEventListener("pointerdown", handleClickOutside);
+    }, []);
+
     return (
         <>
             <Toast ref={toast} position="bottom-right" />
-            <div className={`${Style.containerTopBar} ${slidebarAberta ? Style.topBarAberta : Style.topBarFechada}`}>
+            <div className={`${Style.containerTopBar} 
+                ${slidebarAberta ? Style.topBarAberta : Style.topBarFechada}`}
+            >
                 <div className={Style.divEsquerda}>
                     <IconField iconPosition="left" className={Style.ajusteInput}>
                         <InputIcon className="pi pi-search" />
-                        <InputText placeholder="Buscar..." className={Style.input} />
+                        <InputText placeholder="Buscar..." className={Style.input}
+                            ref={inputBuscaRef}
+                            value={textoBusca} onChange={(e) => setTextoBusca(e.target.value)}
+                            onFocus={() => {
+                                if (textoBusca) setModalBuscaAberto(true);
+                            }}
+                        />
                     </IconField>
+                    {modalBuscaAberto && (
+                        <div ref={modalBuscaRef} className={Style.modalBusca}>
+                            {resultadosBusca.length > 0 ? (
+                                resultadosBusca.map((podcast) => (
+                                    <div key={podcast.id}
+                                        className={Style.itemBusca}
+                                        onClick={() => {
+                                            navigate("/explorar/1/1/1");
+                                            setModalBuscaAberto(false);
+                                        }}
+                                    >
+                                        <img src={"/imgs/podcast-default.jpg"}
+                                            alt={"audio.titulo"} className={Style.imgBusca}
+                                            draggable="false"
+                                            onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
+                                        />
+                                        <p>{podcast.titulo}</p>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className={Style.semResultado}>
+                                    Nenhum podcast encontrado
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <div className={Style.divDireita}>
                     {!userLogado ? (
@@ -363,19 +442,21 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                                     <p>Configurações</p>
                                 </div>
                             </div>
-                            <div onClick={() => {
-                                navigate("/admin");
-                                setModalUserMobileAberto(false);
-                            }}
-                                className={Style.btnTroca}
-                            >
-                                <div>
-                                    <i className="fa-solid fa-user-shield"
-                                        style={{ fontSize: "1.1rem" }}
-                                    ></i>
-                                    <p>Admin</p>
+                            {nvAcesso !== "aluno" && (
+                                <div onClick={() => {
+                                    navigate("/admin");
+                                    setModalUserMobileAberto(false);
+                                }}
+                                    className={Style.btnTroca}
+                                >
+                                    <div>
+                                        <i className="fa-solid fa-user-shield"
+                                            style={{ fontSize: "1.1rem" }}
+                                        ></i>
+                                        <p>Admin</p>
+                                    </div>
                                 </div>
-                            </div>
+                            )}
                             <div onClick={() => alertSair()} className={Style.btnTroca + " " + Style.modalBtnSair}>
                                 <div>
                                     <i className="fa-solid fa-arrow-right-from-bracket"
@@ -480,7 +561,7 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     );
 }

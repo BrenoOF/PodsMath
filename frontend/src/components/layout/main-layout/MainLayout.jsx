@@ -50,12 +50,27 @@ export default function TelaLayout() {
         return () => elemento.removeEventListener("scroll", handleScroll);
     });
 
-    // Verifica se User está logado
+    // Verifica se User está logado e qual o nível de acesso
     const [userLogado, setUserLogado] = useState(false);
+    const [nvAcesso, setNvAcesso] = useState("");
+
+    const getNivelAcesso = (token) => {
+        if (!token) return null;
+        try {
+            const payload  = token.split(".")[1];
+            const decoded  = JSON.parse(atob(payload ));
+
+            return decoded.nivel_acesso?.toLowerCase();
+        } catch (error) {
+            console.error("Erro ao decodificar token", error);
+            return null;
+        }
+    };
 
     useEffect(() => {
         const token = localStorage.getItem("token");
         setUserLogado(!!token);
+        setNvAcesso(getNivelAcesso(token));
     }, []);
 
     // Função Logout
@@ -91,6 +106,7 @@ export default function TelaLayout() {
                 setAberta={setSlidebarAberta}
                 alertSair={alertSair}
                 userLogado={userLogado}
+                nvAcesso={nvAcesso}
             />
             {/* Topo fixo */}
             <TopBar
@@ -98,6 +114,7 @@ export default function TelaLayout() {
                 alertSair={alertSair}
                 userLogado={userLogado}
                 setUserLogado={setUserLogado}
+                nvAcesso={nvAcesso}
             />
             {/* Conteúdo dinâmico */}
             <main className={`${Style.main} ${slidebarAberta ? Style.aberta : Style.fechada}`}>

@@ -59,6 +59,7 @@
     margin-right: 0.5rem;
     margin-left: -1rem;
     width: clamp(12rem, 34rem, 34rem);
+    position: relative;
 }
 
 .ajusteInput {
@@ -75,12 +76,57 @@
     font-size: 0.875rem;
 }
 
-/* Ícone de search */
 .divEsquerda :global(.pi-search) {
     position: absolute;
     top: 50%;
     left: 0.75rem;
     transform: translateY(-50%);
+}
+
+.modalBusca {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    position: absolute;
+    top: 3rem;
+    width: 100%;
+    background-color: var(--app-background);
+    border: 0.1rem solid var(--border-color-tema);
+    border-radius: 0.5rem;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 4px 12px var(--sombra);
+    z-index: 999;
+}
+
+.itemBusca {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.itemBusca:hover {
+    background-color: var(--cor-azul-escura-font-bg);
+}
+
+.itemBusca>p{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.imgBusca {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+}
+
+.semResultado {
+    padding: 0.5rem 0.75rem;
+    color: var(--font-meio-apagada);
 }
 
 /* Estilo para menu de Login/Cadastro */
@@ -251,7 +297,7 @@
 
 .modalInfoUser>h1 {
     font-size: 0.875rem;
-    
+
     width: 90%;
     white-space: nowrap;
     overflow: hidden;
@@ -268,7 +314,7 @@
     text-overflow: ellipsis;
 }
 
-.hrSeparacao{
+.hrSeparacao {
     width: 17rem;
     border: 0.1rem var(--border-color-tema) solid;
 }

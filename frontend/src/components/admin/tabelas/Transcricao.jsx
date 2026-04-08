@@ -280,6 +280,7 @@ export default function CompTranscricao() {
                                     rows={12}
                                     className={Style.input}
                                     placeholder="Transcrição do Podcast"
+                                    style={{ resize: "none" }}
                                 />
                             </div>
                         </form>
