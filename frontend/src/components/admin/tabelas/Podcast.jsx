@@ -475,28 +475,30 @@ export default function CompPodcast() {
                   <p>Imagem do Podcast</p>
                 </div>
                 {/* Adicionar Audio no Cadastro */}
-                <div className={Style.divInputAudio}>
-                  <label htmlFor="inputAudioPodcast"
-                    className={`
+                {!isEditar?.idaudios && (
+                  <div className={Style.divInputAudio}>
+                    <label htmlFor="inputAudioPodcast"
+                      className={`
                       ${Style.divCardAudio}
                       ${audioFile ? Style.audioSelected : ""}
                     `}
-                  >
-                    <i className={`fa-solid ${audioFile ? "fa-circle-check" : "fa-music"}`}></i>
-                    <p>{audioFile ? "Áudio selecionado" : "Selecionar áudio"}</p>
-                  </label>
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    id="inputAudioPodcast"
-                    onChange={trocarAudio}
-                    className={Style.inputFile}
-                  />
-                  <p>Áudio do Podcast</p>
-                  {errors.audioFile && (
-                    <Message severity="error" text={errors.audioFile} />
-                  )}
-                </div>
+                    >
+                      <i className={`fa-solid ${audioFile ? "fa-circle-check" : "fa-music"}`}></i>
+                      <p>{audioFile ? "Áudio selecionado" : "Selecionar áudio"}</p>
+                    </label>
+                    <input
+                      type="file"
+                      accept="audio/*"
+                      id="inputAudioPodcast"
+                      onChange={trocarAudio}
+                      className={Style.inputFile}
+                    />
+                    <p>Áudio do Podcast</p>
+                    {errors.audioFile && (
+                      <Message severity="error" text={errors.audioFile} />
+                    )}
+                  </div>
+                )}
               </div>
               <div className={Style.divInput}>
                 <label>Título</label>
