@@ -11,6 +11,7 @@ import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 
 const API_BASE_URL = "/api-transcription";
+const API_USER_URL = "/api-user";
 
 export default function CompTranscricao() {
     const [modal, setModal] = useState(false);
@@ -68,7 +69,7 @@ export default function CompTranscricao() {
             // EDITAR
             if (isEditar.idTranscricao) {
                 await axios.put(
-                    `${API_BASE_URL}/transcricao/${isEditar.idTranscricao}`,
+                    `${API_USER_URL}/transcricoes/${isEditar.idTranscricao}`,
                     payload,
                     {
                         headers: {
