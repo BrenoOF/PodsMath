@@ -80,8 +80,8 @@ const Transcricao = {
             connection = await pool.getConnection();
             await connection.beginTransaction();
             const [result] = await connection.query(
-                'UPDATE transcricao SET textoTranscricao = ?, audios_idaudios = ?, idiomas_ididiomas = ? WHERE idTranscricao = ?',
-                [textoTranscricao, audios_idaudios, idiomas_ididiomas, id]
+                'UPDATE transcricao SET textoTranscricao = ? WHERE idTranscricao = ?',
+                [textoTranscricao, id]
             );
             await connection.commit();
             return result.affectedRows > 0;

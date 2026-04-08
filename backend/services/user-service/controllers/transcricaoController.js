@@ -47,11 +47,6 @@ const transcricaoController = {
             const transcricao = await Transcricao.getById(req.params.id);
             if (!transcricao) return res.status(404).json({ message: 'Transcricao não encontrada' });
 
-            const audio = await Audio.getById(transcricao.audios_idaudios);
-            if (audio && audio.usuarios_idusuarios !== req.usuario.idusuarios) {
-                return res.status(403).json({ message: 'Sem permissão para alterar esta transcrição' });
-            }
-
             const updated = await Transcricao.update(req.params.id, req.body);
             if (updated) {
                 res.json({ message: 'Transcricao atualizada' });
