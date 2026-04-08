@@ -87,8 +87,8 @@ export default function CompUsuario() {
         const token = localStorage.getItem("token");
         try {
             await axios.put(
-                `${API_BASE_URL}/usuarios/${isEditar.idusuarios}`,
-                isEditar,
+                `${API_BASE_URL}/usuarios/${isEditar.idusuarios}/nivel-acesso`,
+                { nivel_acesso_idnivel_acesso: isEditar.nivel_acesso_idnivel_acesso },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -97,7 +97,7 @@ export default function CompUsuario() {
             );
 
             Swal.fire({
-                title: `Usuário "${isEditar.nome}" editado`,
+                title: `Nível de acesso de "${isEditar.nome}" alterado`,
                 icon: "success",
                 confirmButtonColor: "#012663"
             });
