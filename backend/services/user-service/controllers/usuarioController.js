@@ -205,7 +205,7 @@ const usuarioController = {
       }
 
       const senhaHash = await bcrypt.hash(senhaNova, 10);
-      const updated = await Usuario.update(idUsuario, { ...usuario, senha: senhaHash });
+      const updated = await Usuario.updateSenha(idUsuario, { senha: senhaHash });
 
       if (updated) {
         res.json({ message: 'Senha alterada com sucesso' });

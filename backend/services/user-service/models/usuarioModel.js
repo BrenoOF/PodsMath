@@ -104,6 +104,26 @@ const Usuario = {
         }
     },
 
+    updateSenha: async (id, usuarioData) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const { senha } = usuarioData;
+            const [result] = await connection.query(
+                'UPDATE usuarios SET senha = ? WHERE idusuarios = ?',
+                [senha, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
     updateNivelAcesso: async (id, usuarioData) => {
         let connection;
         try {
