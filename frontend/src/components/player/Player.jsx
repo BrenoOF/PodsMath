@@ -561,7 +561,7 @@ export default function TelaPlayer() {
                 />
                 <div className={Style.divTextosApresentacao}>
                     <h1>{dadosPlayer?.titulo}</h1>
-                    <p>Feito por: {dadosPlayer?.usuario_nome || "PodsMath"}</p>
+                    <p>{dadosPlayer?.usuario_nome || "PodsMath"}</p>
                     <div className={Style.ultimaDivApresentacao}>
                         <p>
                             <i className="fa-regular fa-clock"></i>

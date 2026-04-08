@@ -343,7 +343,7 @@ export default function CompPodcast() {
             titulo: "",
             descricao: "",
             temas_idtemas: "",
-            instituicoes_idinstituicoes: "",
+            instituicoes_idinstituicoes: null,
             idiomas_ididiomas: "",
             imagens_idimagens: null
           });
