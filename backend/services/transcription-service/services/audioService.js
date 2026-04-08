@@ -34,7 +34,6 @@ async function createAudioRecord({
     if (temas_idtemas) payload.temas_idtemas = temas_idtemas;
     if (idiomas_ididiomas) payload.idiomas_ididiomas = idiomas_ididiomas;
     if (imagens_idimagens) payload.imagens_idimagens = imagens_idimagens;
-    if (instituicoes_idinstituicoes) payload.instituicoes_idinstituicoes = instituicoes_idinstituicoes;
     // usuarios_idusuarios removed from payload since it's from token in user-service
 
     try {
