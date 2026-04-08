@@ -19,6 +19,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.3.0",
     "multer": "^2.0.2",
+    "music-metadata": "^11.12.3",
     "mysql2": "^3.19.1",
     "nodejs-whisper": "^0.2.9"
   }

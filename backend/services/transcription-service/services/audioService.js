@@ -17,9 +17,10 @@ async function createAudioRecord({
     titulo,
     descricao,
     temas_idtemas,
-    usuarios_idusuarios,
     idiomas_ididiomas,
     imagens_idimagens,
+    instituicoes_idinstituicoes,
+    duracao,
     token
 }) {
     // 1. Cria registro na tabela 'audios' via user-service
@@ -27,11 +28,13 @@ async function createAudioRecord({
     const payload = {
         visualizacoes: 0,
         titulo: titulo || 'Sem título',
-        descricao: descricao || ''
+        descricao: descricao || '',
+        duracao: duracao || '0:00'
     };
     if (temas_idtemas) payload.temas_idtemas = temas_idtemas;
     if (idiomas_ididiomas) payload.idiomas_ididiomas = idiomas_ididiomas;
     if (imagens_idimagens) payload.imagens_idimagens = imagens_idimagens;
+    if (instituicoes_idinstituicoes) payload.instituicoes_idinstituicoes = instituicoes_idinstituicoes;
     // usuarios_idusuarios removed from payload since it's from token in user-service
 
     try {

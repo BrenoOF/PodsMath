@@ -49,12 +49,10 @@ const Audio = {
       const query = `
         SELECT
         a.*,
-        u.nome AS usuario_nome,
         t.titulo AS tema_nome,
         i.nomeIdiomas AS idioma_nome,
         img.caminho_imagem AS imagem_caminho
         FROM audios a
-        LEFT JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
         LEFT JOIN temas t ON a.temas_idtemas = t.idtemas
         LEFT JOIN idiomas i ON a.idiomas_ididiomas = i.ididiomas
         LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
@@ -100,10 +98,10 @@ const Audio = {
     try {
       connection = await pool.getConnection();
       await connection.beginTransaction();
-      const { temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas } = audioData;
+      const { temas_idtemas, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes } = audioData;
       const [result] = await connection.query(
-        'INSERT INTO audios (temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas) VALUES (?, ?, ?, ?, ?, ?, ?)',
-        [temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes || 0, titulo, descricao, idiomas_ididiomas]
+        'INSERT INTO audios (temas_idtemas, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+        [temas_idtemas, imagens_idimagens, visualizacoes || 0, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes || null]
       );
       await connection.commit();
       return { idaudios: result.insertId, ...audioData };
@@ -120,10 +118,10 @@ const Audio = {
     try {
       connection = await pool.getConnection();
       await connection.beginTransaction();
-      const { temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas } = audioData;
+      const { temas_idtemas, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes } = audioData;
       const [result] = await connection.query(
-        'UPDATE audios SET temas_idtemas = ?, usuarios_idusuarios = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ? WHERE idaudios = ?',
-        [temas_idtemas, usuarios_idusuarios, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, id]
+        'UPDATE audios SET temas_idtemas = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ?, duracao = ?, instituicoes_idinstituicoes = ? WHERE idaudios = ?',
+        [temas_idtemas, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes || null, id]
       );
       await connection.commit();
       return result.affectedRows > 0;
@@ -218,9 +216,8 @@ const Audio = {
         LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
         LEFT JOIN temas t on a.temas_idtemas = t.idtemas
         LEFT JOIN categorias cat on t.categorias_idcategorias = cat.idcategorias
-        WHERE usuarios_idusuarios = ?
       `;
-      const [rows] = await connection.query(query, [userId]);
+      const [rows] = await connection.query(query);
       await connection.commit();
       return rows;
     } catch (error) {
@@ -237,9 +234,8 @@ const Audio = {
       connection = await pool.getConnection();
       await connection.beginTransaction();
       const query = `
-        SELECT a.*, u.nome AS autor, img.caminho_imagem AS imagem_caminho
+        SELECT a.*, img.caminho_imagem AS imagem_caminho
         FROM audios a
-        LEFT JOIN usuarios u ON a.usuarios_idusuarios = u.idusuarios
         LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens
         WHERE temas_idtemas = ?
       `;

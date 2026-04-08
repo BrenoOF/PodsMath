@@ -1,10 +1,18 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
+const mm = require('music-metadata');
 const queueService = require('../services/queueService');
 const { createAudioRecord, getAudioWithTranscription, getTranscriptionStatus, getAllTranscriptionsWithAudio } = require('../services/audioService');
 
 const USER_SERVICE_URL = process.env.USER_SERVICE_URL || 'http://localhost:3001';
+
+const formatDuration = (seconds) => {
+  if (!seconds) return '0:00';
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs.toString().padStart(2, '0')}`;
+};
 
 const transcriptionController = {
   /**
@@ -28,11 +36,21 @@ const transcriptionController = {
         descricao = '',
         temas_idtemas = 1,
         idiomas_ididiomas = 1,
-        imagens_idimagens = 1
+        imagens_idimagens = 1,
+        instituicoes_idinstituicoes = 1
       } = req.body;
 
       let token = req.headers.authorization?.split(' ')[1] || req.query.token;
       if (token === 'null' || token === 'undefined') token = null;
+
+      // Extrai duração do áudio
+      let duracaoStr = '0:00';
+      try {
+        const metadata = await mm.parseFile(audioFile.path);
+        duracaoStr = formatDuration(metadata.format.duration);
+      } catch (mmErr) {
+        console.error('Erro ao ler metadados do áudio:', mmErr.message);
+      }
 
       // 1. Se enviou imagem, faz o "forward" para o user-service
       if (imagemFile) {
@@ -60,8 +78,6 @@ const transcriptionController = {
         }
       }
 
-      const usuarios_idusuarios = req.usuario.idusuarios;
-
       const filePath = audioFile.path;
       const mimeType = audioFile.mimetype || 'audio/wav';
 
@@ -72,9 +88,10 @@ const transcriptionController = {
         titulo,
         descricao,
         temas_idtemas,
-        usuarios_idusuarios,
         idiomas_ididiomas,
         imagens_idimagens,
+        instituicoes_idinstituicoes,
+        duracao: duracaoStr,
         token
       });
 
@@ -85,7 +102,8 @@ const transcriptionController = {
         message: 'Áudio criado e adicionado à fila de transcrição.',
         audioId,
         status: 'queued',
-        imagens_idimagens
+        imagens_idimagens,
+        duracao: duracaoStr
       });
 
     } catch (error) {
