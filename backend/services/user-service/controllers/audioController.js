@@ -48,6 +48,28 @@ const audioController = {
     }
   },
 
+  getAudioDetailsById: async (req, res) => {
+    try {
+      const audio = await Audio.getDetailsById(req.params.id);
+      if (audio) {
+        res.json(audio);
+      } else {
+        res.status(404).json({ message: 'Audio não encontrado' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
+  searchAudios: async (req, res) => {
+    try {
+      const audios = await Audio.search();
+      res.json(audios);
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  },
+
   createAudio: async (req, res) => {
     try {
       let imagens_idimagens = req.body.imagens_idimagens || 1;

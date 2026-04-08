@@ -71,6 +71,30 @@ const Audio = {
     }
   },
 
+  search: async () => {
+    let connection;
+    try {
+      connection = await pool.getConnection();
+      await connection.beginTransaction();
+      const [rows] = await connection.query(`
+        SELECT
+        a.*,
+        c.idcategorias,
+        img.caminho_imagem
+        FROM audios a
+        LEFT JOIN temas t ON a.temas_idtemas = t.idtemas
+        LEFT JOIN categorias c ON t.categorias_idcategorias = c.idcategorias
+        LEFT JOIN imagens img ON a.imagens_idimagens = img.idimagens`);
+      await connection.commit();
+      return rows;
+    } catch (error) {
+      if (connection) await connection.rollback();
+      throw error;
+    } finally {
+      if (connection) connection.release();
+    }
+  },
+
   create: async (audioData) => {
     let connection;
     try {

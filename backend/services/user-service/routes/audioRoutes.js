@@ -9,6 +9,7 @@ router.get('/tema/:idTema', audioController.getAudiosByTema);
 router.get('/destaque', audioController.getHighlights);
 router.get('/recentes', audioController.getRecent);
 router.get('/proprios', authMiddleware, audioController.getOwnAudios);
+router.get('/pesquisar', audioController.searchAudios);
 router.get('/:id', audioController.getAudioById);
 router.get('/:id/details', audioController.getAudioDetailsById);
 router.post('/:id/visualizacao', audioController.incrementViews);
