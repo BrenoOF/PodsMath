@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 import { PrimeReactContext } from 'primereact/api';
 import { useMatchMedia } from 'primereact/hooks';
@@ -283,17 +284,15 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
     const [resultadosBusca, setResultadosBusca] = useState([]);
     const [modalBuscaAberto, setModalBuscaAberto] = useState(false);
 
-    const podcastsMock = [
-        { id: 1, titulo: "React para iniciantes" },
-        { id: 2, titulo: "Aprendendo JavaScript moderno" },
-        { id: 3, titulo: "CSS do zero ao avançado" },
-        { id: 4, titulo: "Node.js na prática" },
-        { id: 5, titulo: "Banco de dados explicado" },
-    ];
+    const podcastsMock = async () => {
+        const response = await axios.get("/api-user/audios/pesquisar");
+        return response.data;
+    };
 
     const inputBuscaRef = useRef(null);
     const modalBuscaRef = useRef(null);
 
+    // ✅ Correção aplicada aqui: o useEffect agora espera a função assíncrona resolver antes de filtrar
     useEffect(() => {
         if (!textoBusca.trim()) {
             setResultadosBusca([]);
@@ -301,12 +300,21 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
             return;
         }
         
-        const filtrados = podcastsMock.filter(p =>
-                p.titulo.toLowerCase().includes(textoBusca.toLowerCase())
-        ).slice(0, 3);
+        const buscarEFiltrar = async () => {
+            try {
+                const dadosPesquisa = await podcastsMock();
+                const filtrados = dadosPesquisa.filter(p =>
+                    p.titulo.toLowerCase().includes(textoBusca.toLowerCase())
+                ).slice(0, 3);
 
-        setResultadosBusca(filtrados);
-        setModalBuscaAberto(true);
+                setResultadosBusca(filtrados);
+                setModalBuscaAberto(true);
+            } catch (error) {
+                console.error("Erro na busca de podcasts:", error);
+            }
+        };
+
+        buscarEFiltrar();
     }, [textoBusca]);
 
     useEffect(() => {
@@ -347,12 +355,14 @@ export default function CompTopBar({ slidebarAberta, alertSair, userLogado, setU
                                     <div key={podcast.id}
                                         className={Style.itemBusca}
                                         onClick={() => {
-                                            navigate("/explorar/1/1/1");
+                                            navigate(`/explorar/${podcast.idcategorias}/${podcast.temas_idtemas}/${
+                                            podcast.idaudios}`);
                                             setModalBuscaAberto(false);
                                         }}
                                     >
-                                        <img src={"/imgs/podcast-default.jpg"}
-                                            alt={"audio.titulo"} className={Style.imgBusca}
+                                        <img src={`/api-user/imagens/file/${podcast.caminho_imagem.split('/').pop()}` 
+                                        || "/imgs/podcast-default.jpg"}
+                                            alt={podcast.titulo} className={Style.imgBusca}
                                             draggable="false"
                                             onError={(e) => (e.target.src = "/imgs/podcast-default.jpg")}
                                         />

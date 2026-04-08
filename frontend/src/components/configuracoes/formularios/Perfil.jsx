@@ -87,10 +87,14 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
     };
 
 
-    const excluirConta = () => {
+    const excluirConta = async () => {
         try {
+            await axios.delete("/api-user/usuarios/me", {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
             localStorage.removeItem("token");
             navigate("/");
+            window.location.reload();
         } catch (error) {
             console.error("Erro ao Excluir conta ", error);
         }
