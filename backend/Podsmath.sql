@@ -25,21 +25,22 @@ DROP TABLE IF EXISTS `audios`;
 CREATE TABLE `audios` (
   `idaudios` int NOT NULL AUTO_INCREMENT,
   `temas_idtemas` int NOT NULL,
-  `usuarios_idusuarios` int NOT NULL,
   `imagens_idimagens` int NOT NULL,
-  `visualizacoes` int DEFAULT '0',
-  `titulo` text,
-  `descricao` text,
+  `visualizacoes` int NOT NULL DEFAULT '0',
+  `titulo` text NOT NULL,
+  `descricao` text NOT NULL,
   `idiomas_ididiomas` int NOT NULL,
+  `instituicoes_idinstituicoes` int DEFAULT NULL,
+  `duracao` varchar(45) NOT NULL,
   PRIMARY KEY (`idaudios`),
   KEY `fk_audios_temas1_idx` (`temas_idtemas`),
-  KEY `fk_audios_usuarios1_idx` (`usuarios_idusuarios`),
   KEY `fk_audios_imagens1_idx` (`imagens_idimagens`),
   KEY `fk_audios_idiomas1_idx` (`idiomas_ididiomas`),
+  KEY `fk_audios_instituicoes1_idx` (`instituicoes_idinstituicoes`),
   CONSTRAINT `fk_audios_idiomas1` FOREIGN KEY (`idiomas_ididiomas`) REFERENCES `idiomas` (`ididiomas`),
   CONSTRAINT `fk_audios_imagens1` FOREIGN KEY (`imagens_idimagens`) REFERENCES `imagens` (`idimagens`),
-  CONSTRAINT `fk_audios_temas1` FOREIGN KEY (`temas_idtemas`) REFERENCES `temas` (`idtemas`),
-  CONSTRAINT `fk_audios_usuarios1` FOREIGN KEY (`usuarios_idusuarios`) REFERENCES `usuarios` (`idusuarios`)
+  CONSTRAINT `fk_audios_instituicoes` FOREIGN KEY (`instituicoes_idinstituicoes`) REFERENCES `instituicoes` (`idinstituicoes`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk_audios_temas1` FOREIGN KEY (`temas_idtemas`) REFERENCES `temas` (`idtemas`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -445,7 +446,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,NULL,'Breno Oliveira Fidelis','fobreno@gmail.com','$2b$10$pITP0PLZejJdw7QHqG6Ur.EMDh8OdvEKBA6ZwxQi/QrR1.5lMj1hC',NULL,1,2,0,NULL);
+INSERT INTO `usuarios` VALUES (1,NULL,'Breno Oliveira Fidelis','fobreno@gmail.com','159753br!?',NULL,1,2,0,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -458,4 +459,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-03-16 23:47:16
+-- Dump completed on 2026-04-07 18:24:09
