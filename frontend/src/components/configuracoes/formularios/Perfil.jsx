@@ -195,6 +195,12 @@ export default function CompPerfil({ dadosUser, errors, setErrors, limparErro })
                     </div>
                     <hr className={Style.linhaSeparacao} />
                     <div className={Style.divInformacao}>
+                        <h1>Instituição</h1>
+                        <p>{dadosUser?.instituicoes_idinstituicoes || "-"}</p>
+                        {/* Ver Api do Backend para pegar o nome da instituição */}
+                    </div>
+                    <hr className={Style.linhaSeparacao} />
+                    <div className={Style.divInformacao}>
                         <h1>Nível de Acesso</h1>
                         <p>{dadosUser?.nome_nivel_acesso}</p>
                     </div>

@@ -18,6 +18,7 @@ export default function CompUsuario() {
     const [niveis, setNiveis] = useState([]);
     const [isEditar, setIsEditar] = useState(null);
     const [busca, setBusca] = useState("");
+    const [instituicoes, setInstituicoes] = useState([]);
 
     const [menuConfigsAberto, setMenuConfigsAberto] = useState(false);
     const [nivelSelecionado, setNivelSelecionado] = useState("todos");
@@ -27,6 +28,14 @@ export default function CompUsuario() {
         label: nv.nome,
         value: nv.idnivel_acesso
     }));
+
+    const instituicaoOptions = [
+        { label: "Nenhuma", value: null },
+        ...instituicoes.map(inst => ({
+            label: inst.nome,
+            value: inst.idinstituicoes
+        }))
+    ];
 
     const mudarNivel = (valor) => {
         setNivelSelecionado(valor);
@@ -58,25 +67,19 @@ export default function CompUsuario() {
     const carregarDados = async () => {
         const token = localStorage.getItem("token");
         try {
-            const [resUsuarios, resNiveis] = await Promise.all([
-                axios.get(`${API_BASE_URL}/usuarios`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                ),
-                axios.get(`${API_BASE_URL}/niveis-acesso`,
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                )
+            const headers = {
+                Authorization: `Bearer ${token}`
+            };
+
+            const [resUsuarios, resNiveis, resInstituicoes] = await Promise.all([
+                axios.get(`${API_BASE_URL}/usuarios`, { headers }),
+                axios.get(`${API_BASE_URL}/niveis-acesso`, { headers }),
+                axios.get(`${API_BASE_URL}/instituicoes`, { headers })
             ]);
 
             setUsuarios(resUsuarios.data);
             setNiveis(resNiveis.data);
+            setInstituicoes(resInstituicoes.data);
         } catch (erro) {
             console.error("erro ao buscar usuarios", erro);
         }
@@ -94,6 +97,7 @@ export default function CompUsuario() {
                         Authorization: `Bearer ${token}`
                     }
                 }
+                // Ver Api do Backend para fazer edição de instituição tb
             );
 
             Swal.fire({
@@ -114,6 +118,42 @@ export default function CompUsuario() {
             });
         }
     };
+
+    // Excluir Instituição
+    // const alertExclusao = (id) => {
+    //     Swal.fire({
+    //         title: "Tem certeza que deseja excluir este Usuário?",
+    //         text: "Essa ação não pode ser desfeita",
+    //         icon: "warning",
+    //         showCancelButton: true,
+    //         confirmButtonText: "Sim, Quero Excluir!",
+    //         cancelButtonText: "Cancelar",
+    //         cancelButtonColor: "#d33",
+    //         confirmButtonColor: "#012663"
+    //     }).then((result) => {
+    //         if (result.isConfirmed) {
+    //             excluirUsuario(id);
+    //         }
+    //     });
+    // }
+
+    // const excluirUsuario = async (id) => {
+    //     const token = localStorage.getItem("token");
+    //     try {
+    //         await axios.delete(
+    //             `${API_BASE_URL}/instituicoes/${id}`,
+    //             {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             }
+    //         );
+    //         setInstituicoes(prev => prev.filter(inst => inst.idinstituicoes !== id));
+    //     }
+    //     catch (error) {
+    //         console.error("Erro ao excluir instituição", error);
+    //     }
+    // };
 
     // Carregar dados quando a pagina carrega
     useEffect(() => {
@@ -241,6 +281,11 @@ export default function CompUsuario() {
                                     }}>
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
+                                    <button onClick={() => {
+                                        // alertExclusao(instituicao.idinstituicoes);
+                                    }}>
+                                        <i className="fa-solid fa-trash"></i>
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -275,6 +320,22 @@ export default function CompUsuario() {
                                         }}
                                         options={niveisOptions}
                                         placeholder="Selecione um Nível"
+                                        className={Style.input}
+                                    />
+                                </div>
+                            </div>
+                            <div className={Style.divInput}>
+                                <label>Instituição</label>
+                                <div className={Style.divDropdown}>
+                                    <Dropdown appendTo="self" value={isEditar.instituicoes_idinstituicoes}
+                                        onChange={(e) => {
+                                            setIsEditar({
+                                                ...isEditar,
+                                                instituicoes_idinstituicoes: e.value
+                                            });
+                                        }}
+                                        options={instituicaoOptions}
+                                        placeholder="Selecione uma Instituição"
                                         className={Style.input}
                                     />
                                 </div>
