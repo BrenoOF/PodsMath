@@ -1,0 +1,129 @@
+const pool = require('../db/connections');
+
+const Transcricao = {
+    getAll: async () => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM transcricao');
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    getById: async (id) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [rows] = await connection.query('SELECT * FROM transcricao WHERE idTranscricao = ?', [id]);
+            await connection.commit();
+            return rows[0];
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    getByAudioId: async (audioId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const query = `
+                SELECT t.*, i.nomeIdiomas AS idioma_nome 
+                FROM transcricao t
+                LEFT JOIN idiomas i ON t.idiomas_ididiomas = i.ididiomas
+                WHERE t.audios_idaudios = ?
+            `;
+            const [rows] = await connection.query(query, [audioId]);
+            await connection.commit();
+            return rows;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    create: async ({ textoTranscricao, audios_idaudios, idiomas_ididiomas }) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'INSERT INTO transcricao (textoTranscricao, audios_idaudios, idiomas_ididiomas) VALUES (?, ?, ?)',
+                [textoTranscricao, audios_idaudios, idiomas_ididiomas]
+            );
+            await connection.commit();
+            return { idTranscricao: result.insertId, textoTranscricao, audios_idaudios, idiomas_ididiomas };
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    update: async (id, { textoTranscricao, audios_idaudios, idiomas_ididiomas }) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query(
+                'UPDATE transcricao SET textoTranscricao = ? WHERE idTranscricao = ?',
+                [textoTranscricao, id]
+            );
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    delete: async (id) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM transcricao WHERE idTranscricao = ?', [id]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    },
+
+    deleteByAudioId: async (audioId) => {
+        let connection;
+        try {
+            connection = await pool.getConnection();
+            await connection.beginTransaction();
+            const [result] = await connection.query('DELETE FROM transcricao WHERE audios_idaudios = ?', [audioId]);
+            await connection.commit();
+            return result.affectedRows > 0;
+        } catch (error) {
+            if (connection) await connection.rollback();
+            throw error;
+        } finally {
+            if (connection) connection.release();
+        }
+    }
+};
+
+module.exports = Transcricao;
