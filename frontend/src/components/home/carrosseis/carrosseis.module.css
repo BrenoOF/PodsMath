@@ -1,0 +1,286 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .divTitulosDosPodcasts {
+        font-size: 1.2rem;
+    }
+
+    .btnAssunto {
+        font-size: 0.625rem;
+    }
+
+    /* Podcasts Novidade */
+    .cardNovidade {
+        width: 100%;
+        max-width: 16rem;
+    }
+
+    .cardNovidade:hover {
+        transform: scale(1);
+    }
+
+    /* Podcasts Proprios */
+    .cardProprio {
+        padding: 0.5rem;
+    }
+
+    .cardProprio:hover {
+        transform: scale(1);
+    }
+
+    .cardProprio>.imgCard {
+        width: 8rem;
+    }
+
+    .divTextosProprio {
+        max-width: 50%;
+    }
+
+    .divTextosProprio>h1 {
+        font-size: 0.8rem;
+    }
+
+    .divTextosProprio>p {
+        font-size: 0.625rem;
+    }
+
+    .iconPlayProprio {
+        font-size: 2rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .divTitulosDosPodcasts {
+        font-size: 1.5rem;
+    }
+
+    .btnAssunto {
+        font-size: 0.875rem;
+    }
+
+    /* Podcasts Novidade */
+    .cardNovidade {
+        width: 100%;
+        max-width: 18.85rem;
+    }
+
+    .cardNovidade:hover {
+        transform: scale(1.07);
+    }
+
+    /* Podcasts Proprios */
+    .cardProprio {
+        padding: 1.5rem;
+    }
+
+    .cardProprio:hover {
+        transform: scale(1.01);
+    }
+
+    .imgCard {
+        width: 18.75rem;
+    }
+
+    .divTextosProprio {
+        max-width: 35%;
+    }
+
+    .divTextosProprio>h1 {
+        font-size: 1.5rem;
+    }
+
+    .divTextosProprio>p {
+        font-size: 1rem;
+    }
+
+    .iconPlayProprio {
+        font-size: 3.5rem;
+    }
+}
+
+/* Estilo padrão para os títulos de cada 'Carrossel' */
+.divTitulosDosPodcasts {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+/* Estilo Padrão */
+.imgCard {
+    max-width: 100%;
+    aspect-ratio: 18.75 / 12;
+    border-radius: 1rem;
+}
+
+.btnAssunto {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: var(--cor-semibtn-hover);
+    border: 0.1rem solid var(--cor-azul-escura-padrao);
+    color: var(--branco);
+    padding: 0.188rem 0.2rem;
+    width: 7rem;
+    border-radius: 5rem;
+    cursor: pointer;
+    transition: 0.5s ease;
+    margin: 1rem;
+}
+
+.btnAssunto:hover {
+    background-color: var(--cor-semibtn-normal);
+    color: var(--cor-azul-font-borda);
+}
+
+/* Estilos para os audios em destaque */
+.divCardsDestaque {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4rem;
+}
+
+.cardsDestaque {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 0 0 8rem;
+    gap: 1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cardsDestaque:hover {
+    transform: scale(1.1);
+}
+
+.cardsDestaque>div>h2 {
+    font-size: 1rem;
+}
+
+.cardsDestaque>div>p {
+    font-size: 0.875rem;
+}
+
+.imgCardDestaque {
+    width: 8rem;
+    height: 8rem;
+    box-shadow: 0px 4px 12px 0px var(--sombra);
+    border-radius: 0.375rem;
+}
+
+.textosCardDestaque {
+    text-align: center;
+}
+
+/* Estilos para as novidades */
+.limitarWidthNovidade {
+    width: 100%;
+}
+
+:global(.p-carousel-item) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 26rem;
+    margin-bottom: 1.5rem;
+}
+
+.cardNovidade {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1rem;
+    background-color: var(--app-background);
+    border: 0.05rem solid transparent;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.cardNovidade:hover {
+    border: 0.05rem solid var(--cor-laranja-escuro);
+    box-shadow: 0px 2px 12px 0px var(--sombra);
+}
+
+.cardNovidade>h1 {
+    font-size: 1.125rem;
+    margin: 1rem;
+}
+
+.cardNovidade>p {
+    font-size: 0.875rem;
+    margin: 1rem;
+    color: var(--font-paragrafo);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+.divImgCardNovidade {
+    position: relative;
+}
+
+/* Apartir daqui (apagar esse comentario dps) */
+.divPodcastsProprio {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: 100%;
+}
+
+.cardProprio {
+    display: flex;
+    align-items: center;
+    border: 0.1rem solid var(--border-color-tema);
+    border-radius: 1rem;
+    box-shadow: 5px 5px 14px 1px var(--sombra);
+    transition: transform 0.2s ease;
+    cursor: pointer;
+}
+
+.divTextosProprio {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 1;
+    margin-left: 1rem;
+}
+
+.divTextosProprio>p {
+    color: var(--font-paragrafo);
+
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+
+    overflow: hidden;
+}
+
+.divTextosProprio>.btnAssunto {
+    margin: 0rem !important;
+    width: auto !important;
+    padding: 0.4rem !important;
+}
+
+.divIconProprio {
+    margin-left: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.iconPlayProprio {
+    color: var(--cor-azul-escura-padrao);
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.iconPlayProprio:hover {
+    color: var(--cor-azul-escura-font-bg);
+    transform: scale(1.15);
+}

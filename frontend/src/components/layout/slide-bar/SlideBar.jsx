@@ -1,0 +1,134 @@
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import Style from "./slideBar.module.css";
+
+export default function CompSlideBar({ aberta, setAberta, alertSair, userLogado, nvAcesso }) {
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    // Função para ver a Rota
+    const rotaAtiva = (rota) => location.pathname === rota;
+
+    // Troca de Logo caso o usuario esteja no modo dark
+    const [temaAtual, setTemaAtual] = useState(localStorage.getItem("theme-mode") || "light");
+
+    useEffect(() => {
+        const atualizarTema = (e) => {
+            const novoTema = e?.detail || localStorage.getItem("theme-mode");
+            setTemaAtual(novoTema);
+        };
+
+        // Escutador para mudanças no localStorage
+        window.addEventListener("themeChange", atualizarTema);
+        return () => {
+            window.removeEventListener("themeChange", atualizarTema);
+        };
+    }, []);
+
+    const trocarLogo = () => {
+        if (temaAtual === "dark") {
+            return require("../../../imgs/Logo2.png");
+        }
+
+        return require("../../../imgs/Logo1.png");
+    }
+
+    return (
+        <div className={`${Style.containerSlideBar} ${!aberta ? Style.fechada : ""}`}>
+            <div className={Style.divLogo}>
+                <img src={trocarLogo()} alt="Podsmath Logo"
+                    className={Style.imgLogo} onClick={() => { navigate("/") }}
+                    draggable="false"
+                />
+                {!aberta && (
+                    <hr className={Style.linhaToggle} />
+                )}
+                <i className={`fa-regular fa-square-caret-left ${Style.btnToggle}`} style={{ fontSize: "1rem" }}
+                    onClick={() => setAberta(!aberta)}
+                ></i>
+            </div>
+            <div className={Style.divMenuOpcoes}>
+                <button className={`${Style.btnPadrao} ${rotaAtiva("/") ? Style.btnSelecionado : ""}`}
+                    onClick={() => {
+                        navigate("/");
+                    }}
+                >
+                    <i className="fa-regular fa-house" style={{ fontSize: "1rem" }}></i>
+                    <p>Home</p>
+                </button>
+                <button className={`${Style.btnPadrao} ${rotaAtiva("/explorar") ? Style.btnSelecionado : ""}`}
+                    onClick={() => {
+                        navigate("/explorar");
+                    }}
+                >
+                    <i className="fa-regular fa-folder" style={{ fontSize: "1rem" }}></i>
+                    <p>Explorar</p>
+                </button>
+                {userLogado && (
+                    <>
+                        <button className={`${Style.btnPadrao} ${rotaAtiva("/historico") ? Style.btnSelecionado : ""}`}
+                            onClick={() => {
+                                navigate("/historico");
+                            }}
+                        >
+                            <i className="fa-regular fa-clock" style={{ fontSize: "1rem" }}></i>
+                            <p>Histórico</p>
+                        </button>
+                        <button className={`${Style.btnPadrao} ${rotaAtiva("/favoritos") ? Style.btnSelecionado : ""}`}
+                            onClick={() => {
+                                navigate("/favoritos");
+                            }}
+                        >
+                            <i className="fa-regular fa-heart" style={{ fontSize: "1rem" }}></i>
+                            <p>Favoritos</p>
+                        </button>
+                    </>
+                )}
+            </div>
+            <div className={Style.divBtnLogin}>
+                {!userLogado ? (
+                    <>
+                        <div className={Style.btnPadrao + " " + Style.btnLogin}
+                            onClick={() => { navigate("/login") }}
+                        >
+                            <i className="fa-regular fa-user" style={{ fontSize: "1rem", color: "#fff" }}></i>
+                            <p>Entrar / Cadastrar</p>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className={Style.divMenuLogado}>
+                            <div className={`${Style.btnPadrao} ${rotaAtiva("/perfil") ? Style.btnSelecionado : ""}`}
+                                onClick={() => {
+                                    navigate("/perfil");
+                                }}
+                            >
+                                <i className="fa-regular fa-address-card" style={{ fontSize: "1rem" }}></i>
+                                <p>Perfil</p>
+                            </div>
+                            {nvAcesso !== "aluno" && (
+                                <div className={`${Style.btnPadrao} ${rotaAtiva("/admin") ? Style.btnSelecionado : ""}`}
+                                    onClick={() => {
+                                        navigate("/admin");
+                                    }}
+                                >
+                                    <i className="fa-solid fa-user-shield" style={{ fontSize: "1rem" }}></i>
+                                    <p>Admin</p>
+                                </div>
+                            )}
+                            <div className={Style.btnPadrao + " " + Style.btnSair}
+                                onClick={() => { alertSair() }}
+                            >
+                                <i className="fa-solid fa-arrow-right-from-bracket"
+                                    style={{ fontSize: "1rem" }}
+                                ></i>
+                                <p>Sair</p>
+                            </div>
+                        </div>
+                    </>
+                )}
+            </div>
+        </div>
+    )
+}

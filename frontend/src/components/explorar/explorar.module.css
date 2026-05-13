@@ -1,0 +1,102 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerExplorar {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+
+    .divTituloTopo {
+        width: 90%;
+        text-align: center;
+    }
+
+    .divTituloTopo>h1 {
+        font-size: 1.875rem;
+    }
+
+    .card:hover {
+        transform: scale(1);
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerExplorar {
+        display: block;
+        padding: 2rem;
+    }
+
+    .divTituloTopo {
+        width: 100%;
+    }
+
+    .divTituloTopo>h1 {
+        font-size: 2.25rem;
+    }
+
+    .card:hover {
+        box-shadow: 0px 2px 12px 0px var(--sombra);
+        transform: scale(1.05);
+    }
+}
+
+.containerExplorar {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+.divTituloTopo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 3rem;
+}
+
+.divTituloTopo>p {
+    font-size: 1rem;
+    color: var(--font-meio-apagada);
+}
+
+.divCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 25rem;
+    border-radius: 0.75rem;
+    background-color: var(--app-background);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.divImgCardNovidade {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgCard{
+    height: 9rem;
+    width: 100%;
+    border-radius: 0.75rem 0.75rem 0rem 0rem;
+}
+
+.tituloCard {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+}
+
+.tituloCard>h1 {
+    font-size: 1.25rem;
+}
+
+.card:hover .tituloCard>h1 {
+    color: var(--font-paragrafo);
+}

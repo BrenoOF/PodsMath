@@ -1,0 +1,12 @@
+/* Esqueceu a Senha */
+.divEsqueceuSenha {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    cursor: pointer;
+}
+
+.divEsqueceuSenha>p {
+    font-size: 1rem;
+    color: var(--font-paragrafo);
+}

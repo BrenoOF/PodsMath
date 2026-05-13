@@ -1,0 +1,64 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerHistorico {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+
+    .divTitulo{
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerHistorico {
+        display: block;
+        padding: 2rem;
+    }
+
+    .divTitulo{
+        width: 100%;
+    }
+}
+
+.containerHistorico {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+/* Estilo para o Título */
+.divTitulo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+}
+
+.divTitulo>p {
+    font-size: 1rem;
+    color: var(--font-meio-apagada);
+    margin-left: 0.8rem;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.titulo>i {
+    font-size: 1.75rem;
+}
+
+/* Estilo para caso o usuario não tenha um histórico */
+.divNaoTemPodcast {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 5rem;
+}
+
+.divNaoTemPodcast>p {
+    color: var(--font-meio-apagada);
+}
