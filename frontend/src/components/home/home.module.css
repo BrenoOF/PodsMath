@@ -1,0 +1,218 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerHome {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0.5rem;
+    }
+
+    .divBoasVindas {
+        padding: 2rem 1rem;
+    }
+
+    .tituloBoasVindas {
+        line-height: 2rem;
+        font-size: 2rem;
+    }
+
+    .subTitulo {
+        font-size: 1rem;
+    }
+
+    .imgMicrofone {
+        display: none;
+    }
+
+    /* Estilos para o "Sobre este Projeto" */
+    .sobreOProjeto {
+        flex-direction: column-reverse;
+        text-align: center;
+    }
+
+    .divTextosProjeto {
+        align-items: center;
+        padding: 1rem;
+        width: 100%;
+    }
+
+    .tituloProjeto {
+        font-size: 1.5rem;
+    }
+
+    .subTituloProjeto {
+        font-size: 1rem;
+    }
+
+    .paragrafosProjeto {
+        font-size: 0.875rem;
+    }
+
+    .divImgProf {
+        width: 100%;
+    }
+
+    .imgProfessora {
+        width: 16rem;
+        height: 13rem;
+        margin-top: 1.5rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerHome {
+        display: block;
+        padding: 2rem;
+    }
+
+    .divBoasVindas {
+        padding: 2rem 4.6rem;
+    }
+
+    .tituloBoasVindas {
+        line-height: 4rem;
+        font-size: 3.75rem;
+    }
+
+    .subTitulo {
+        font-size: 1.25rem;
+    }
+
+    .imgMicrofone {
+        display: block;
+    }
+
+    /* Estilos para o "Sobre este Projeto" */
+    .sobreOProjeto {
+        flex-direction: row;
+    }
+
+    .divTextosProjeto {
+        align-items: flex-start;
+        padding: 5rem;
+        width: 50%;
+    }
+
+    .tituloProjeto {
+        font-size: 2.25rem;
+    }
+
+    .subTituloProjeto {
+        font-size: 1.375rem;
+    }
+
+    .paragrafosProjeto {
+        font-size: 1rem;
+    }
+
+    .divImgProf {
+        width: 50%;
+    }
+
+    .imgProfessora {
+        width: 30rem;
+        height: 24rem;
+        margin-top: 0rem;
+    }
+}
+
+/* Estilo da Primeira coisa da Home(um bloco falando pouco do podsmath) */
+.divBoasVindas {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2rem;
+    background: linear-gradient(264.39deg, #4577A1 -92.12%, #021B33 104.6%);
+    color: var(--branco);
+    min-height: 24rem;
+    height: auto;
+    border-radius: 1.5rem;
+}
+
+.pequenaMensagem {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.7rem;
+    font-size: 0.875rem;
+    background: var(--fundo-apagado);
+    border-radius: 2rem;
+    padding: 0.5rem;
+    width: 13rem;
+}
+
+.tituloBoasVindas>span {
+    background: linear-gradient(90deg, #F08E60 0%, #FF851A 100%);
+    background-clip: text;
+    color: transparent;
+}
+
+.imgMicrofone {
+    position: absolute;
+    right: 8rem;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.1;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
+    width: 20rem;
+}
+
+/* Estilo para uma separação simples */
+.hrDeSeparacao {
+    margin: 3.5rem 0rem;
+    border: 0.1rem solid var(--border-color-tema);
+}
+
+/* Estilos para o "Sobre este Projeto" */
+.sobreOProjeto {
+    display: flex;
+    background-color: var(--sobre-projeto-bg);
+    border-radius: 1.5rem;
+    margin-top: 3.5rem;
+}
+
+.divTextosProjeto {
+    display: flex;
+    gap: 3rem;
+    flex-direction: column;
+}
+
+.subTituloProjeto {
+    font-weight: normal;
+}
+
+.divParagrafoProjeto {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.btnLerMais {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1rem;
+    width: 15rem;
+    height: 3rem;
+    background-color: var(--cor-azul-escura-padrao);
+    color: var(--branco);
+    border-radius: 0.625rem;
+    cursor: pointer;
+}
+
+.btnLerMais:hover {
+    background-color: var(--cor-azul-escura-font-bg);
+}
+
+.divImgProf {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.imgProfessora {
+    object-fit: cover;
+    object-position: bottom;
+    border-radius: 1.25rem;
+}

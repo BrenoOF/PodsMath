@@ -1,0 +1,44 @@
+services:
+  backend_user:
+    build:
+      context: ./backend/services/user-service
+      dockerfile: Dockerfile
+    container_name: app_backend_user
+    env_file:
+      - ./backend/config/.env
+    expose:
+      - "3001"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  backend_transcription:
+    build:
+      context: ./backend/services/transcription-service
+      dockerfile: Dockerfile
+    container_name: app_backend_transcription
+    env_file:
+      - ./backend/config/.env
+    expose:
+      - "3002"
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: app_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend_user
+      - backend_transcription
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

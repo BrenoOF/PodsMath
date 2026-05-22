@@ -1,7 +1,6 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
-const mm = require('music-metadata');
 const queueService = require('../services/queueService');
 const { createAudioRecord, getAudioWithTranscription, getTranscriptionStatus, getAllTranscriptionsWithAudio } = require('../services/audioService');
 
@@ -46,7 +45,8 @@ const transcriptionController = {
       // Extrai duração do áudio
       let duracaoStr = '0:00';
       try {
-        const metadata = await mm.parseFile(audioFile.path);
+        const { parseFile } = await import('music-metadata');
+        const metadata = await parseFile(audioFile.path);
         duracaoStr = formatDuration(metadata.format.duration);
       } catch (mmErr) {
         console.error('Erro ao ler metadados do áudio:', mmErr.message);

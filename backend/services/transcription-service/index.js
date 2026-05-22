@@ -11,8 +11,8 @@ const PORT = process.env.TRANSCRIPTION_SERVICE_PORT || 3002;
 app.use(cors({
     exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length']
 }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '500mb' }));
+app.use(express.urlencoded({ limit: '500mb', extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Rotas

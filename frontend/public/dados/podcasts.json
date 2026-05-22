@@ -1,0 +1,110 @@
+{
+    "podcastsProprios": [
+        {
+            "id": 1,
+            "titulo": "Fundamentos da Trigonometria: Seno, Cosseno e Tangente",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Trigonometria",
+            "idTema": 5,
+            "playlistTema": 501,
+            "idPodcast": 5001
+        },
+        {
+            "id": 2,
+            "titulo": "Álgebra Essencial: Equações dp 1° Grau",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Álgebra",
+            "idTema": 1,
+            "playlistTema": 101,
+            "idPodcast": 1001
+        },
+        {
+            "id": 3,
+            "titulo": "Juros Compostos: Fórmula dos Juros Compostos",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Matemática Financeira",
+            "idTema": 6,
+            "playlistTema": 602,
+            "idPodcast": 6003
+        }
+    ],
+    "novidades": [
+        {
+            "id": 1,
+            "titulo": "Equações do 1° Grau",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Álgebra",
+            "idTema": 1,
+            "playlistTema": 101,
+            "idPodcast": 1001
+        },
+        {
+            "id": 2,
+            "titulo": "Seno, Cosseno e Tangente",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Trigonometria",
+            "idTema": 5,
+            "playlistTema": 501,
+            "idPodcast": 5001
+        },
+        {
+            "id": 3,
+            "titulo": "Teorema de Pitágoras",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Geometria",
+            "idTema": 2,
+            "playlistTema": 201,
+            "idPodcast": 2002
+        },
+        {
+            "id": 4,
+            "titulo": "Média, Moda e Mediana",
+            "autor": "Adriana",
+            "img": "/imgs/cardExemplo.jpg",
+            "assunto": "Estatística",
+            "idTema": 3,
+            "playlistTema": 301,
+            "idPodcast": 3001
+        }
+    ],
+    "podcastsDestaque": [
+        {
+            "id": 1,
+            "titulo": "Álgebra Essencial",
+            "episodios": 3,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 1,
+            "playlistTema": 101
+        },
+        {
+            "id": 2,
+            "titulo": "Geometria Plana",
+            "episodios": 2,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 2,
+            "playlistTema": 201
+        },
+        {
+            "id": 3,
+            "titulo": "Estatística Básica",
+            "episodios": 2,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 3,
+            "playlistTema": 301
+        },
+        {
+            "id": 4,
+            "titulo": "Fundamentos da Trigonometria",
+            "episodios": 2,
+            "img": "/imgs/cardExemplo.jpg",
+            "idTema": 5,
+            "playlistTema": 501
+        }
+    ]
+}

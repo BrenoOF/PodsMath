@@ -1,0 +1,82 @@
+/* Responsividade */
+@media screen and (max-width: 769px) {
+    .containerFavoritos {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 0rem;
+    }
+}
+
+@media screen and (min-width: 770px) {
+    .containerFavoritos {
+        display: block;
+        padding: 2rem;
+    }
+}
+
+.containerFavoritos {
+    max-width: 1350px;
+    margin: 0 auto;
+}
+
+.divTitulo {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    width: 100%;
+}
+
+.divTitulo>p {
+    font-size: 1rem;
+    color: var(--font-meio-apagada);
+    margin-left: 0.8rem;
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.titulo>i {
+    font-size: 1.75rem;
+    color: var(--cor-laranja-escuro);
+}
+
+/* Estilo para os cards */
+.divCardNovidade {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    justify-items: center;
+}
+
+/* Estilo para as ações que estão mais abaixo no card */
+.divAcoesBottom{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.divCoracao{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+    cursor: pointer;
+    width: 2rem;
+    height: 2rem;
+    margin: 1rem;
+    background-color: var(--cor-laranja-escuro);
+    border-radius: 100%;
+}
+.divCoracao>i{
+    color: var(--branco);
+    font-size: 1rem;
+}
+
+.apagadaCoracao{
+    opacity: 0.5;
+    transition: 0.3s;
+}
