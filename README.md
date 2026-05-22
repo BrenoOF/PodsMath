@@ -30,10 +30,43 @@ sudo apt install -y ffmpeg cmake build-essential
 - **MySQL** — para o `user-service`
 - **MongoDB** — para o `transcription-service`
 - **Git**
+- **Docker & Docker Compose** (opcional, para execução via containers)
 
 ---
 
-## 🚀 Passo a Passo de Configuração
+## 🐳 Instalação via Docker (Recomendado)
+
+Se você deseja rodar a aplicação de forma rápida e isolada, utilize o Docker.
+
+### 1. Preparar variáveis de ambiente
+
+O Docker Compose utiliza um arquivo centralizado de configuração para os serviços de backend.
+
+```bash
+cp backend/config/.env.example backend/config/.env
+```
+
+Edite o arquivo `backend/config/.env` e configure as credenciais de acesso aos seus bancos de dados. 
+
+> **Nota:** O `docker-compose.yml` atual não inclui os bancos de dados. Certifique-se de que o MySQL e MongoDB estão acessíveis. Se estiverem rodando localmente no host, utilize `host.docker.internal` como endereço no `.env`.
+
+### 2. Subir os containers
+
+Na raiz do projeto, execute:
+
+```bash
+docker-compose up -d --build
+```
+
+### 3. Acessar a aplicação
+
+- **Frontend:** [http://localhost:3000](http://localhost:3000)
+- **User Service:** [http://localhost:3001](http://localhost:3001)
+- **Transcription Service:** [http://localhost:3002](http://localhost:3002)
+
+---
+
+## 🚀 Passo a Passo de Configuração (Manual)
 
 ### 1. Clonar o repositório
 
