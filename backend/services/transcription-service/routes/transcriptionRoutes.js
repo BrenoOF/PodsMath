@@ -5,6 +5,7 @@ const path = require('path');
 const fs = require('fs');
 const transcriptionController = require('../controllers/transcriptionController');
 const authMiddleware = require('../middleware/authMiddleware');
+const permissionsMiddleware = require('../middleware/permissionsMiddleware');
 
 // Configuração do Multer para salvar arquivos temporariamente
 const uploadDir = path.join(__dirname, '../uploads/');
@@ -25,7 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 // POST /transcricao — Upload de áudio + imagem opcional + metadados
-router.post('/', authMiddleware, upload.fields([
+router.post('/', authMiddleware, permissionsMiddleware('Criar Audios'), upload.fields([
     { name: 'audio', maxCount: 1 },
     { name: 'imagem', maxCount: 1 }
 ]), transcriptionController.createTranscription);
@@ -40,6 +41,6 @@ router.get('/:id', transcriptionController.getTranscription);
 router.get('/:id/audio', transcriptionController.streamAudio);
 
 // DELETE /transcricao/:id — Deleta áudio + transcrição do MongoDB e MySQL
-router.delete('/:id', authMiddleware, transcriptionController.deleteTranscription);
+router.delete('/:id', authMiddleware, permissionsMiddleware('Excluir Audios'), transcriptionController.deleteTranscription);
 
 module.exports = router;

@@ -2,11 +2,12 @@ const express = require('express');
 const router = express.Router();
 const categoriaNivelAcessoController = require('../controllers/categoriaNivelAcessoController');
 const authMiddleware = require('../middleware/authMiddleware');
+const permissionsMiddleware = require('../middleware/permissionsMiddleware');
 
-router.get('/', authMiddleware, categoriaNivelAcessoController.getAllCategoriasNivelAcesso);
-router.get('/:id', authMiddleware, categoriaNivelAcessoController.getCategoriaNivelAcessoById);
-router.post('/', authMiddleware, categoriaNivelAcessoController.createCategoriaNivelAcesso);
-router.put('/:id', authMiddleware, categoriaNivelAcessoController.updateCategoriaNivelAcesso);
-router.delete('/:id', authMiddleware, categoriaNivelAcessoController.deleteCategoriaNivelAcesso);
+router.get('/', authMiddleware, permissionsMiddleware('Ver Nivel de Acesso'), categoriaNivelAcessoController.getAllCategoriasNivelAcesso);
+router.get('/:id', authMiddleware, permissionsMiddleware('Ver Nivel de Acesso'), categoriaNivelAcessoController.getCategoriaNivelAcessoById);
+router.post('/', authMiddleware, permissionsMiddleware('Criar Categoria Acesso'), categoriaNivelAcessoController.createCategoriaNivelAcesso);
+router.put('/:id', authMiddleware, permissionsMiddleware('Editar Categoria Acesso'), categoriaNivelAcessoController.updateCategoriaNivelAcesso);
+router.delete('/:id', authMiddleware, permissionsMiddleware('Excluir Categoria Acesso'), categoriaNivelAcessoController.deleteCategoriaNivelAcesso);
 
 module.exports = router;
