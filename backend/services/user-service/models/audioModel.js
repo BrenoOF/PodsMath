@@ -118,10 +118,17 @@ const Audio = {
     try {
       connection = await pool.getConnection();
       await connection.beginTransaction();
-      const { temas_idtemas, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes } = audioData;
+      const { temas_idtemas, imagens_idimagens, titulo, descricao, idiomas_ididiomas, instituicoes_idinstituicoes } = audioData;
+      const idInstituicao = (() => {
+        const raw = instituicoes_idinstituicoes?.value ?? instituicoes_idinstituicoes;
+        return raw && raw !== 'null' ? Number(raw) : null;
+      })();
+
+      console.log('instituicoes recebido:', instituicoes_idinstituicoes);
+      console.log('idInstituicao calculado:', idInstituicao);
       const [result] = await connection.query(
-        'UPDATE audios SET temas_idtemas = ?, imagens_idimagens = ?, visualizacoes = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ?, duracao = ?, instituicoes_idinstituicoes = ? WHERE idaudios = ?',
-        [temas_idtemas, imagens_idimagens, visualizacoes, titulo, descricao, idiomas_ididiomas, duracao, instituicoes_idinstituicoes || null, id]
+        'UPDATE audios SET temas_idtemas = ?, imagens_idimagens = ?, titulo = ?, descricao = ?, idiomas_ididiomas = ?, instituicoes_idinstituicoes = ? WHERE idaudios = ?',
+        [temas_idtemas, imagens_idimagens, titulo, descricao, idiomas_ididiomas, idInstituicao, id]
       );
       await connection.commit();
       return result.affectedRows > 0;

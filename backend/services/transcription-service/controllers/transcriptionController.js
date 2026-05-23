@@ -35,7 +35,7 @@ const transcriptionController = {
         descricao = '',
         temas_idtemas = 1,
         idiomas_ididiomas = 1,
-        imagens_idimagens = 1,
+        imagens_idimagens = null,
         instituicoes_idinstituicoes = 1
       } = req.body;
 

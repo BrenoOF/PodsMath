@@ -119,11 +119,17 @@ const audioController = {
         }
       }
 
+      const raw = req.body.instituicoes_idinstituicoes;
+      const instituicoes_idinstituicoes = raw && typeof raw === 'object'
+        ? raw.value
+        : raw;
+      
       const audioData = {
         ...req.body,
         imagens_idimagens,
-        usuarios_idusuarios: req.usuario.idusuarios
-      };
+        usuarios_idusuarios: req.usuario.idusuarios,
+        instituicoes_idinstituicoes: instituicoes_idinstituicoes || null
+      };;
 
       const updated = await Audio.update(req.params.id, audioData);
       if (updated) {
