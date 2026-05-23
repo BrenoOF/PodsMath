@@ -8,6 +8,8 @@ services:
       - ./backend/config/.env
     expose:
       - "3001"
+    volumes:
+      - ./backend/services/user-service/uploads:/app/uploads
     restart: unless-stopped
     networks:
       - app-network
