@@ -446,7 +446,7 @@ CREATE TABLE `usuarios` (
 
 LOCK TABLES `usuarios` WRITE;
 /*!40000 ALTER TABLE `usuarios` DISABLE KEYS */;
-INSERT INTO `usuarios` VALUES (1,NULL,'Breno Oliveira Fidelis','fobreno@gmail.com','159753br!?',NULL,1,2,0,NULL);
+INSERT INTO `usuarios` VALUES (1,NULL,'Breno Oliveira Fidelis','fobreno@gmail.com','$2b$10$dXtdnY4jKfJzKJo5c5BeRuztzC.Wbs3VOcs6on7kiRErAU/utVguS',NULL,1,2,0,NULL);
 /*!40000 ALTER TABLE `usuarios` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

@@ -2,7 +2,7 @@
 const bcrypt = require('bcrypt');
 
 async function gerarHash() {
-    const senhaPlana = '123456';
+    const senhaPlana = '159753br!?';
     const saltRounds = 10; // Verifique no seu projeto se o número de rounds é esse
 
     try {
