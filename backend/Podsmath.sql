@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `audios`;
 CREATE TABLE `audios` (
   `idaudios` int NOT NULL AUTO_INCREMENT,
   `temas_idtemas` int NOT NULL,
-  `imagens_idimagens` int NOT NULL,
+  `imagens_idimagens` int NULL,
   `visualizacoes` int NOT NULL DEFAULT '0',
   `titulo` text NOT NULL,
   `descricao` text NOT NULL,

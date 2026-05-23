@@ -72,7 +72,7 @@ const audioController = {
 
   createAudio: async (req, res) => {
     try {
-      let imagens_idimagens = req.body.imagens_idimagens || 1;
+      let imagens_idimagens = req.body.imagens_idimagens;
 
       if (req.processedFile) {
         const newImagem = await Imagem.create({
