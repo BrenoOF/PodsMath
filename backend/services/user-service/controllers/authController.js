@@ -66,7 +66,7 @@ const authController = {
         senha: senhaHash,
         instituicoes_idinstituicoes: instituicoes_idinstituicoes || null,
         id_usuario_professor: null,
-        nivel_acesso_idnivel_acesso: req.body.nivel_acesso_idnivel_acesso || 1,
+        nivel_acesso_idnivel_acesso: req.body.nivel_acesso_idnivel_acesso || 3,
         paletaCor_idpaletaCor: req.body.paletaCor_idpaletaCor || 1,
         audiosEscutados: 0,
         imagens_idimagens: req.body.imagens_idimagens || 1
