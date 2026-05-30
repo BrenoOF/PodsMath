@@ -9,10 +9,13 @@ services:
     expose:
       - "3001"
     volumes:
-      - ./backend/services/user-service/uploads:/app/uploads
+      - podsmath-uploads:/app/uploads
     restart: unless-stopped
     networks:
       - app-network
+    depends_on:
+      - mysql
+      - mongodb
 
   backend_transcription:
     build:
@@ -23,9 +26,14 @@ services:
       - ./backend/config/.env
     expose:
       - "3002"
+    volumes:
+      - podsmath-models:/app/node_modules/nodejs-whisper/cpp/whisper.cpp/models
     restart: unless-stopped
     networks:
       - app-network
+    depends_on:
+      - mysql
+      - mongodb
 
   frontend:
     build:
@@ -41,6 +49,43 @@ services:
     networks:
       - app-network
 
+  mysql:
+    image: mysql:8.0
+    container_name: app_mysql
+    env_file:
+      - ./backend/config/.env
+    volumes:
+      - podsmath-mysql:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    restart: unless-stopped
+    networks:
+      - app-network
+    expose:
+      - "3306"
+
+  mongodb:
+    image: mongo:7.0
+    container_name: app_mongodb
+    env_file:
+      - ./backend/config/.env
+    volumes:
+      - podsmath-mongo:/data/db
+    restart: unless-stopped
+    networks:
+      - app-network
+    expose:
+      - "27017"
+
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  podsmath-uploads:
+    driver: local
+  podsmath-models:
+    driver: local
+  podsmath-mysql:
+    driver: local
+  podsmath-mongo:
+    driver: local
