@@ -1,3 +1,5 @@
+Site já no ar na URL: podsmath.com.br
+
 # 🎧 PodsMath
 
 O **PodsMath** é uma plataforma focada no ecossistema de podcasts, permitindo não apenas a reprodução e gerenciamento de áudios, mas também oferecendo um poderoso serviço de transcrição automatizada de episódios.
