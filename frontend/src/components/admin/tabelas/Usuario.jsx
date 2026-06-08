@@ -119,41 +119,41 @@ export default function CompUsuario() {
         }
     };
 
-    // Excluir Instituição
-    // const alertExclusao = (id) => {
-    //     Swal.fire({
-    //         title: "Tem certeza que deseja excluir este Usuário?",
-    //         text: "Essa ação não pode ser desfeita",
-    //         icon: "warning",
-    //         showCancelButton: true,
-    //         confirmButtonText: "Sim, Quero Excluir!",
-    //         cancelButtonText: "Cancelar",
-    //         cancelButtonColor: "#d33",
-    //         confirmButtonColor: "#012663"
-    //     }).then((result) => {
-    //         if (result.isConfirmed) {
-    //             excluirUsuario(id);
-    //         }
-    //     });
-    // }
+    // Excluir Usuario
+    const alertExclusao = (id) => {
+        Swal.fire({
+            title: "Tem certeza que deseja excluir este Usuário?",
+            text: "Essa ação não pode ser desfeita",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, Quero Excluir!",
+            cancelButtonText: "Cancelar",
+            cancelButtonColor: "#d33",
+            confirmButtonColor: "#012663"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                excluirUsuario(id);
+            }
+        });
+    }
 
-    // const excluirUsuario = async (id) => {
-    //     const token = localStorage.getItem("token");
-    //     try {
-    //         await axios.delete(
-    //             `${API_BASE_URL}/instituicoes/${id}`,
-    //             {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`
-    //                 }
-    //             }
-    //         );
-    //         setInstituicoes(prev => prev.filter(inst => inst.idinstituicoes !== id));
-    //     }
-    //     catch (error) {
-    //         console.error("Erro ao excluir instituição", error);
-    //     }
-    // };
+    const excluirUsuario = async (id) => {
+        const token = localStorage.getItem("token");
+        try {
+            await axios.delete(
+                `${API_BASE_URL}/usuarios/${id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+            setUsuarios(prev => prev.filter(user => user.idusuarios !== id));
+        }
+        catch (error) {
+            console.error("Erro ao excluir instituição", error);
+        }
+    };
 
     // Carregar dados quando a pagina carrega
     useEffect(() => {
@@ -282,7 +282,7 @@ export default function CompUsuario() {
                                         <i className="fa-solid fa-pen"></i>
                                     </button>
                                     <button onClick={() => {
-                                        // alertExclusao(instituicao.idinstituicoes);
+                                        alertExclusao(usuario.idusuarios);
                                     }}>
                                         <i className="fa-solid fa-trash"></i>
                                     </button>
